@@ -1,4 +1,7 @@
-import React from 'react';
+import React from "react";
+import { OutsideScene } from "../OutsideScene/OutsideScene";
+import { RoomScene } from "../RoomScene/RoomScene";
+import { ZykCoding } from "../ZykCoding/ZykCoding";
 
 /**
  * Hero section for the portfolio.
@@ -6,17 +9,13 @@ import React from 'react';
  */
 export const Hero: React.FC = () => {
   return (
-    <section
-      style={{
-        padding: '4rem 2rem',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-      }}
-    >
-      <h1 style={{ marginBottom: '1rem' }}>Welcome to My Portfolio</h1>
-      {/* Replace the src and poster with your real assets when available */}
+    <section className="py-16 px-8 flex flex-col items-center justify-center text-center min-h-screen">
+      <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1>
+      <div className="mt-8 w-full max-w-4xl mx-auto">
+        <OutsideScene />
+        <RoomScene />
+        <ZykCoding />
+      </div>
     </section>
   );
 };
