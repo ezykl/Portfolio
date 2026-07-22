@@ -1,0 +1,9 @@
+/* AssetLayer container maintains aspect ratio via padding-bottom */
+.assetLayer {
+  position: relative;
+  width: 100%;
+  height: 0; /* height derived from padding */
+  overflow: hidden;
+}
+
+/* Child img/video elements are absolutely positioned – already handled inline */

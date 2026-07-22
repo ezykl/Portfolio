@@ -1,0 +1,7 @@
+/* Styling for RoomScene wrapper */
+.roomScene {
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto; /* spacing between scenes */
+  border: 2px solid #e0e0e0;
+}
