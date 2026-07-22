@@ -1,8 +1,8 @@
-/* Styling for the outer wrapper */
+/* ZykCoding fills its parent container */
 .zykCoding {
-  /* Adjust outer size here */
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto; /* center horizontally */
-  border: 2px solid #e0e0e0; /* optional visual aid */
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  border: 2px solid #e0e0e0; /* keep border for debugging */
 }

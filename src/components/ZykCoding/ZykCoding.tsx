@@ -1,6 +1,5 @@
 import React from "react";
 import { AssetLayer, AssetItem } from "../AssetLayer";
-import styles from "./ZykCoding.module.css";
 
 /**
  * ZykCoding – a responsive container that layers all assets from
@@ -102,9 +101,5 @@ export const ZykCoding: React.FC = () => {
     },
   ];
 
-  return (
-    <div className={styles.zykCoding}>
-      <AssetLayer items={items} aspectRatio="16/9" />
-    </div>
-  );
+  return <AssetLayer items={items} aspectRatio="16/9" />;
 };

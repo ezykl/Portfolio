@@ -1,7 +1,8 @@
-/* Styling for OutsideScene wrapper */
+/* OutsideScene fills its parent container */
 .outsideScene {
   width: 100%;
-  max-width: 900px;
-  margin: 2rem auto;
-  border: 2px solid #e0e0e0;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  border: 2px solid #e0e0e0; /* keep border for debugging */
 }

@@ -1,7 +1,8 @@
-/* Styling for RoomScene wrapper */
+/* RoomScene fills its parent container */
 .roomScene {
   width: 100%;
-  max-width: 900px;
-  margin: 2rem auto; /* spacing between scenes */
-  border: 2px solid #e0e0e0;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  border: 2px solid #e0e0e0; /* keep border for debugging */
 }

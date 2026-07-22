@@ -1,6 +1,5 @@
 import React from "react";
 import { AssetLayer, AssetItem } from "../AssetLayer";
-import styles from "./RoomScene.module.css";
 
 /**
  * RoomScene – a simple scene using assets from `assets/room/`.
@@ -90,9 +89,5 @@ export const RoomScene: React.FC = () => {
     },
   ];
 
-  return (
-    <div className={styles.roomScene}>
-      <AssetLayer items={items} aspectRatio="16/9" />
-    </div>
-  );
+  return <AssetLayer items={items} aspectRatio="16/9" />;
 };
