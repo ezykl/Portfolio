@@ -12,6 +12,7 @@ export const Hero: React.FC = () => {
   return (
     <section className="py-8 px-2 flex flex-col items-center  text-center min-h-screen border-2 border-yellow-300 overflow-hidden">
       <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1>
+// @ts-ignore
       <motion.div
         className=" w-full mx-auto relative border-2 border-gray-300"
         style={{
@@ -49,6 +50,7 @@ export const Hero: React.FC = () => {
         >
           <RoomScene />
         </div>
+// @ts-ignore
         <motion.div
           style={{
             position: "absolute",
@@ -64,7 +66,7 @@ export const Hero: React.FC = () => {
         >
           <ZykCoding />
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };
