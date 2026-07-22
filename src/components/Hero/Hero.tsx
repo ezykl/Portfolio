@@ -12,7 +12,7 @@ export const Hero: React.FC = () => {
   return (
     <section className="py-8 px-2 flex flex-col items-center  text-center min-h-screen border-2 border-yellow-300 overflow-hidden">
       <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1>
-      <div
+      <motion.div
         className=" w-full mx-auto relative border-2 border-gray-300"
         style={{
           maxWidth: "1200px",
@@ -21,6 +21,9 @@ export const Hero: React.FC = () => {
           overflow: "hidden",
           borderRadius: "8px",
         }}
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
       >
         {/* Position each scene as needed – each wrapped with absolute positioning */}
         <div
@@ -46,7 +49,7 @@ export const Hero: React.FC = () => {
         >
           <RoomScene />
         </div>
-        <div
+        <motion.div
           style={{
             position: "absolute",
 
@@ -55,9 +58,12 @@ export const Hero: React.FC = () => {
             bottom: 0,
             right: -50,
           }}
+          initial={{ x: 100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.6 }}
         >
           <ZykCoding />
-        </div>
+        </motion.div>
       </div>
     </section>
   );
