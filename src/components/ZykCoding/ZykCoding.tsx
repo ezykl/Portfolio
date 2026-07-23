@@ -6,8 +6,7 @@ import { AssetLayer, AssetItem } from "../AssetLayer";
  * `public/assets/me/` (video + images). The outer div uses the CSS class
  * `zykCoding` for styling.
  */
-export const ZykCoding: React.FC = () => {
-  const items: AssetItem[] = [
+export const zykCodingItems: AssetItem[] = [
     // Image – Table (base layer)
     {
       src: "/assets/me/Table.png",
@@ -101,5 +100,6 @@ export const ZykCoding: React.FC = () => {
     },
   ];
 
-  return <AssetLayer items={items} aspectRatio="16/9" />;
-};
+export const ZykCoding: React.FC = () => (
+  <AssetLayer items={zykCodingItems} aspectRatio="16/9" />
+);

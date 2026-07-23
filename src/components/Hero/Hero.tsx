@@ -11,11 +11,11 @@ import { ZykCoding } from "../ZykCoding/ZykCoding";
 export const Hero: React.FC = () => {
   return (
     <section className="py-8 px-2 flex flex-col items-center  text-center min-h-screen border-2 border-yellow-300 overflow-hidden">
-      <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1>
+      {/* <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1> */}
       <div
         className=" w-full mx-auto relative border-2 border-gray-300"
         style={{
-          maxWidth: "1200px",
+          minWidth: "800px",
           // 16:9 aspect ratio – height will be calculated automatically
           aspectRatio: "16 / 9", // height scales with width
           overflow: "hidden",

@@ -12,8 +12,7 @@ import { AssetLayer, AssetItem } from "../AssetLayer/AssetLayer";
  * - Parallax effect on individual elements or the whole scene.
  *   Add related state and event handlers where appropriate.
  */
-export const OutsideScene: React.FC = () => {
-  const items: AssetItem[] = [
+export const outsideSceneItems: AssetItem[] = [
     // Sky background (full size)
     {
       src: "/assets/outside/sky.png",
@@ -32,6 +31,15 @@ export const OutsideScene: React.FC = () => {
       width: 25,
       height: 25,
     },
+
+    {
+      src: "/assets/outside/clouds.png",
+      type: "image",
+      left: 10,
+      top: 20,
+      width: 70,
+      height: 25,
+    },
     // Mountain silhouette
     {
       src: "/assets/outside/mountainis.png",
@@ -43,5 +51,6 @@ export const OutsideScene: React.FC = () => {
     },
   ];
 
-  return <AssetLayer items={items} aspectRatio="16/9" />;
-};
+export const OutsideScene: React.FC = () => (
+  <AssetLayer items={outsideSceneItems} aspectRatio="16/9" />
+);

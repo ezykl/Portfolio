@@ -1,8 +1,0 @@
-/* ZykCoding fills its parent container */
-.zykCoding {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  inset: 0;
-  border: 2px solid #e0e0e0; /* keep border for debugging */
-}

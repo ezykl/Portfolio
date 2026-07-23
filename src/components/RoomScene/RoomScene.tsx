@@ -12,8 +12,7 @@ import { AssetLayer, AssetItem } from "../AssetLayer";
  * - Parallax effect on individual elements or the whole scene.
  *   Add related state and event handlers where appropriate.
  */
-export const RoomScene: React.FC = () => {
-  const items: AssetItem[] = [
+export const roomSceneItems: AssetItem[] = [
     // Background room
     {
       src: "/assets/room/room.png",
@@ -89,5 +88,6 @@ export const RoomScene: React.FC = () => {
     },
   ];
 
-  return <AssetLayer items={items} aspectRatio="16/9" />;
-};
+export const RoomScene: React.FC = () => (
+  <AssetLayer items={roomSceneItems} aspectRatio="16/9" />
+);
