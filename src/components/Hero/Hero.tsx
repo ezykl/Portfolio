@@ -3,12 +3,17 @@ import { motion } from "framer-motion";
 import { OutsideScene } from "../OutsideScene/OutsideScene";
 import { RoomScene } from "../RoomScene/RoomScene";
 import { ZykCoding } from "../ZykCoding/ZykCoding";
+import { WelcomeOverlay } from "../WelcomeOverlay/WelcomeOverlay";
+
+interface HeroProps {
+  revealed?: boolean;
+}
 
 /**
  * Hero section for the portfolio.
  * Displays a heading and the extracted Framer component (`Me`).
  */
-export const Hero: React.FC = () => {
+export const Hero: React.FC<HeroProps> = ({ revealed }) => {
   return (
     <section className="py-8 px-2 flex flex-col items-center  text-center min-h-screen border-2 border-yellow-300 overflow-hidden">
       {/* <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1> */}
@@ -16,6 +21,7 @@ export const Hero: React.FC = () => {
         className=" w-full mx-auto relative border-2 border-gray-300"
         style={{
           minWidth: "800px",
+          maxWidth: "1200px",
           // 16:9 aspect ratio – height will be calculated automatically
           aspectRatio: "16 / 9", // height scales with width
           overflow: "hidden",
@@ -62,6 +68,8 @@ export const Hero: React.FC = () => {
         >
           <ZykCoding />
         </motion.div>
+
+        <WelcomeOverlay show={Boolean(revealed)} />
       </div>
     </section>
   );

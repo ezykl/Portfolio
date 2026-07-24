@@ -1,0 +1,9 @@
+/* Scene container maintains aspect ratio via padding-bottom */
+.sceneRenderer {
+  position: relative;
+  width: 100%;
+  height: 0; /* height derived from padding */
+  overflow: hidden;
+}
+
+/* Child layers are absolutely positioned — handled inline by InteractiveLayer */

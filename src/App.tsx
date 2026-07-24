@@ -5,11 +5,11 @@ import { AboutPage } from './pages/AboutPage';
 import { outsideSceneItems } from './components/OutsideScene/OutsideScene';
 import { roomSceneItems } from './components/RoomScene/RoomScene';
 import { zykCodingItems } from './components/ZykCoding/ZykCoding';
-import type { AssetItem } from './components/AssetLayer/AssetLayer';
+import type { SceneLayer } from './engine';
 
 // Collect every still-image URL shown at boot: scene images plus video posters.
 // Videos themselves stream in over their poster after reveal, so we don't block on them.
-function collectImageUrls(items: AssetItem[]): string[] {
+function collectImageUrls(items: SceneLayer[]): string[] {
   const urls: string[] = [];
   for (const item of items) {
     if (item.type === 'image') urls.push(item.src);
@@ -113,7 +113,7 @@ function App() {
         </div>
       </nav>
       {/* Page rendering */}
-      {page === 'home' && <HomePage />}
+      {page === 'home' && <HomePage revealed={!isLoading} />}
       {page === 'about' && <AboutPage />}
 
       {/* Cozy loading overlay sits on top (fixed, z-index 9999) until ready. */}

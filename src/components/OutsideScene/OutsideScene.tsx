@@ -1,5 +1,5 @@
 import React from "react";
-import { AssetLayer, AssetItem } from "../AssetLayer/AssetLayer";
+import { SceneEngine, type Scene, type SceneLayer } from "../../engine";
 
 /**
  * OutsideScene – a simple scene using assets from `assets/outside/`.
@@ -12,45 +12,56 @@ import { AssetLayer, AssetItem } from "../AssetLayer/AssetLayer";
  * - Parallax effect on individual elements or the whole scene.
  *   Add related state and event handlers where appropriate.
  */
-export const outsideSceneItems: AssetItem[] = [
-    // Sky background (full size)
-    {
-      src: "/assets/outside/sky.png",
-      type: "image",
-      left: 0,
-      top: 0,
-      width: 100,
-      height: 100,
-    },
-    // Sun (small top‑right element)
-    {
-      src: "/assets/outside/sun.png",
-      type: "image",
-      left: 40,
-      top: 40,
-      width: 25,
-      height: 25,
-    },
+export const outsideSceneItems: SceneLayer[] = [
+  // Sky background (full size)
+  {
+    id: "outside-sky",
+    src: "/assets/outside/sky.png",
+    type: "image",
+    left: 0,
+    top: 0,
+    width: 100,
+    height: 100,
+  },
+  // Sun (small top‑right element)
+  {
+    id: "outside-sun",
+    src: "/assets/outside/sun.png",
+    type: "image",
+    left: 40,
+    top: 40,
+    width: 25,
+    height: 25,
+  },
 
-    {
-      src: "/assets/outside/clouds.png",
-      type: "image",
-      left: 10,
-      top: 20,
-      width: 70,
-      height: 25,
-    },
-    // Mountain silhouette
-    {
-      src: "/assets/outside/mountainis.png",
-      type: "image",
-      left: 5,
-      top: 40,
-      width: 80,
-      height: 60,
-    },
-  ];
+  {
+    id: "outside-clouds",
+    src: "/assets/outside/clouds.png",
+    type: "image",
+    left: -30,
+    top: 20,
+    width: 70,
+    height: 25,
+    loop: { fromLeft: -30, toLeft: 50, fadeStartLeft: 30, duration: 20 },
+  },
+  // Mountain silhouette
+  {
+    id: "outside-mountains",
+    src: "/assets/outside/mountainis.png",
+    type: "image",
+    left: 5,
+    top: 40,
+    width: 80,
+    height: 60,
+  },
+];
+
+const outsideScene: Scene = {
+  id: "outside",
+  layers: outsideSceneItems,
+  aspectRatio: "16/9",
+};
 
 export const OutsideScene: React.FC = () => (
-  <AssetLayer items={outsideSceneItems} aspectRatio="16/9" />
+  <SceneEngine scene={outsideScene} />
 );
