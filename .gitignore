@@ -28,6 +28,7 @@ Thumbs.db
 
 # Claude (contains local memory .md files)
 .claude/
+.claude/agents
 
 # Environment
 .env
