@@ -128,6 +128,7 @@ export const roomSceneItems: SceneLayer[] = [
     top: 42.7,
     width: 22,
     height: 13,
+    behaviors: ["clickGlow"],
   },
 
   {

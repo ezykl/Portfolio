@@ -5,6 +5,7 @@ import { RoomScene } from "../RoomScene/RoomScene";
 import { ZykCoding } from "../ZykCoding/ZykCoding";
 import { WelcomeOverlay } from "../WelcomeOverlay/WelcomeOverlay";
 import { Toggle } from "../Toggle/Toggle";
+import { CustomCursor } from "../CustomCursor/CustomCursor";
 import {
   IconSunHigh,
   IconMoonStars,
@@ -41,6 +42,9 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
   // for whatever "Light" ends up controlling once that's specified.
   const [lightOn, setLightOn] = useState(false);
   const bgAudioRef = useRef<HTMLAudioElement | null>(null);
+  // Tracks the whole Hero box (scene + border + HUD), not just the scene
+  // content, so the custom cursor also applies over the toggle controls.
+  const cursorAreaRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const audio = bgAudioRef.current;
@@ -53,12 +57,14 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
     <section className=" flex flex-col items-center  text-center min-h-screen border-2 border-yellow-300 overflow-hidden">
       {/* <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1> */}
       <div
+        ref={cursorAreaRef}
         className=" w-full mx-auto relative"
         style={{
           minWidth: "800px",
           maxWidth: "1400px",
           // 16:9 aspect ratio – height will be calculated automatically
           aspectRatio: "16 / 9", // height scales with width
+          cursor: "none",
         }}
       >
         {/*
@@ -207,6 +213,8 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
         <audio ref={bgAudioRef} loop preload="none">
           <source src={encodeURI("/assets/music/komii - downtown.mp3")} />
         </audio>
+
+        <CustomCursor containerRef={cursorAreaRef} />
       </div>
     </section>
   );

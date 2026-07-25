@@ -68,7 +68,10 @@ export const InteractiveLayer: React.FC<InteractiveLayerProps> = ({ layer, layer
     height: `${box.height}%`,
     objectFit: 'contain',
     ...(isInteractive ? {} : { pointerEvents: 'none' }),
-    ...(hasClickHandler ? { cursor: 'pointer' } : {}),
+    // The scene renders its own custom cursor (see CustomCursor / Hero.tsx),
+    // so the native OS cursor is suppressed here rather than shown as
+    // 'pointer' — otherwise it'd peek out from under our cursor image.
+    ...(hasClickHandler ? { cursor: 'none' } : {}),
     ...(layer.zIndex !== undefined ? { zIndex: layer.zIndex } : {}),
     ...(layer.rotation ? { transform: `rotate(${layer.rotation}deg)` } : {}),
   };
@@ -152,6 +155,10 @@ export const InteractiveLayer: React.FC<InteractiveLayerProps> = ({ layer, layer
     onClick: handleClick,
     onMouseEnter: layer.events?.onMouseEnter,
     onMouseLeave: layer.events?.onMouseLeave,
+    // Plain marker for CustomCursor to detect "hovering something clickable"
+    // via closest() — not a real CSS/DOM behavior, so it can't conflict
+    // with the `cursor: none` above.
+    ...(hasClickHandler ? { 'data-clickable': true } : {}),
   };
 
   if (layer.type === 'image') {

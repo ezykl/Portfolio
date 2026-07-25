@@ -57,6 +57,10 @@ export const Toggle: React.FC<ToggleProps> = ({
       aria-checked={checked}
       aria-label={label}
       onClick={handleClick}
+      // Marks this for CustomCursor (see Hero.tsx) to swap in the hand
+      // image; `cursor: none` hides the native pointer that would
+      // otherwise show through underneath it.
+      data-clickable
       style={{
         position: "relative",
         width: "6rem",
@@ -64,7 +68,7 @@ export const Toggle: React.FC<ToggleProps> = ({
         padding: 0,
         border: "none",
         background: "none",
-        cursor: "pointer",
+        cursor: "none",
       }}
     >
       <img
