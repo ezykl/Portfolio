@@ -125,7 +125,7 @@ export const roomSceneItems: SceneLayer[] = [
     src: "/assets/room/gdsc.png",
     type: "image",
     left: 53,
-    top: 43,
+    top: 42.7,
     width: 22,
     height: 13,
   },

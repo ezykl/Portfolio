@@ -1,5 +1,6 @@
 import type { MotionProps } from 'framer-motion';
 import type { BehaviorId } from './types';
+import { playClickSound } from './clickSound';
 
 export const ALL_BEHAVIOR_IDS: BehaviorId[] = ['clickGlow'];
 
@@ -48,6 +49,7 @@ const BEHAVIOR_RESOLVERS: Record<
       onClick: () => {
         acc.onClick?.();
         ctx.toggleGlow();
+        playClickSound();
       },
     };
   },
