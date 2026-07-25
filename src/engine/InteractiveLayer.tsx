@@ -56,6 +56,8 @@ export const InteractiveLayer: React.FC<InteractiveLayerProps> = ({ layer, layer
   // straight through them.
   const isInteractive = (layer.behaviors?.length ?? 0) > 0 || Boolean(layer.events);
 
+  const hasClickHandler = Boolean(resolved.onClick || layer.events?.onClick);
+
   const style: React.CSSProperties = {
     position: 'absolute',
     // `left` is driven entirely by the loop animation below when present,
@@ -66,11 +68,10 @@ export const InteractiveLayer: React.FC<InteractiveLayerProps> = ({ layer, layer
     height: `${box.height}%`,
     objectFit: 'contain',
     ...(isInteractive ? {} : { pointerEvents: 'none' }),
+    ...(hasClickHandler ? { cursor: 'pointer' } : {}),
     ...(layer.zIndex !== undefined ? { zIndex: layer.zIndex } : {}),
     ...(layer.rotation ? { transform: `rotate(${layer.rotation}deg)` } : {}),
   };
-
-  const hasClickHandler = Boolean(resolved.onClick || layer.events?.onClick);
 
   // Registered so a click that misses this asset's own opaque pixels can
   // fall through to it from a layer stacked above (see handleClick below).

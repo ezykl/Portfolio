@@ -23,6 +23,7 @@ export const outsideSceneItems: SceneLayer[] = [
     width: 100,
     height: 100,
   },
+
   // Sun (small top‑right element)
   {
     id: "outside-sun",

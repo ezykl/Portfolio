@@ -74,7 +74,7 @@ export const zykCodingItems: SceneLayer[] = [
     id: "zyk-cup-holder",
     src: "/assets/me/cupHolder.png",
     type: "image",
-    left: 56,
+    left: 55,
     top: 50,
     width: 10,
     height: 24,

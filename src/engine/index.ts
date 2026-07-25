@@ -5,6 +5,7 @@ export { ALL_BEHAVIOR_IDS, resolveBehaviors } from './behaviors';
 export type { BehaviorContext, ResolvedBehaviors } from './behaviors';
 export { SceneRefsProvider, useSceneRefs } from './SceneRefsContext';
 export type { SceneRefsApi } from './SceneRefsContext';
+export { SceneGlowProvider } from './SceneGlowContext';
 export { InteractiveLayer } from './InteractiveLayer';
 export { LayerRenderer } from './LayerRenderer';
 export { SceneRenderer } from './SceneRenderer';

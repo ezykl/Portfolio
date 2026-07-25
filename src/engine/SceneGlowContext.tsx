@@ -8,13 +8,20 @@ interface SceneGlowContextValue {
 const SceneGlowContext = createContext<SceneGlowContextValue | undefined>(undefined);
 
 /**
- * At most one clickGlow asset lit within a scene at a time. One instance
- * per SceneEngine (mirrors SceneRefsProvider), so separate scenes never
- * affect each other's glow state.
+ * At most one clickGlow asset lit at a time within whichever tree shares a
+ * single SceneGlowProvider. SceneEngine wraps every scene with one of these
+ * so a scene works standalone — but nesting-safe: if an ancestor already
+ * provides glow state (e.g. several composited, overlapping scenes sharing
+ * one explicit SceneGlowProvider higher up, as in Hero), this becomes a
+ * no-op passthrough instead of shadowing it with a fresh, scene-local one.
+ * That's what makes glow exclusivity span multiple visually-overlapping
+ * scenes instead of stopping at each one's own boundary.
  */
 export const SceneGlowProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const existing = useContext(SceneGlowContext);
   const [activeId, setActiveId] = useState<string | null>(null);
   const value = useMemo(() => ({ activeId, setActiveId }), [activeId]);
+  if (existing) return <>{children}</>;
   return <SceneGlowContext.Provider value={value}>{children}</SceneGlowContext.Provider>;
 };
 

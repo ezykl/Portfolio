@@ -32,7 +32,9 @@ const messages = [
   "Building experiences, not just pages.",
 ];
 
-export const LoadingScreen: React.FC<{ progress?: number }> = ({ progress }) => {
+export const LoadingScreen: React.FC<{ progress?: number }> = ({
+  progress,
+}) => {
   const hasProgress = progress != null;
   // Raw (fractional) value drives the bar width for frame-smooth motion; the
   // rounded value is only used for the on-screen percentage.
@@ -41,7 +43,7 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({ progress }) => 
 
   // Pick a single line once, at mount, and keep it for the whole load.
   const [line] = React.useState(
-    () => messages[Math.floor(Math.random() * messages.length)]
+    () => messages[Math.floor(Math.random() * messages.length)],
   );
   const message = pct >= 100 ? "Come on in!" : line;
 
