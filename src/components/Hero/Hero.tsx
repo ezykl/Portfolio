@@ -54,7 +54,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
   }, [musicOn]);
 
   return (
-    <section className=" flex flex-col items-center  text-center min-h-screen border-2 border-yellow-300 overflow-hidden">
+    <section className="m-0 flex flex-col justify-center items-center min-h-screen border-2 overflow-hidden border border-red-300">
       {/* <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1> */}
       <div
         ref={cursorAreaRef}
@@ -65,6 +65,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
           // 16:9 aspect ratio – height will be calculated automatically
           aspectRatio: "16 / 9", // height scales with width
           cursor: "none",
+          border: "2px solid red", // Debugging border to visualize the Hero section
         }}
       >
         {/*

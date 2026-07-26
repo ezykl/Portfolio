@@ -1,19 +1,19 @@
-import React from 'react';
-import { LoadingScreen } from './components/LoadingScreen/LoadingScreen';
-import { HomePage } from './pages/HomePage';
-import { AboutPage } from './pages/AboutPage';
-import { outsideSceneItems } from './components/OutsideScene/OutsideScene';
-import { roomSceneItems } from './components/RoomScene/RoomScene';
-import { zykCodingItems } from './components/ZykCoding/ZykCoding';
-import type { SceneLayer } from './engine';
+import React from "react";
+import { LoadingScreen } from "./components/LoadingScreen/LoadingScreen";
+import { HomePage } from "./pages/HomePage";
+import { AboutPage } from "./pages/AboutPage";
+import { outsideSceneItems } from "./components/OutsideScene/OutsideScene";
+import { roomSceneItems } from "./components/RoomScene/RoomScene";
+import { zykCodingItems } from "./components/ZykCoding/ZykCoding";
+import type { SceneLayer } from "./engine";
 
 // Collect every still-image URL shown at boot: scene images plus video posters.
 // Videos themselves stream in over their poster after reveal, so we don't block on them.
 function collectImageUrls(items: SceneLayer[]): string[] {
   const urls: string[] = [];
   for (const item of items) {
-    if (item.type === 'image') urls.push(item.src);
-    else if (item.type === 'video') {
+    if (item.type === "image") urls.push(item.src);
+    else if (item.type === "video") {
       const poster = item.videoAttrs?.poster;
       if (poster) urls.push(poster);
     }
@@ -26,7 +26,7 @@ const PRELOAD_IMAGES = Array.from(
     ...collectImageUrls(outsideSceneItems),
     ...collectImageUrls(roomSceneItems),
     ...collectImageUrls(zykCodingItems),
-  ])
+  ]),
 );
 // The loading screen is shown for at least this long so the progress bar is
 // actually visible even when every asset is cached and loads in milliseconds.
@@ -38,7 +38,7 @@ const MAX_LOAD_MS = 15000;
 function App() {
   const [isLoading, setIsLoading] = React.useState(true);
   const [progress, setProgress] = React.useState(0);
-  const [page, setPage] = React.useState<'home' | 'about'>('home');
+  const [page, setPage] = React.useState<"home" | "about">("home");
 
   React.useEffect(() => {
     const total = PRELOAD_IMAGES.length;
@@ -103,7 +103,7 @@ function App() {
       {/* The page renders underneath from the start so its scenes/videos are
           fully painted by the time the loading overlay is removed. */}
       {/* Simple navigation */}
-      <nav style={{ padding: '1rem', borderBottom: '1px solid #ddd' }}>
+      {/* <nav style={{ padding: '1rem', borderBottom: '1px solid #ddd' }}>
         <button onClick={() => setPage('home')} style={{ marginRight: '1rem' }}>
           Home
         </button>
@@ -111,10 +111,10 @@ function App() {
         <div className="p-4 bg-indigo-100 rounded-lg shadow-md">
           Tailwind is working!
         </div>
-      </nav>
+      </nav> */}
       {/* Page rendering */}
-      {page === 'home' && <HomePage revealed={!isLoading} />}
-      {page === 'about' && <AboutPage />}
+      {page === "home" && <HomePage revealed={!isLoading} />}
+      {page === "about" && <AboutPage />}
 
       {/* Cozy loading overlay sits on top (fixed, z-index 9999) until ready. */}
       {isLoading && <LoadingScreen progress={progress} />}
