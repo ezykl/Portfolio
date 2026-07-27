@@ -1,24 +1,16 @@
 import React from "react";
 
 /**
- * Cozy game-style loading screen, themed after the warm "coding room" scene.
+ * Cozy game-style loading screen, now sharing the site's actual design
+ * tokens (font-display, text-zyk-heading/accent, the f2bf83→fef5eb wash)
+ * instead of its own standalone palette — so it reads as the same app as
+ * the Hero, not a separate splash screen.
  *
- * Shows a storybook dialog panel with a chunky progress bar, a moving shimmer,
- * and a bobbing coffee cup. `progress` is a 0–100 percentage; when it is
- * undefined the bar animates in an indeterminate "warming up" state.
+ * Shows a storybook dialog panel with a chunky progress bar, a moving
+ * shimmer, and a looping coffee-cup clip. `progress` is a 0–100 percentage;
+ * when it is undefined the bar animates in an indeterminate "warming up"
+ * state.
  */
-
-/** Room palette — see the reference scene (peach walls, wood, moss sweater). */
-const palette = {
-  sandyPeach: "#F2DAC6", // main wall / dominant background
-  blushPink: "#F8D7CA", // sky in the window → lamp glow
-  tanBrown: "#A9795E", // wood ceiling & lamp details → secondary text
-  terracotta: "#BC693A", // bookshelf wood → borders & accents
-  walnut: "#5A3A26", // deep shadow grain → headings & deep shadow
-  mossGreen: "#3D4D3D", // the sweater, main pop of colour → progress fill
-  charcoal: "#1D1D1D", // laptop screen & hair → darkest text
-  brass: "#C9A15A", // aged-brass desk lamp → highlight accents
-} as const;
 
 /**
  * Portfolio one-liners. One is picked at random per load and held the whole
@@ -48,39 +40,54 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
   const message = pct >= 100 ? "Come on in!" : line;
 
   return (
-    <div style={styles.overlay}>
-      {/* Keyframes are scoped to this screen and injected once. */}
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-linear-to-b from-zyk-bg-start] to-zyk-bg-end">
+      {/* Keyframes are scoped to this screen and injected once — bob/shimmer/
+          indeterminate aren't default Tailwind utilities. */}
       <style>{keyframes}</style>
 
-      <div style={styles.panel}>
-        <div style={styles.cup} aria-hidden>
-          ☕
-        </div>
+      <div className="w-[min(420px,90vw)] rounded-[28px] border-2 border-[#BC693A] bg-linear-to-b from-[#FBF1E7] to-[#F6E7D6] px-8 pb-7 pt-9 text-center shadow-[0_18px_40px_rgba(90,58,38,0.28),inset_0_1px_0_rgba(255,255,255,0.7)]">
+        <video
+          src={"/assets/me/Coffe.webm"}
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-hidden
+          className="mx-auto mb-2 h-20 w-20 object-contain animate-[cozy-bob_2.2s_ease-in-out_infinite] drop-shadow-[0_6px_10px_rgba(90,58,38,0.35)]"
+        />
 
-        <h1 style={styles.title}>Setting up your cozy space</h1>
+        <h1 className="mb-5 font-display text-lg text-zyk-heading">
+          Setting up your cozy space
+        </h1>
 
-        <div style={styles.barRow}>
-          <span style={styles.hint}>Loading</span>
-          <span style={styles.percent}>{hasProgress ? `${pct}%` : "…"}</span>
+        <div className="mb-2 flex items-baseline justify-between text-[0.85rem] font-bold uppercase tracking-wider text-[#A9795E]">
+          <span className="opacity-90">Loading</span>
+          <span className="font-display tabular-nums text-zyk-accent">
+            {hasProgress ? `${pct}%` : "…"}
+          </span>
         </div>
 
         {/* Progress track */}
-        <div style={styles.track}>
+        <div className="relative h-[22px] w-full overflow-hidden rounded-full border-2 border-[rgba(90,58,38,0.3)] bg-[#E7CCB4] shadow-[inset_0_2px_5px_rgba(90,58,38,0.35)]">
           <div
+            className="relative h-full overflow-hidden rounded-full bg-linear-to-b from-[#ffcf85] via-zyk-accent to-[#c9791f] shadow-[0_0_12px_rgba(201,161,90,0.45),inset_0_1px_0_rgba(255,255,255,0.35)]"
             style={{
-              ...styles.fill,
               width: hasProgress ? `${raw}%` : "40%",
               animation: hasProgress
                 ? undefined
                 : "cozy-indeterminate 1.4s ease-in-out infinite",
+              transition: "none", // width is eased frame-by-frame in App's rAF loop
             }}
           >
-            <div style={styles.shimmer} />
+            <div className="absolute left-0 top-0 h-full w-2/5 bg-linear-to-r from-transparent via-[rgba(201,161,90,0.75)] to-transparent [animation:cozy-shimmer_1.6s_ease-in-out_infinite]" />
           </div>
         </div>
 
         {/* key={message} remounts the node on each change so it fades in. */}
-        <p key={message} style={styles.flavor}>
+        <p
+          key={message}
+          className="mx-auto mt-4 min-h-[1.2em] max-w-[28ch] text-[0.85rem] italic text-[rgba(90,58,38,0.7)] [animation:cozy-fade_0.45s_ease-out]"
+        >
           {message}
         </p>
       </div>
@@ -109,117 +116,3 @@ const keyframes = `
   to   { opacity: 1; transform: translateY(0); }
 }
 `;
-
-const styles: Record<string, React.CSSProperties> = {
-  overlay: {
-    position: "fixed",
-    inset: 0,
-    zIndex: 9999,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    // Sandy-peach wall with a soft blush-pink lamp glow in the middle.
-    background:
-      `radial-gradient(60% 55% at 50% 40%, ${palette.blushPink}, rgba(248,215,202,0) 72%), ` +
-      `linear-gradient(160deg, ${palette.sandyPeach} 0%, #E9CBB1 100%)`,
-    fontFamily:
-      "'Segoe UI', system-ui, -apple-system, 'Trebuchet MS', sans-serif",
-  },
-
-  panel: {
-    width: "min(420px, 90vw)",
-    padding: "2.25rem 2rem 1.75rem",
-    borderRadius: 20,
-    textAlign: "center",
-    // Warm cream card, like a storybook dialog box.
-    background: "linear-gradient(180deg, #FBF1E7 0%, #F6E7D6 100%)",
-    border: `2px solid ${palette.terracotta}`,
-    boxShadow:
-      "0 18px 40px rgba(90,58,38,0.28), inset 0 1px 0 rgba(255,255,255,0.7)",
-  },
-
-  cup: {
-    fontSize: "3rem",
-    lineHeight: 1,
-    display: "inline-block",
-    marginBottom: "0.5rem",
-    animation: "cozy-bob 2.2s ease-in-out infinite",
-    filter: "drop-shadow(0 6px 10px rgba(90,58,38,0.35))",
-  },
-
-  title: {
-    margin: "0 0 1.25rem",
-    fontSize: "1.15rem",
-    fontWeight: 700,
-    letterSpacing: "0.02em",
-    color: palette.walnut,
-  },
-
-  barRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "baseline",
-    marginBottom: "0.5rem",
-    color: palette.tanBrown,
-    fontSize: "0.85rem",
-    fontWeight: 700,
-    letterSpacing: "0.06em",
-    textTransform: "uppercase",
-  },
-
-  hint: { opacity: 0.9 },
-
-  percent: {
-    fontSize: "1rem",
-    color: palette.terracotta,
-    fontVariantNumeric: "tabular-nums",
-  },
-
-  track: {
-    position: "relative",
-    height: 22,
-    width: "100%",
-    borderRadius: 999,
-    overflow: "hidden",
-    // Recessed peach groove so the moss-green fill pops.
-    background: "#E7CCB4",
-    border: `2px solid rgba(90,58,38,0.3)`,
-    boxShadow: "inset 0 2px 5px rgba(90,58,38,0.35)",
-  },
-
-  fill: {
-    position: "relative",
-    height: "100%",
-    borderRadius: 999,
-    // Deep moss green — the room's pop of colour — with a lit top edge.
-    background: `linear-gradient(180deg, #6E8A6A 0%, #4E634A 55%, ${palette.mossGreen} 100%)`,
-    boxShadow:
-      "0 0 12px rgba(61,77,61,0.45), inset 0 1px 0 rgba(255,255,255,0.35)",
-    // No CSS transition: the width is eased frame-by-frame in App's rAF loop,
-    // so the bar moves in lockstep with the % text (a transition would lag it).
-    transition: "none",
-    overflow: "hidden",
-  },
-
-  shimmer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    height: "100%",
-    width: "40%",
-    // Warm brass-tinted sweep of light across the fill.
-    background:
-      "linear-gradient(100deg, transparent, rgba(201,161,90,0.75), transparent)",
-    animation: "cozy-shimmer 1.6s ease-in-out infinite",
-  },
-
-  flavor: {
-    margin: "1rem auto 0",
-    minHeight: "1.2em", // reserve a line so the panel doesn't jump on swap
-    maxWidth: "28ch",
-    fontSize: "0.85rem",
-    fontStyle: "italic",
-    color: "rgba(90,58,38,0.7)",
-    animation: "cozy-fade 0.45s ease-out",
-  },
-};

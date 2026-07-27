@@ -1,7 +1,7 @@
 import React from "react";
 import { LoadingScreen } from "./components/LoadingScreen/LoadingScreen";
 import { HomePage } from "./pages/HomePage";
-import { AboutPage } from "./pages/AboutPage";
+import { NavBar } from "./components/NavBar/NavBar";
 import { outsideSceneItems } from "./components/OutsideScene/OutsideScene";
 import { roomSceneItems } from "./components/RoomScene/RoomScene";
 import { zykCodingItems } from "./components/ZykCoding/ZykCoding";
@@ -38,7 +38,6 @@ const MAX_LOAD_MS = 15000;
 function App() {
   const [isLoading, setIsLoading] = React.useState(true);
   const [progress, setProgress] = React.useState(0);
-  const [page, setPage] = React.useState<"home" | "about">("home");
 
   React.useEffect(() => {
     const total = PRELOAD_IMAGES.length;
@@ -101,20 +100,11 @@ function App() {
   return (
     <>
       {/* The page renders underneath from the start so its scenes/videos are
-          fully painted by the time the loading overlay is removed. */}
-      {/* Simple navigation */}
-      {/* <nav style={{ padding: '1rem', borderBottom: '1px solid #ddd' }}>
-        <button onClick={() => setPage('home')} style={{ marginRight: '1rem' }}>
-          Home
-        </button>
-        <button onClick={() => setPage('about')}>About</button>
-        <div className="p-4 bg-indigo-100 rounded-lg shadow-md">
-          Tailwind is working!
-        </div>
-      </nav> */}
-      {/* Page rendering */}
-      {page === "home" && <HomePage revealed={!isLoading} />}
-      {page === "about" && <AboutPage />}
+          fully painted by the time the loading overlay is removed. It's a single
+          long-scrolling page (§3); the NavBar smooth-scrolls between its section
+          anchors. Nav mounts only after reveal so its entrance animation plays. */}
+      {!isLoading && <NavBar />}
+      <HomePage revealed={!isLoading} />
 
       {/* Cozy loading overlay sits on top (fixed, z-index 9999) until ready. */}
       {isLoading && <LoadingScreen progress={progress} />}

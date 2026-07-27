@@ -6,6 +6,7 @@ import { ZykCoding } from "../ZykCoding/ZykCoding";
 import { WelcomeOverlay } from "../WelcomeOverlay/WelcomeOverlay";
 import { Toggle } from "../Toggle/Toggle";
 import { CustomCursor } from "../CustomCursor/CustomCursor";
+
 import {
   IconSunHigh,
   IconMoonStars,
@@ -13,6 +14,7 @@ import {
   IconMusicOff,
 } from "@tabler/icons-react";
 import { SceneGlowProvider } from "../../engine";
+import { PillButton } from "../ui/PillButton";
 
 // Matches the warm-gold accent already used for clickGlow elsewhere in the
 // app, so an "on" icon reads as the same kind of "lit up" as those assets.
@@ -54,168 +56,50 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
   }, [musicOn]);
 
   return (
-    <section className="m-0 flex flex-col justify-center items-center min-h-screen border-2 overflow-hidden border border-red-300">
-      {/* <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1> */}
-      <div
-        ref={cursorAreaRef}
-        className=" w-full mx-auto relative"
-        style={{
-          minWidth: "800px",
-          maxWidth: "1400px",
-          // 16:9 aspect ratio – height will be calculated automatically
-          aspectRatio: "16 / 9", // height scales with width
-          cursor: "none",
-          border: "2px solid red", // Debugging border to visualize the Hero section
-        }}
-      >
-        {/*
-          The border image is rendered at the full, unmodified size of this
-          box (no offset hacks) — its own frame artwork already spans edge
-          to edge. To get the picture-frame "straddle" look (the frame's
-          wood band overlapping the scene's edge on both sides), the scene
-          content is inset into a smaller box instead of enlarging the
-          border image — enlarging it would risk getting clipped by an
-          ancestor's overflow.
+    <section
+      id="home"
+      className=" flex flex-col items-center justify-start overflow-hidden  pt-24 md:pt-16 bg-linear-to-b from-[#f2bf83] to-[#fef5eb]"
+      style={{ scrollMarginTop: "5rem" }}
+    >
+      <div className="flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
+        {/* Text content */}
 
-          The inset amounts (0.72% sides, 1.28% top/bottom) come from
-          measuring 16x9_border.png's actual alpha channel: it has a ~10px
-          transparent margin before the wood band starts, and the band
-          itself is ~51-52px thick (on its 5000x2813 canvas). Half that
-          band's centerline sits at ~36px in from the image edge on every
-          side — 36/5000 horizontally, 36/2813 vertically. Re-measure if
-          the border asset is ever replaced.
-        */}
-        <div
-          style={{
-            position: "absolute",
-            top: "1.28%",
-            bottom: "1.28%",
-            left: "0.72%",
-            right: "0.72%",
-            overflow: "hidden",
-            borderRadius: "20px",
-          }}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex w-full flex-col items-center text-center mt-8 -mb-8 sm:mt-14 sm:-mb-14 md:mt-20 md:-mb-20"
         >
-          {/*
-            Outside/Room/ZykCoding are three separate SceneEngine instances,
-            but visually they overlap into what reads as one composited
-            scene — so clickGlow exclusivity needs to span all three, not
-            reset at each scene's own boundary. This one shared provider is
-            what each scene's own (nesting-safe) SceneGlowProvider defers to
-            instead of creating its own independent glow state.
-          */}
-          <SceneGlowProvider>
-            {/* Position each scene as needed – each wrapped with absolute positioning */}
-            <div
-              style={{
-                position: "absolute",
-                width: "55%",
-                height: "auto",
-                top: "20%",
-                left: 30,
-              }}
-            >
-              <OutsideScene />
-            </div>
-            {/* Adjust the inline styles below for RoomScene and ZykCoding as needed */}
-            <div
-              style={{
-                position: "absolute",
-                left: -4,
-                top: -1,
-                width: "102%",
-                height: "auto",
-              }}
-            >
-              <RoomScene />
-            </div>
-
-            <motion.div
-              style={{
-                position: "absolute",
-
-                width: "80%",
-                height: "auto",
-                bottom: 0,
-                right: -50,
-              }}
-              initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-            >
-              <ZykCoding />
-            </motion.div>
-
-            <WelcomeOverlay show={Boolean(revealed)} />
-          </SceneGlowProvider>
-        </div>
-
-        {/* Decorative frame over the whole 16:9 box — matches the asset's own
-            aspect ratio exactly, so plain `fill` doesn't distort it, and
-            renders at this box's full, unclipped size (see inset comment
-            above for why the scene content shrinks instead of this growing). */}
-        <img
-          src="/assets/ui/16x9_border.png"
-          alt=""
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "fill",
-            pointerEvents: "none",
-            zIndex: 60,
-          }}
-        />
-
-        {/* HUD controls — sit above the frame (zIndex 60) since they're
-            real controls, not scene decoration. */}
-        <div
-          style={{
-            position: "absolute",
-            top: "3%",
-            right: "2%",
-            zIndex: 70,
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
-          }}
+          <h1
+            className="font-display leading-tight text-zyk-heading"
+            style={{ fontSize: "clamp(3rem, 2rem + 4vw, 6rem)" }}
+          >
+            Hi, I&apos;m Zyk.
+          </h1>
+          <p
+            className="mt-3 font-medium text-zyk-accent"
+            style={{ fontSize: "clamp(1.125rem, 1rem + 0.6vw, 1.5rem)" }}
+          >
+            Software Developer &amp; Graphic Artist
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 md:justify-start">
+            <PillButton variant="primary" href="#projects">
+              View Projects
+            </PillButton>
+            <PillButton variant="secondary" href="#contact">
+              Get in Touch
+            </PillButton>
+          </div>
+        </motion.div>
+        {/* Zyk coding image — always below text, full width, grows with viewport */}
+        <motion.div
+          initial={{ x: 100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-0 w-full  lg:ml-10 mt-8 md:mt-12"
         >
-          {/* <Toggle
-            checked={lightOn}
-            onChange={setLightOn}
-            icon={
-              lightOn ? (
-                <IconMoonStars size="60%" color={ICON_GOLD} />
-              ) : (
-                <IconSunHigh size="60%" color={ICON_NEUTRAL} />
-              )
-            }
-            label="Toggle light"
-            stateText={lightOn ? "Night" : "Day"}
-            knobTint={lightOn ? TINT_NIGHT : TINT_DAY}
-          /> */}
-          <Toggle
-            checked={musicOn}
-            onChange={setMusicOn}
-            icon={
-              musicOn ? (
-                <IconMusic size="60%" color={ICON_GOLD} />
-              ) : (
-                <IconMusicOff size="60%" color={ICON_NEUTRAL} />
-              )
-            }
-            label="Toggle background music"
-            stateText={musicOn ? "Music" : "Mute"}
-            knobTint={musicOn ? TINT_PLAYING : TINT_MUTED}
-          />
-        </div>
-
-        <audio ref={bgAudioRef} loop preload="none">
-          <source src={encodeURI("/assets/music/komii - downtown.mp3")} />
-        </audio>
-
-        <CustomCursor containerRef={cursorAreaRef} />
+          <ZykCoding />
+        </motion.div>
       </div>
     </section>
   );
