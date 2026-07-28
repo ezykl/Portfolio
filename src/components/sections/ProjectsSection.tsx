@@ -61,7 +61,11 @@ const ProjectCard: React.FC<{ project: Project; reduce: boolean }> = ({
   <motion.article
     variants={{
       hidden: reduce ? { opacity: 1 } : { opacity: 0, y: 20 },
-      show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+      show: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.5, ease: "easeOut" },
+      },
     }}
     className="flex flex-col overflow-hidden rounded-3xl border border-zyk-brown/10 bg-zyk-bg-end/80 p-4 shadow-md transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-xl"
   >
@@ -93,7 +97,7 @@ export const ProjectsSection: React.FC = () => {
   return (
     <section
       id="projects"
-      style={{ scrollMarginTop: "5rem" }}
+      style={{ scrollMarginTop: "70px" }}
       className="mx-auto max-w-6xl px-6 py-24"
     >
       <motion.div {...reveal} className="max-w-2xl">
@@ -104,7 +108,8 @@ export const ProjectsSection: React.FC = () => {
           Featured Projects
         </h2>
         <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
-          A handful of things I&apos;ve made — each one a small world of its own.
+          A handful of things I&apos;ve made — each one a small world of its
+          own.
         </p>
       </motion.div>
 

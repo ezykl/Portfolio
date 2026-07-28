@@ -1,4 +1,12 @@
-export type { SceneLayer, Scene, BehaviorId, LayerEvents, AssetItem } from './types';
+export type { SceneLayer, Scene, BehaviorId, LayerEvents, AssetItem, PopupContent } from './types';
+export {
+  POPUP_OPEN_EVENT,
+  COLLECTIBLE_FOUND_EVENT,
+  LAYER_CLICK_EVENT,
+  OPEN_MINIGAME_EVENT,
+  MUSIC_TOGGLE_EVENT,
+} from './events';
+export type { PopupOpenDetail, LayerClickDetail } from './events';
 export { resolveWorldBox } from './transforms';
 export type { Box } from './transforms';
 export { ALL_BEHAVIOR_IDS, resolveBehaviors } from './behaviors';

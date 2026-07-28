@@ -5,7 +5,21 @@ import type { MouseEvent, VideoHTMLAttributes } from 'react';
  * interprets these — see `behaviors.ts` for the registry. Add a new
  * behavior by adding a resolver there; nothing else needs to change.
  */
-export type BehaviorId = 'clickGlow';
+export type BehaviorId =
+  | 'clickGlow'
+  | 'huntItem'
+  | 'tooltip'
+  | 'popup'
+  | 'hoverGlow'
+  | 'toggle'
+  | 'openMinigame'
+  | 'music';
+
+/** Content for the click-to-open message popup (see the `popup` behavior). */
+export interface PopupContent {
+  title?: string;
+  body: string;
+}
 
 export interface LayerEvents {
   onClick?: (e: MouseEvent) => void;
@@ -54,6 +68,22 @@ export interface SceneLayer {
   /** Id of another layer in the same scene this one is positioned relative to. Optional, unused by any current scene. */
   parent?: string;
   behaviors?: BehaviorId[];
+  /** Text shown in a floating tooltip on hover. Requires the `tooltip` behavior. */
+  tooltip?: string;
+  /** Message shown in a centered popup on click. Requires the `popup` behavior. */
+  popup?: PopupContent;
+  /**
+   * Alternate media the `toggle` behavior swaps to on click (and back again),
+   * e.g. cold coffee (png) ⇄ hot coffee with animated steam (webm). The base
+   * `src`/`type`/`videoAttrs` are the untoggled state.
+   */
+  toggle?: {
+    src: string;
+    type: 'image' | 'video';
+    videoAttrs?: VideoHTMLAttributes<HTMLVideoElement>;
+    /** Tooltip shown while in the toggled state (falls back to `tooltip`). */
+    tooltip?: string;
+  };
   events?: LayerEvents;
   videoAttrs?: VideoHTMLAttributes<HTMLVideoElement>;
   loop?: LoopAnimation;

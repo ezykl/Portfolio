@@ -12,6 +12,9 @@ interface PillButtonProps {
   variant?: Variant;
   href?: string;
   onClick?: React.MouseEventHandler;
+  /** Button type when rendered as a <button> (ignored when `href` is set). */
+  type?: "button" | "submit";
+  disabled?: boolean;
   children: React.ReactNode;
   className?: string;
 }
@@ -25,13 +28,15 @@ export const PillButton: React.FC<PillButtonProps> = ({
   variant = "primary",
   href,
   onClick,
+  type = "button",
+  disabled = false,
   children,
   className = "",
 }) => {
   const classes =
     "inline-flex items-center justify-center rounded-full px-7 py-3 font-display text-base " +
     "shadow-md transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg " +
-    "active:translate-y-0 " +
+    "active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 " +
     VARIANTS[variant] +
     (className ? ` ${className}` : "");
 
@@ -43,7 +48,7 @@ export const PillButton: React.FC<PillButtonProps> = ({
     );
   }
   return (
-    <button type="button" onClick={onClick} className={classes}>
+    <button type={type} onClick={onClick} disabled={disabled} className={classes}>
       {children}
     </button>
   );

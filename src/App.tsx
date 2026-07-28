@@ -2,6 +2,7 @@ import React from "react";
 import { LoadingScreen } from "./components/LoadingScreen/LoadingScreen";
 import { HomePage } from "./pages/HomePage";
 import { NavBar } from "./components/NavBar/NavBar";
+import { MusicHost } from "./components/MusicHost/MusicHost";
 import { outsideSceneItems } from "./components/OutsideScene/OutsideScene";
 import { roomSceneItems } from "./components/RoomScene/RoomScene";
 import { zykCodingItems } from "./components/ZykCoding/ZykCoding";
@@ -104,6 +105,7 @@ function App() {
           long-scrolling page (§3); the NavBar smooth-scrolls between its section
           anchors. Nav mounts only after reveal so its entrance animation plays. */}
       {!isLoading && <NavBar />}
+      <MusicHost />
       <HomePage revealed={!isLoading} />
 
       {/* Cozy loading overlay sits on top (fixed, z-index 9999) until ready. */}

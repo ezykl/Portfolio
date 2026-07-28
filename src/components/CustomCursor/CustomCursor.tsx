@@ -46,7 +46,8 @@ const HAND_HOTSPOT = { x: 0.32, y: 0.05 };
 function isOverClickablePixel(clientX: number, clientY: number): boolean {
   const stack = document.elementsFromPoint(clientX, clientY);
   for (const el of stack) {
-    if (!(el instanceof HTMLElement) || !el.hasAttribute("data-clickable")) continue;
+    if (!(el instanceof HTMLElement) || !el.hasAttribute("data-clickable"))
+      continue;
     if (el instanceof HTMLImageElement || el instanceof HTMLVideoElement) {
       if (isOpaqueAt(el, clientX, clientY)) return true;
       continue; // transparent here — keep walking down the stack
@@ -72,12 +73,9 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ containerRef }) => {
     if (!container) return;
 
     const handleMove = (e: PointerEvent) => {
-      const rect = container.getBoundingClientRect();
-      setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      setPos({ x: e.clientX, y: e.clientY });
 
       const { clientX, clientY } = e;
-      // The opacity check draws to a canvas — throttle to one per frame so
-      // rapid pointermove events don't each force a synchronous read.
       if (rafRef.current !== undefined) cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
         setIsClickable(isOverClickablePixel(clientX, clientY));
@@ -107,13 +105,15 @@ export const CustomCursor: React.FC<CustomCursorProps> = ({ containerRef }) => {
       src={isClickable ? "/assets/ui/hand.png" : "/assets/ui/cursor.png"}
       alt=""
       style={{
-        position: "absolute",
+        position: "fixed",
         left: pos.x - CURSOR_SIZE * hotspot.x,
         top: pos.y - CURSOR_SIZE * hotspot.y,
         width: CURSOR_SIZE,
         height: CURSOR_SIZE,
         pointerEvents: "none",
         zIndex: 9999,
+        transform: "translate3d(0, 0, 0)",
+        willChange: "transform",
       }}
     />
   );

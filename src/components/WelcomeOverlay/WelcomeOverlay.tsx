@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 interface WelcomeOverlayProps {
   /** Flips true once the loading screen has cleared and the scene is actually visible. */
   show: boolean;
+  onStart?: () => void;
+  onSkip?: () => void;
 }
 
 const HOLD_MS = 2200;
@@ -14,7 +16,11 @@ const HOLD_MS = 2200;
  * always plays after the loading screen clears, regardless of how long
  * loading actually took.
  */
-export const WelcomeOverlay: React.FC<WelcomeOverlayProps> = ({ show }) => {
+export const WelcomeOverlay: React.FC<WelcomeOverlayProps> = ({
+  show,
+  onStart,
+  onSkip,
+}) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -45,17 +51,40 @@ export const WelcomeOverlay: React.FC<WelcomeOverlayProps> = ({ show }) => {
             exit={{ opacity: 0, y: -16, scale: 0.96 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
             style={{
-              fontSize: "clamp(1.5rem, 4vw, 2.75rem)",
-              fontWeight: 700,
               color: "#3a2b22",
               textShadow: "0 2px 12px rgba(255,255,255,0.6)",
-              background: "rgba(255, 250, 240, 0.55)",
-              padding: "0.6em 1.1em",
-              borderRadius: "999px",
-              backdropFilter: "blur(6px)",
+              background: "rgba(255, 250, 240, 0.6)",
+              padding: "1.1rem 1.35rem",
+              borderRadius: "1.5rem",
+              backdropFilter: "blur(8px)",
+              boxShadow: "0 18px 40px rgba(74, 46, 28, 0.13)",
+              maxWidth: "min(92vw, 32rem)",
+              textAlign: "center",
             }}
           >
-            Hi, I'm Zyk 👋
+            <p className="font-display text-2xl sm:text-3xl">
+              Start an exploration?
+            </p>
+            <p className="mt-2 font-body text-sm leading-relaxed text-zyk-brown/80 sm:text-base">
+              A few hidden memories are tucked around the portfolio. Find them
+              and the room slowly comes alive.
+            </p>
+            <div className="mt-5 flex flex-wrap justify-center gap-3">
+              <button
+                type="button"
+                onClick={onStart}
+                className="rounded-full bg-zyk-primary px-4 py-2 font-display text-sm text-white shadow-md transition-transform hover:-translate-y-0.5"
+              >
+                Start Exploration
+              </button>
+              <button
+                type="button"
+                onClick={onSkip}
+                className="rounded-full bg-zyk-secondary px-4 py-2 font-display text-sm text-zyk-heading shadow-md transition-transform hover:-translate-y-0.5"
+              >
+                Skip
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
