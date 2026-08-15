@@ -12,7 +12,7 @@ import { useSceneRef } from "./SceneRefsContext";
 import { useSceneGlow } from "./SceneGlowContext";
 import { isOpaqueAt } from "./alphaHitTest";
 import { Tooltip } from "./Tooltip";
-import { LAYER_CLICK_EVENT } from "./events";
+import { LAYER_CLICK_EVENT, MUSIC_TOGGLE_EVENT } from "./events";
 
 interface InteractiveLayerProps {
   layer: SceneLayer;
@@ -111,6 +111,30 @@ export const InteractiveLayer: React.FC<InteractiveLayerProps> = ({
   const [toggled, setToggled] = useState(false);
   const onToggle = useCallback(() => setToggled((v) => !v), []);
 
+  const listensMusic = layer.behaviors?.includes("listenMusicToggle") ?? false;
+  const [musicActive, setMusicActive] = useState(false);
+
+  useEffect(() => {
+    if (!listensMusic) return;
+    const onMusicToggle = () => setMusicActive((prev) => !prev);
+    window.addEventListener(MUSIC_TOGGLE_EVENT, onMusicToggle);
+    return () => window.removeEventListener(MUSIC_TOGGLE_EVENT, onMusicToggle);
+  }, [listensMusic]);
+
+  // If this layer is a video (e.g. animated music notes webm), play/pause in sync with music
+  useEffect(() => {
+    if (!listensMusic) return;
+    const el = mediaElRef.current;
+    if (el instanceof HTMLVideoElement) {
+      if (musicActive) {
+        el.currentTime = 0;
+        el.play().catch(() => {});
+      } else {
+        el.pause();
+      }
+    }
+  }, [listensMusic, musicActive]);
+
   const resolved = useMemo(
     () =>
       resolveBehaviors(layer.behaviors, {
@@ -125,6 +149,7 @@ export const InteractiveLayer: React.FC<InteractiveLayerProps> = ({
             : layer.tooltip,
         popup: layer.popup,
         onToggle,
+        opacity: layer.opacity ?? 1,
         emitEvent: (eventName, detail) => {
           if (typeof window !== "undefined") {
             window.dispatchEvent(new CustomEvent(eventName, { detail }));
@@ -151,10 +176,12 @@ export const InteractiveLayer: React.FC<InteractiveLayerProps> = ({
 
   // Every layer captures pointer events by default, so a large, mostly
   // transparent asset rendered after a smaller one can block clicks meant for
-  // what's beneath it. Layers with no behaviors/events aren't interactive
-  // anyway, so let clicks pass straight through them.
+  // what's beneath it. Layers with no interactive behaviors/events aren't
+  // interactive anyway, so let clicks pass straight through them.
   const isInteractive =
-    (layer.behaviors?.length ?? 0) > 0 || Boolean(layer.events);
+    (layer.behaviors?.some(
+      (b) => b !== "listenMusicToggle" && b !== "opacity",
+    ) ?? false) || Boolean(layer.events);
 
   const hasClickHandler = Boolean(resolved.onClick || layer.events?.onClick);
 
@@ -288,6 +315,43 @@ export const InteractiveLayer: React.FC<InteractiveLayerProps> = ({
           repeatType: "loop",
         },
       },
+    };
+  }
+
+  // Reactive visibility & gentle floating animation for layers that sync with music
+  if (listensMusic) {
+    const targetOpacity = layer.opacity ?? 0.85;
+    const floatDuration = layer.floatDuration ?? 10;
+    const prevInitial = (motionProps.initial ?? {}) as Record<string, unknown>;
+    const prevAnimate = (motionProps.animate ?? {}) as Record<string, unknown>;
+    motionProps = {
+      ...motionProps,
+      initial: { opacity: 0, scale: 0.9, y: 6, ...prevInitial },
+      animate: musicActive
+        ? {
+            ...prevAnimate,
+            opacity: targetOpacity,
+            scale: [1, 1.05, 1],
+            y: [0, -5, 0],
+          }
+        : {
+            ...prevAnimate,
+            opacity: 0,
+            scale: 0.9,
+            y: 6,
+          },
+      transition: musicActive
+        ? {
+            opacity: { duration: 1, ease: "easeOut" },
+            scale: { duration: floatDuration, repeat: Infinity, ease: "easeInOut" },
+            y: { duration: floatDuration, repeat: Infinity, ease: "easeInOut" },
+            ...motionProps.transition,
+          }
+        : {
+            duration: 0.35,
+            ease: "easeIn",
+            ...motionProps.transition,
+          },
     };
   }
 

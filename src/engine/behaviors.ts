@@ -17,6 +17,8 @@ export const ALL_BEHAVIOR_IDS: BehaviorId[] = [
   'toggle',
   'openMinigame',
   'music',
+  'listenMusicToggle',
+  'opacity',
 ];
 
 /** Runtime state a resolver may need, e.g. clickGlow's on/off flag. */
@@ -31,6 +33,8 @@ export interface BehaviorContext {
   popup?: PopupContent;
   /** Flips the layer's `toggle` media state; provided to the `toggle` resolver. */
   onToggle?: () => void;
+  /** Opacity of the layer (0-1), used by the `opacity` behavior. */
+  opacity?: number;
 }
 
 export interface ResolvedBehaviors {
@@ -117,14 +121,13 @@ const BEHAVIOR_RESOLVERS: Record<
     },
   }),
   // Swaps the layer between its base media and its `toggle` media on click
-  // (e.g. cold ⇄ hot coffee). InteractiveLayer owns the toggled state and the
+  // (e.g. cold �� ⇄ hot coffee). InteractiveLayer owns the toggled state and the
   // actual media swap; this resolver just flips it and plays the click sound.
   toggle: (acc, ctx) => ({
     ...acc,
     onClick: () => {
       acc.onClick?.();
       ctx.onToggle?.();
-      playClickSound();
     },
   }),
   // Opens the AllScene find-the-object mini-game by emitting OPEN_MINIGAME_EVENT;
@@ -138,15 +141,25 @@ const BEHAVIOR_RESOLVERS: Record<
     },
   }),
   // In-scene music control (e.g. a desk music player): each click swaps the
-  // asset's media (via `toggle`: still png ⇄ playing webp) and emits
+  // asset's media (via `toggle`: still png �� ⇄ playing webp) and emits
   // MUSIC_TOGGLE_EVENT so an app-level MusicHost play/pauses the track. Both
   // start "off" and flip together, so the art stays in sync with the audio.
   music: (acc, ctx) => ({
     ...acc,
     onClick: () => {
       acc.onClick?.();
-      ctx.onToggle?.();
       ctx.emitEvent?.(MUSIC_TOGGLE_EVENT, {});
+    },
+  }),
+  // Marker: opts a layer into toggling visibility when MUSIC_TOGGLE_EVENT is received.
+  // InteractiveLayer manages the event listener and opacity/motion animation.
+  listenMusicToggle: (acc) => acc,
+  // Sets the layer's opacity (0-1) via motionProps.opacity.
+  opacity: (acc, ctx) => ({
+    ...acc,
+    motionProps: {
+      ...acc.motionProps,
+      opacity: ctx.opacity ?? 1,
     },
   }),
 };

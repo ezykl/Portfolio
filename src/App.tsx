@@ -40,6 +40,17 @@ function App() {
   const [isLoading, setIsLoading] = React.useState(true);
   const [progress, setProgress] = React.useState(0);
 
+  // Always start at the very top of the page, regardless of the browser's
+  // scroll-restoration (a refresh mid-scroll would otherwise skip straight
+  // past the Hero reveal). Runs once, before the reveal animation is gated on.
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
   React.useEffect(() => {
     const total = PRELOAD_IMAGES.length;
     let loaded = 0;

@@ -90,7 +90,7 @@ export const NavBar: React.FC = () => {
       ref={navRef}
       initial={reduce ? false : { y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ delay: 2, duration: 0.5, ease: "easeOut" }}
       className="fixed inset-x-0 top-0 z-100 transition-colors duration-300"
       style={{
         backgroundColor: atTop
@@ -129,7 +129,7 @@ export const NavBar: React.FC = () => {
                 {isActive && (
                   <motion.span
                     layoutId="nav-active-underline"
-                    className="absolute -bottom-1.5 left-0 right-0 h-0.5 rounded-full bg-zyk-text-accent"
+                    className="absolute -bottom-1.5 left-0 right-0 h-0.5 rounded-full bg-zyk-text-primary"
                     transition={{ type: "spring", stiffness: 400, damping: 32 }}
                   />
                 )}

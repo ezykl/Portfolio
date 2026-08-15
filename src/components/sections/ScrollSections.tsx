@@ -3,6 +3,39 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ContactForm } from "../Contact/ContactForm";
 import { ContactLinks } from "../Contact/ContactLinks";
 import { Placeholder } from "../ui/Placeholder";
+import { TechIcon, type TechIconName } from "../ui/techIcons";
+
+// Maps our human-readable tech labels to vendored tech-logo icon names. Labels
+// with no entry here (e.g. placeholder tags like "Tech") just render as
+// plain text — TechChip below falls back gracefully.
+const TECH_ICON_MAP: Partial<Record<string, TechIconName>> = {
+  React: "react",
+  TypeScript: "typescript",
+  Tailwind: "tailwindcss",
+  "Framer Motion": "framer",
+  Figma: "figma",
+  Vite: "vitejs",
+  Git: "git",
+  Node: "nodejs",
+  HTML: "html5",
+  CSS: "css3",
+};
+
+/** A tag pill with an optional tech-stack-icons logo in front of the label. */
+const TechChip: React.FC<{ label: string; className?: string }> = ({
+  label,
+  className = "",
+}) => {
+  const icon = TECH_ICON_MAP[label];
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 font-body font-medium ${className}`}
+    >
+      {icon && <TechIcon name={icon} className="h-4 w-4 shrink-0" />}
+      {label}
+    </span>
+  );
+};
 
 /**
  * Anchor scaffolding for the single-page scroll (§3). These are intentionally
@@ -131,44 +164,76 @@ export const DesignsSection: React.FC = () => {
   );
 };
 
-interface JourneyStep {
-  title: string;
+// ▶ EDIT ME: 2-4 sentences on who you are beyond the résumé — background,
+// personality, what drives you. Keep it personal and cozy, not corporate.
+const ABOUT_BLURB =
+  "[Personal bio placeholder — a couple of sentences about who you are outside of the work: your background, what you're curious about, and what makes you, you.]";
+
+// ▶ EDIT ME: quick scannable facts — where you're based, hobbies, fun details.
+const ABOUT_FACTS = ["[Based in ...]", "[A hobby you love]", "[Something playful about you]"];
+
+interface ExperienceEntry {
+  period: string;
+  role: string;
+  org: string;
   blurb: string;
-  detail: string;
+  /** Tech / skills used in this role — the stack, told over time. */
+  tech: string[];
 }
 
-const JOURNEY_STEPS: JourneyStep[] = [
+// ▶ EDIT ME: your real roles, in order — internships, jobs, leadership
+// positions, freelance work. Replace every bracketed placeholder below.
+const EXPERIENCE: ExperienceEntry[] = [
   {
-    title: "Curiosity first",
+    period: "[20XX — 20XX]",
+    role: "[Your Role]",
+    org: "[Company / Organization]",
     blurb:
-      "I started by making things that felt alive — sketches, interfaces, and small interactions that invited people to explore.",
-    detail: "That curiosity became the root of how I build today.",
+      "[One or two sentences on what you did and the impact you made.]",
+    tech: ["Tech", "Used", "Here"],
   },
   {
-    title: "Design meets code",
+    period: "[20XX — 20XX]",
+    role: "[Your Role]",
+    org: "[Company / Organization]",
     blurb:
-      "I learned to bridge visuals and systems so the experience feels as good as it looks.",
-    detail:
-      "React, motion, and thoughtful UI became my language for storytelling.",
+      "[One or two sentences on what you did and the impact you made.]",
+    tech: ["Tech", "Used", "Here"],
   },
   {
-    title: "Community and craft",
+    period: "[20XX — Present]",
+    role: "[Your Role]",
+    org: "[Company / Organization]",
     blurb:
-      "Leadership, events, and teaching helped me sharpen my voice and share what I was building with others.",
-    detail:
-      "GDSC and creative collaborations shaped the way I think about impact.",
+      "[One or two sentences on what you did and the impact you made.]",
+    tech: ["Tech", "Used", "Here"],
   },
-  {
-    title: "Still becoming",
-    blurb:
-      "I’m drawn to work that feels handcrafted, playful, and memorable — the kind of work that leaves a feeling behind.",
-    detail: "The portfolio itself is part of that evolving practice.",
-  },
+];
+
+// At-a-glance current stack, shown as a strip below Experience.
+const TECH_STACK = [
+  "React",
+  "TypeScript",
+  "Tailwind",
+  "Framer Motion",
+  "Figma",
+  "Vite",
+  "Git",
+  "Node",
 ];
 
 export const JourneySection: React.FC = () => {
   const reveal = useReveal();
   const reduce = useReducedMotion() ?? false;
+
+  const item = {
+    hidden: reduce ? { opacity: 1 } : { opacity: 0, y: 16 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.45, ease: "easeOut" as const },
+    },
+  };
 
   return (
     <section
@@ -176,101 +241,161 @@ export const JourneySection: React.FC = () => {
       style={{ scrollMarginTop: "5rem" }}
       className="mx-auto max-w-6xl px-6 py-24"
     >
+      {/* About Me */}
       <motion.div {...reveal} className="max-w-3xl">
         <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
-          The path so far
+          Who I am
         </p>
         <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
-          Journey
+          About Me
         </h2>
         <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
-          My work has always sat at the edge of making and meaning — design,
-          code, motion, and story all shaping the same creative practice.
+          {ABOUT_BLURB}
         </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {ABOUT_FACTS.map((fact) => (
+            <span
+              key={fact}
+              className="rounded-full bg-zyk-secondary/35 px-3 py-1 font-body text-xs font-medium text-zyk-heading"
+            >
+              {fact}
+            </span>
+          ))}
+        </div>
       </motion.div>
 
-      <div className="mt-12 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={{
-            hidden: {},
-            show: { transition: { staggerChildren: reduce ? 0 : 0.08 } },
-          }}
-          className="rounded-[2rem] border border-zyk-brown/10 bg-zyk-bg-end/80 p-6 shadow-md"
+      {/* Experience: a line crossing left→right (top→bottom on mobile) with a
+          dot per role. */}
+      <div className="mt-20">
+        <motion.p
+          {...reveal}
+          className="font-display text-sm uppercase tracking-widest text-zyk-accent"
         >
-          <div className="grid gap-4 sm:grid-cols-2">
-            {JOURNEY_STEPS.map((step) => (
-              <motion.article
-                key={step.title}
-                variants={{
-                  hidden: reduce ? { opacity: 1 } : { opacity: 0, y: 16 },
-                  show: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 0.45, ease: "easeOut" },
-                  },
-                }}
-                className="rounded-2xl border border-zyk-brown/10 bg-white/60 p-4"
-              >
-                <p className="font-display text-lg text-zyk-heading">
-                  {step.title}
-                </p>
-                <p className="mt-2 font-body text-sm leading-relaxed text-zyk-brown/80">
-                  {step.blurb}
-                </p>
-                <p className="mt-3 font-body text-xs uppercase tracking-[0.2em] text-zyk-accent">
-                  {step.detail}
-                </p>
-              </motion.article>
-            ))}
-          </div>
-        </motion.div>
+          Where I&apos;ve been
+        </motion.p>
+        <motion.h3
+          {...reveal}
+          className="mt-2 font-display text-3xl text-zyk-heading md:text-4xl"
+        >
+          Experience
+        </motion.h3>
 
-        <motion.div {...reveal} className="flex flex-col gap-4">
-          <Placeholder
-            label="A winding illustrated path from sketchbook to interface, with little paper tags for community, learning, and craft"
-            aspect="4 / 3"
+        <div className="relative mt-12">
+          {/* Horizontal connector (desktop) — draws in left→right. */}
+          <motion.div
+            aria-hidden
+            initial={reduce ? false : { scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            style={{ transformOrigin: "left" }}
+            className="absolute left-0 right-0 top-2 hidden h-0.5 bg-zyk-brown/20 md:block"
           />
-          <div className="rounded-[2rem] border border-zyk-brown/10 bg-zyk-secondary/25 p-5 shadow-sm">
-            <p className="font-display text-lg text-zyk-heading">
-              Tools I keep reaching for
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {[
-                "React",
-                "TypeScript",
-                "Figma",
-                "Framer Motion",
-                "Tailwind",
-                "Vite",
-              ].map((tool) => (
-                <span
-                  key={tool}
-                  className="rounded-full bg-zyk-bg-end/70 px-3 py-1 font-body text-xs font-medium text-zyk-brown/80"
-                >
-                  {tool}
-                </span>
-              ))}
-            </div>
-          </div>
-        </motion.div>
+          {/* Vertical connector (mobile). */}
+          <div
+            aria-hidden
+            className="absolute bottom-0 left-2 top-2 w-0.5 bg-zyk-brown/20 md:hidden"
+          />
+
+          <motion.ol
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: {},
+              show: { transition: { staggerChildren: reduce ? 0 : 0.15 } },
+            }}
+            className="grid gap-10 md:grid-cols-3 md:gap-6"
+          >
+            {EXPERIENCE.map((entry) => (
+              <motion.li
+                key={`${entry.role}-${entry.org}`}
+                variants={item}
+                className="relative flex gap-4 md:flex-col md:items-center md:gap-0 md:text-center"
+              >
+                {/* Dot on the line */}
+                <span className="relative z-10 mt-1 h-4 w-4 shrink-0 rounded-full bg-zyk-primary ring-4 ring-zyk-bg-end md:mt-0" />
+
+                <div className="md:mt-6">
+                  <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent">
+                    {entry.period}
+                  </p>
+                  <p className="mt-1 font-display text-lg text-zyk-heading">
+                    {entry.role}
+                  </p>
+                  <p className="font-body text-sm font-medium text-zyk-brown/60">
+                    {entry.org}
+                  </p>
+                  <p className="mt-2 font-body text-sm leading-relaxed text-zyk-brown/80">
+                    {entry.blurb}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-1.5 md:justify-center">
+                    {entry.tech.map((t) => (
+                      <TechChip
+                        key={t}
+                        label={t}
+                        className="rounded-full bg-zyk-secondary/35 px-2.5 py-1 text-xs text-zyk-heading"
+                      />
+                    ))}
+                  </div>
+                </div>
+              </motion.li>
+            ))}
+          </motion.ol>
+        </div>
       </div>
+
+      {/* Tech Stack summary */}
+      <motion.div
+        {...reveal}
+        className="mt-16 rounded-[2rem] border border-zyk-brown/10 bg-zyk-bg-end/80 p-6 text-center shadow-sm"
+      >
+        <p className="font-display text-sm uppercase tracking-[0.2em] text-zyk-accent">
+          Tech Stack
+        </p>
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          {TECH_STACK.map((tool) => (
+            <TechChip
+              key={tool}
+              label={tool}
+              className="rounded-full bg-white/70 px-3 py-1.5 text-sm text-zyk-brown/80 shadow-sm"
+            />
+          ))}
+        </div>
+      </motion.div>
     </section>
   );
 };
 
-/** Contact / footer — the §2b brown footer band with a hire-me call to action. */
+/** Contact / footer — the §2b brown footer band with a hire-me call to action,
+ *  a faint patterned texture, and a closing footer bar. */
 export const ContactSection: React.FC = () => {
   const reveal = useReveal();
+  const year = new Date().getFullYear();
   return (
     <footer
       id="contact"
       style={{ scrollMarginTop: "5rem" }}
-      className="mt-12 bg-zyk-brown px-6 py-20 text-center text-zyk-bg-end"
+      className="relative mt-12 overflow-hidden bg-zyk-brown px-6 py-20 text-center text-zyk-bg-end"
     >
-      <motion.div {...reveal} className="mx-auto max-w-2xl">
+      {/* bg-pattern.svg overlaid and recoloured to a soft cream via CSS mask
+          (the source SVG is solid black — masking lets us tint it without
+          editing the shared asset). Sits behind the content as faint texture. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.12]"
+        style={{
+          backgroundColor: "#FEF5EB",
+          WebkitMaskImage: "url(/assets/ui/bg-pattern.svg)",
+          maskImage: "url(/assets/ui/bg-pattern.svg)",
+          WebkitMaskRepeat: "repeat",
+          maskRepeat: "repeat",
+          WebkitMaskSize: "300px",
+          maskSize: "300px",
+        }}
+      />
+
+      <motion.div {...reveal} className="relative z-10 mx-auto max-w-2xl">
         <h2 className="font-display text-4xl md:text-5xl">
           Let&apos;s work together.
         </h2>
@@ -290,6 +415,21 @@ export const ContactSection: React.FC = () => {
           <ContactLinks />
         </div>
       </motion.div>
+
+      {/* Closing footer bar */}
+      <div className="relative z-10 mx-auto mt-16 flex max-w-5xl flex-col items-center gap-2 border-t border-zyk-bg-end/15 pt-6 font-body text-sm text-zyk-bg-end/70 sm:flex-row sm:justify-between">
+        <p className="font-display tracking-wide">Zyk</p>
+        <p>
+          &copy; {year} Ezekiel Villadolid · Built with React, Tailwind &amp; a
+          lot of coffee ☕
+        </p>
+        <a
+          href="#home"
+          className="transition-colors hover:text-zyk-bg-end"
+        >
+          Back to top ↑
+        </a>
+      </div>
     </footer>
   );
 };

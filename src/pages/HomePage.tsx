@@ -13,8 +13,10 @@ interface HomePageProps {
 
 /**
  * The single long-scrolling page (§3): the AllScene Hero followed by the
- * content sections the NavBar anchors into. Sections are placeholders for now
- * (see ScrollSections), sharing the §2b visual language.
+ * content sections the NavBar anchors into. Each section is fully independent
+ * (not sharing a wrapper) so it's free to define its own internal layout and
+ * scroll behavior — e.g. Projects' own scroll-driven case-study mechanism —
+ * without being entangled with its neighbors.
  */
 export const HomePage: React.FC<HomePageProps> = ({ revealed }) => (
   <main className="bg-linear-to-b from-[#f2bf83] to-[#fef5eb]">

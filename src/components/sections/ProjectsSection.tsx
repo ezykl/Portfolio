@@ -1,16 +1,30 @@
-import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Placeholder } from "../ui/Placeholder";
-import { useReveal } from "./ScrollSections";
 
 /**
- * Featured Projects chapter (Priority 1). Case-study cards laid out with the
- * project's placeholder-asset convention: artwork is a described <Placeholder>
- * so the layout is functional before final illustrations exist. Content here is
- * intentionally placeholder — swap `PROJECTS` for real case studies later.
+ * Featured Projects chapter (Priority 1) — an editorial, scroll-driven layout.
+ * The section header + image sit in a `position: sticky` column that stays put
+ * in the viewport; each project's title/blurb/tags scrolls past it in a normal
+ * document-flow column. Whichever project's text block currently crosses the
+ * vertical center of the viewport becomes "active," and the pinned image
+ * cross-fades to match. Content here is intentionally placeholder — swap
+ * `PROJECTS` for real case studies later; the mechanism doesn't care how many
+ * entries there are.
  *
- * Motion (§4): the header uses the shared fade+rise reveal; the card grid
- * staggers its children in, all reduced-motion safe.
+ * Active-project detection reuses the exact IntersectionObserver "collapse the
+ * root to a center line" technique already proven in NavBar's scroll-spy
+ * (`rootMargin: "-50% 0px -50% 0px"`), rather than continuous scroll-progress
+ * math — simpler, and it's what a discrete "which block is centered" question
+ * calls for.
+ *
+ * No pagination dots: a row of dots reads as "swipe me" (carousel affordance),
+ * which is the wrong cue for a scroll-driven layout — the scroll motion itself
+ * is the only affordance needed.
+ *
+ * Accessibility: a pinned, scroll-driven image is a stronger motion effect
+ * than a simple fade, so `prefers-reduced-motion` skips the mechanism entirely
+ * and falls back to a plain stacked list of image+text cards.
  */
 
 interface Project {
@@ -48,32 +62,31 @@ const PROJECTS: Project[] = [
   },
 ];
 
+const SECTION_INTRO = {
+  eyebrow: "Things I've built",
+  title: "Featured Projects",
+  blurb: "A handful of things I've made — each one a small world of its own.",
+};
+
 const TagChip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="rounded-full bg-zyk-secondary/40 px-3 py-1 font-body text-xs font-medium text-zyk-heading">
     {children}
   </span>
 );
 
-const ProjectCard: React.FC<{ project: Project; reduce: boolean }> = ({
-  project,
-  reduce,
-}) => (
-  <motion.article
-    variants={{
-      hidden: reduce ? { opacity: 1 } : { opacity: 0, y: 20 },
-      show: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5, ease: "easeOut" },
-      },
-    }}
-    className="flex flex-col overflow-hidden rounded-3xl border border-zyk-brown/10 bg-zyk-bg-end/80 p-4 shadow-md transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-  >
-    <Placeholder label={project.art} aspect="4 / 3" />
-    <h3 className="mt-4 font-display text-2xl text-zyk-heading">
+const ProjectText: React.FC<{
+  project: Project;
+  index: number;
+  total: number;
+}> = ({ project, index, total }) => (
+  <>
+    <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent">
+      {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+    </p>
+    <h3 className="mt-2 font-display text-3xl text-zyk-heading md:text-4xl">
       {project.title}
     </h3>
-    <p className="mt-2 flex-1 font-body text-sm leading-relaxed text-zyk-brown/80">
+    <p className="mt-3 font-body text-base leading-relaxed text-zyk-brown/80">
       {project.blurb}
     </p>
     <div className="mt-4 flex flex-wrap gap-2">
@@ -83,50 +96,150 @@ const ProjectCard: React.FC<{ project: Project; reduce: boolean }> = ({
     </div>
     <a
       href={project.href ?? "#projects"}
-      className="mt-5 inline-flex items-center gap-1 font-display text-sm text-zyk-accent transition-colors hover:text-zyk-primary"
+      className="mt-5 inline-flex w-fit items-center gap-1 font-display text-sm text-zyk-accent transition-colors hover:text-zyk-primary"
     >
       Read case study &rarr;
     </a>
-  </motion.article>
+  </>
+);
+
+/** Plain, non-sticky fallback for prefers-reduced-motion — same content, no scroll-driven pinning. */
+const ProjectsStaticList: React.FC = () => (
+  <>
+    <div className="max-w-2xl">
+      <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
+        {SECTION_INTRO.eyebrow}
+      </p>
+      <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
+        {SECTION_INTRO.title}
+      </h2>
+      <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
+        {SECTION_INTRO.blurb}
+      </p>
+    </div>
+    <div className="mt-12 flex flex-col gap-8">
+      {PROJECTS.map((project, i) => (
+        <div
+          key={project.title}
+          className="grid gap-8 rounded-3xl border border-zyk-brown/10 bg-zyk-bg-end/80 p-6 shadow-md md:grid-cols-2 md:items-center"
+        >
+          <Placeholder label={project.art} aspect="4 / 3" />
+          <div>
+            <ProjectText project={project} index={i} total={PROJECTS.length} />
+          </div>
+        </div>
+      ))}
+    </div>
+  </>
 );
 
 export const ProjectsSection: React.FC = () => {
-  const reveal = useReveal();
   const reduce = useReducedMotion() ?? false;
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Same "collapse the viewport to a center line" technique as NavBar's
+  // scroll-spy: whichever project's text block currently straddles that
+  // line is the active one.
+  useEffect(() => {
+    if (reduce) return;
+    const items = itemRefs.current.filter(
+      (el): el is HTMLDivElement => el !== null,
+    );
+    if (items.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const idx = items.indexOf(entry.target as HTMLDivElement);
+          if (idx !== -1) setActiveIndex(idx);
+        });
+      },
+      { rootMargin: "-50% 0px -50% 0px", threshold: 0 },
+    );
+    items.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [reduce]);
 
   return (
     <section
       id="projects"
-      style={{ scrollMarginTop: "70px" }}
+      style={{ scrollMarginTop: "var(--nav-height, 5rem)" }}
       className="mx-auto max-w-6xl px-6 py-24"
     >
-      <motion.div {...reveal} className="max-w-2xl">
-        <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
-          Things I&apos;ve built
-        </p>
-        <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
-          Featured Projects
-        </h2>
-        <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
-          A handful of things I&apos;ve made — each one a small world of its
-          own.
-        </p>
-      </motion.div>
+      {reduce ? (
+        <ProjectsStaticList />
+      ) : (
+        <>
+          {/* Mobile: the pinned-image mechanic needs a tall scrolling column
+              to work at all; without it (sticky is md+ only, below), the same
+              spacing just becomes dead blank gaps. Reuse the compact static
+              list instead — same content, no pin. */}
+          <div className="md:hidden">
+            <ProjectsStaticList />
+          </div>
 
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.15 }}
-        variants={{
-          hidden: {},
-          show: { transition: { staggerChildren: reduce ? 0 : 0.12 } },
-        }}
-        className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-      >
-        {PROJECTS.map((project) => (
-          <ProjectCard key={project.title} project={project} reduce={reduce} />
-        ))}
-      </motion.div>
+          <div className="hidden grid-cols-2 gap-16 md:grid">
+            {/* Fixed column: header + image, pinned in the viewport while the
+                text column (right) scrolls past. The image's own box has a
+                constant size (aspect-ratio driven), so a true simultaneous
+                cross-fade here is safe — nothing to overflow. */}
+            <div className="md:sticky md:top-(--nav-height,5rem) md:h-fit md:self-start">
+              <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
+                {SECTION_INTRO.eyebrow}
+              </p>
+              <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
+                {SECTION_INTRO.title}
+              </h2>
+              <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
+                {SECTION_INTRO.blurb}
+              </p>
+
+              <div className="relative mt-8 aspect-4/3 w-full">
+                <AnimatePresence>
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    className="absolute inset-0"
+                  >
+                    <Placeholder
+                      label={PROJECTS[activeIndex].art}
+                      aspect="4 / 3"
+                      className="h-full"
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* Scrolling column: each project's title/blurb/tags in turn, with
+                enough vertical room per item for it to travel from the bottom
+                of the viewport to the top — the moment it crosses center is
+                what triggers the image swap on the left. */}
+            <div className="flex flex-col">
+              {PROJECTS.map((project, i) => (
+                <div
+                  key={project.title}
+                  ref={(el) => {
+                    itemRefs.current[i] = el;
+                  }}
+                  className="flex min-h-[80vh] flex-col justify-center py-12 first:pt-0"
+                >
+                  <ProjectText
+                    project={project}
+                    index={i}
+                    total={PROJECTS.length}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </section>
   );
 };

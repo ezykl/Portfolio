@@ -53,7 +53,7 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
           muted
           playsInline
           aria-hidden
-          className="mx-auto mb-2 h-20 w-20 object-contain animate-[cozy-bob_2.2s_ease-in-out_infinite] drop-shadow-[0_6px_10px_rgba(90,58,38,0.35)]"
+          className="mx-auto mb-2 h-30 w-30 object-contain animate-[cozy-bob_2.2s_ease-in-out_infinite] drop-shadow-[0_6px_10px_rgba(90,58,38,0.35)]"
         />
 
         <h1 className="mb-5 font-display text-lg text-zyk-heading">

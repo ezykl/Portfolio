@@ -11,7 +11,7 @@ import { SceneEngine, type Scene, type SceneLayer } from "../../engine";
  *   item click-selectable (persistent glow, one lit at a time across all scenes).
  * - `tooltip` (+ a `tooltip` string) — floating label on hover.
  * - `popup` (+ `popup` content) — "me" opens an intro message on click.
- * - `toggle` (+ `toggle` media) — coffee swaps cold png ⇄ hot webm (steam).
+ * - `toggle` (+ `toggle` media) — coffee swaps cold png �� ⇄ hot webm (steam).
  * - `openMinigame` — the notebook opens the AllScene find-the-object game.
  * Add/adjust behaviors on any entry below — nothing in InteractiveLayer or the
  * renderer needs to change.
@@ -27,33 +27,44 @@ export const zykCodingItems: SceneLayer[] = [
     width: 90,
     height: 56.25,
   },
-
   {
-    // Desk music player: click to play/pause the background track. Idle shows
-    // the still PNG; while playing it swaps to the animated player and back.
-    id: "zyk-music",
-    src: "/assets/me/music-player.png",
-    type: "image",
-    left: 20,
-    top: 60,
-    width: 10,
-    height: 17,
-    behaviors: ["hoverGlow", "tooltip", "music"],
-    tooltip: "Want some music?",
-    toggle: {
-      // TODO: drop in the animated /assets/me/music-player.webm; until it
-      // exists this video just shows the poster (the same still PNG).
-      src: "/assets/me/music-player.webm",
-      type: "video",
-      tooltip: "Pause the music",
-      videoAttrs: {
-        autoPlay: true,
-        loop: true,
-        muted: true,
-        poster: "/assets/me/music-player.png",
-      },
+    // Music notes layer (hidden by default, smoothly revealed and floating when desk music is playing)
+    id: "zyk-music-notes",
+    src: "/assets/me/musicnotes.webm",
+    type: "video",
+    left: 10,
+    top: 14,
+    width: 60,
+    height: 60,
+    behaviors: ["listenMusicToggle"],
+    opacity: 1,
+    videoAttrs: {
+      autoPlay: true,
+      loop: true,
+      muted: true,
     },
   },
+
+
+
+  {    // Desk music player: click to play/pause music and toggle music notes.
+    id: "zyk-music",
+    src: "/assets/me/soundbox.png",
+    type: "image",
+    left: 20,
+    top: 62,
+    width: 13,
+    height: 17,
+    behaviors: ["hoverGlow", "tooltip", "music", "toggle"],
+    tooltip: "Want some music?",
+    toggle: {
+      src: "/assets/me/soundbox.png",
+      type: "image",
+      tooltip: "Music is playing",
+    },
+  },
+
+
 
   {
     id: "zyk-laptop",
@@ -147,7 +158,7 @@ export const zykCodingItems: SceneLayer[] = [
     behaviors: ["clickGlow", "tooltip", "popup"],
     tooltip: "That's me — click to say hi",
     popup: {
-      title: "Hey, I'm Zyk 👋",
+      title: "Hey, I'm Zyk! 👋",
       body: "Welcome to my little corner of the web. I'm a software developer and graphic artist who loves building warm, playful, handcrafted experiences — like this one. Poke around the room, scroll through the world, and feel free to reach out.",
     },
     videoAttrs: {

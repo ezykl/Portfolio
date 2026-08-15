@@ -13,7 +13,9 @@ export type BehaviorId =
   | 'hoverGlow'
   | 'toggle'
   | 'openMinigame'
-  | 'music';
+  | 'music'
+  | 'listenMusicToggle'
+  | 'opacity';
 
 /** Content for the click-to-open message popup (see the `popup` behavior). */
 export interface PopupContent {
@@ -87,6 +89,10 @@ export interface SceneLayer {
   events?: LayerEvents;
   videoAttrs?: VideoHTMLAttributes<HTMLVideoElement>;
   loop?: LoopAnimation;
+  /** Opacity of the layer (0-1). Used by the `opacity` behavior. */
+  opacity?: number;
+  /** Duration in seconds for floating loops (e.g. `listenMusicToggle`). Defaults to 5.5s. */
+  floatDuration?: number;
 }
 
 /** @deprecated Kept so pre-refactor imports of `AssetItem` keep compiling. Use {@link SceneLayer}. */
