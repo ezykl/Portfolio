@@ -185,7 +185,10 @@ export const ProjectsSection: React.FC = () => {
                 text column (right) scrolls past. The image's own box has a
                 constant size (aspect-ratio driven), so a true simultaneous
                 cross-fade here is safe — nothing to overflow. */}
-            <div className="md:sticky md:top-(--nav-height,5rem) md:h-fit md:self-start">
+            <div
+              className="md:sticky md:h-fit md:self-start"
+              style={{ top: "var(--nav-height, 5rem)" }}
+            >
               <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
                 {SECTION_INTRO.eyebrow}
               </p>

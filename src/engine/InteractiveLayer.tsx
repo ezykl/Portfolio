@@ -12,7 +12,7 @@ import { useSceneRef } from "./SceneRefsContext";
 import { useSceneGlow } from "./SceneGlowContext";
 import { isOpaqueAt } from "./alphaHitTest";
 import { Tooltip } from "./Tooltip";
-import { LAYER_CLICK_EVENT, MUSIC_TOGGLE_EVENT } from "./events";
+import { LAYER_CLICK_EVENT, ERROR_CLICK_EVENT, MUSIC_TOGGLE_EVENT } from "./events";
 
 interface InteractiveLayerProps {
   layer: SceneLayer;
@@ -113,6 +113,21 @@ export const InteractiveLayer: React.FC<InteractiveLayerProps> = ({
 
   const listensMusic = layer.behaviors?.includes("listenMusicToggle") ?? false;
   const [musicActive, setMusicActive] = useState(false);
+
+  // `errorClick` behavior: each click bumps a counter that the Tooltip turns
+  // into a shake of the hovering label. The asset itself never moves.
+  const hasErrorClick = layer.behaviors?.includes("errorClick") ?? false;
+  const [tooltipShake, setTooltipShake] = useState(0);
+
+  useEffect(() => {
+    if (!hasErrorClick) return;
+    const onErrorClick = (e: Event) => {
+      const detail = (e as CustomEvent).detail as { id?: string } | undefined;
+      if (detail?.id === layer.id) setTooltipShake((s) => s + 1);
+    };
+    window.addEventListener(ERROR_CLICK_EVENT, onErrorClick);
+    return () => window.removeEventListener(ERROR_CLICK_EVENT, onErrorClick);
+  }, [hasErrorClick, layer.id]);
 
   useEffect(() => {
     if (!listensMusic) return;
@@ -433,6 +448,7 @@ export const InteractiveLayer: React.FC<InteractiveLayerProps> = ({
           x={pointer.x}
           y={pointer.y}
           visible={hovered}
+          shake={tooltipShake}
         />
       )}
     </>

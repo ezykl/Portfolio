@@ -55,7 +55,7 @@ export const zykCodingItems: SceneLayer[] = [
     top: 62,
     width: 13,
     height: 17,
-    behaviors: ["hoverGlow", "tooltip", "music", "toggle"],
+    behaviors: ["hoverGlow", "tooltip", "music", "toggle", "clickSound"],
     tooltip: "Want some music?",
     toggle: {
       src: "/assets/me/soundbox.png",
@@ -106,7 +106,7 @@ export const zykCodingItems: SceneLayer[] = [
     top: 30,
     width: 12,
     height: 100,
-    behaviors: ["hoverGlow", "tooltip", "toggle"],
+    behaviors: ["hoverGlow", "tooltip", "toggle", "clickSound"],
     tooltip: "The coffee isn't hot yet.",
     toggle: {
       src: "/assets/me/Coffe.webm",
@@ -134,7 +134,7 @@ export const zykCodingItems: SceneLayer[] = [
   },
   // Image – Lap (assumed surface)
   {
-    // Not clickable yet — hover glow + tooltip only.
+    // Not functionally clickable, but gives feedback on click with error sound and shake.
     id: "zyk-lamp",
     src: "/assets/me/Lamp.png",
     type: "image",
@@ -142,7 +142,7 @@ export const zykCodingItems: SceneLayer[] = [
     top: 32,
     width: 23,
     height: 60,
-    behaviors: ["hoverGlow", "tooltip"],
+    behaviors: ["hoverGlow", "tooltip", "errorClick"],
     tooltip: "Night Mode is currently under maintenance.",
   },
   // Image – Person (standing on lap)

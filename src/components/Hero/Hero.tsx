@@ -17,7 +17,7 @@ const ROLES = ["Software Developer", "Graphic Designer", "Game UI Designer"];
 
 // How long the self-intro holds at the "popped in" spot before it slides up
 // to its resting position.
-const READ_DELAY_MS = 2000;
+const READ_DELAY_MS = 1000;
 
 type TextPhase = "hidden" | "pop" | "settled";
 
@@ -34,6 +34,24 @@ const textVariants = {
     scale: 1,
     y: 0,
     transition: { duration: 1, ease: "easeOut" },
+  },
+};
+
+const detailItemVariants = {
+  hidden: { opacity: 0, scale: 0.85, y: 8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 280, damping: 18 },
+  },
+};
+
+const buttonVariants = {
+  ...detailItemVariants,
+  visible: {
+    ...detailItemVariants.visible,
+    transition: { type: "spring", stiffness: 280, damping: 18, delay: 0.18 },
   },
 };
 
@@ -60,22 +78,32 @@ const textVariants = {
 export const Hero: React.FC<HeroProps> = ({ revealed }) => {
   const reduce = useReducedMotion();
   const [phase, setPhase] = React.useState<TextPhase>("hidden");
+  const [detailsVisible, setDetailsVisible] = React.useState(false);
   const [typewriterActive, setTypewriterActive] = React.useState(false);
 
   React.useEffect(() => {
     if (!revealed) {
       setPhase("hidden");
+      setDetailsVisible(false);
       setTypewriterActive(false);
       return;
     }
     if (reduce) {
-      // Skip the pop + slide for reduced motion — just appear, then type.
+      // Skip the pop + slide for reduced motion — show everything immediately.
       setPhase("settled");
+      setDetailsVisible(true);
       setTypewriterActive(true);
       return;
     }
     setPhase("pop"); // loading just finished — pop in
   }, [revealed, reduce]);
+
+  // Keep the supporting content hidden while the H1 pops in and settles.
+  React.useEffect(() => {
+    if (phase !== "pop" || reduce) return;
+    const timer = window.setTimeout(() => setPhase("settled"), READ_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [phase, reduce]);
 
   const role = useTypewriterCycle(ROLES, { active: typewriterActive });
 
@@ -91,19 +119,15 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
       style={{ scrollMarginTop: "var(--nav-height, 5rem)" }}
     >
       <div className="flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
-        {/* Self-intro (§3): heading + tagline + two CTA pills. Invisible while
-            loading, pops in once revealed, holds, then slides up to rest —
-            after which the tagline starts cycling roles. Reduced-motion just
-            fades in place and starts the role loop immediately. */}
+        {/* H1 entrance: invisible while loading, pops in once revealed, holds,
+            then slides up to its resting position. */}
         <motion.div
           variants={textVariants}
           initial="hidden"
           animate={phase}
           onAnimationComplete={(definition) => {
-            if (definition === "pop") {
-              setTimeout(() => setPhase("settled"), READ_DELAY_MS);
-            }
             if (definition === "settled") {
+              setDetailsVisible(true);
               setTypewriterActive(true);
             }
           }}
@@ -115,7 +139,15 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
           >
             Hi, I&apos;m Zyk.
           </h1>
-          <p
+        </motion.div>
+
+        {/* After the H1 reaches its fixed position, pop in the role first and
+            the buttons just after it. */}
+        <div className="flex w-full flex-col items-center text-center mt-6 sm:mt-10 md:mt-12">
+          <motion.p
+            variants={detailItemVariants}
+            initial="hidden"
+            animate={detailsVisible ? "visible" : "hidden"}
             className="mt-3 font-medium text-zyk-accent"
             style={{ fontSize: "clamp(1.125rem, 1rem + 0.6vw, 1.5rem)" }}
           >
@@ -127,16 +159,21 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
                 <span className="ml-0.5 inline-block h-[1em] w-0.5 translate-y-0.5 bg-zyk-accent animate-pulse" />
               </>
             )}
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 md:justify-start">
+          </motion.p>
+          <motion.div
+            variants={buttonVariants}
+            initial="hidden"
+            animate={detailsVisible ? "visible" : "hidden"}
+            className="mt-6 flex flex-wrap items-center justify-center gap-4 md:justify-start"
+          >
             <PillButton variant="primary" href="#projects">
               View Projects
             </PillButton>
             <PillButton variant="secondary" href="#contact">
               Get in Touch
             </PillButton>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
         {/* ZykCoding workspace. This outer box is a plain, unanimated element
             sized by ZykCoding's own natural layout height — its rendered size

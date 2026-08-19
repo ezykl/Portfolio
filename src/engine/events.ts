@@ -13,6 +13,9 @@ export const LAYER_CLICK_EVENT = "portfolio:layer-click";
 export const OPEN_MINIGAME_EVENT = "portfolio:open-minigame";
 /** Fired by the `music` behavior to toggle background music play/pause. */
 export const MUSIC_TOGGLE_EVENT = "portfolio:music-toggle";
+/** Fired by the `errorClick` behavior (error sound + tooltip shake); the layer
+ *  itself stays visually stable — InteractiveLayer shakes its own tooltip. */
+export const ERROR_CLICK_EVENT = "portfolio:error-click";
 
 /** Detail payload for {@link POPUP_OPEN_EVENT}. */
 export interface PopupOpenDetail {

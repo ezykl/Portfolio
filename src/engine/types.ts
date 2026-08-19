@@ -1,4 +1,4 @@
-import type { MouseEvent, VideoHTMLAttributes } from 'react';
+import type { MouseEvent, VideoHTMLAttributes } from "react";
 
 /**
  * Declarative interaction hooks a layer can opt into. InteractiveLayer
@@ -6,16 +6,18 @@ import type { MouseEvent, VideoHTMLAttributes } from 'react';
  * behavior by adding a resolver there; nothing else needs to change.
  */
 export type BehaviorId =
-  | 'clickGlow'
-  | 'huntItem'
-  | 'tooltip'
-  | 'popup'
-  | 'hoverGlow'
-  | 'toggle'
-  | 'openMinigame'
-  | 'music'
-  | 'listenMusicToggle'
-  | 'opacity';
+  | "clickGlow"
+  | "huntItem"
+  | "tooltip"
+  | "popup"
+  | "hoverGlow"
+  | "toggle"
+  | "openMinigame"
+  | "music"
+  | "listenMusicToggle"
+  | "opacity"
+  | "clickSound"
+  | "errorClick";
 
 /** Content for the click-to-open message popup (see the `popup` behavior). */
 export interface PopupContent {
@@ -59,7 +61,7 @@ export interface SceneLayer {
   /** Unique within its scene. Used for the React key, the refs registry, and the DOM `id`. */
   id: string;
   src: string;
-  type: 'image' | 'video';
+  type: "image" | "video";
   alt?: string;
   left: number;
   top: number;
@@ -81,7 +83,7 @@ export interface SceneLayer {
    */
   toggle?: {
     src: string;
-    type: 'image' | 'video';
+    type: "image" | "video";
     videoAttrs?: VideoHTMLAttributes<HTMLVideoElement>;
     /** Tooltip shown while in the toggled state (falls back to `tooltip`). */
     tooltip?: string;

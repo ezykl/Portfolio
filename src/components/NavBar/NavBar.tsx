@@ -79,9 +79,18 @@ export const NavBar: React.FC = () => {
       const target = document.querySelector(href);
       if (!target) return;
       e.preventDefault();
-      target.scrollIntoView({
+      // Use the same measured offset as desktop sticky sections. Calculating
+      // the destination directly avoids scrollIntoView's anchor positioning
+      // and the sticky constraint both applying an offset during the same
+      // smooth scroll, which makes the pinned project column visibly jump.
+      const navHeight = navRef.current?.getBoundingClientRect().height ?? 0;
+      const top = Math.max(
+        0,
+        target.getBoundingClientRect().top + window.scrollY - navHeight,
+      );
+      window.scrollTo({
+        top,
         behavior: reduce ? "auto" : "smooth",
-        block: "start",
       });
     };
 

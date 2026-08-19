@@ -2,11 +2,12 @@ import type { MotionProps } from 'framer-motion';
 import type { BehaviorId, PopupContent } from './types';
 import {
   COLLECTIBLE_FOUND_EVENT,
+  ERROR_CLICK_EVENT,
   MUSIC_TOGGLE_EVENT,
   OPEN_MINIGAME_EVENT,
   POPUP_OPEN_EVENT,
 } from './events';
-import { playClickSound } from './clickSound';
+import { playClickSound, playSound } from './clickSound';
 
 export const ALL_BEHAVIOR_IDS: BehaviorId[] = [
   'clickGlow',
@@ -19,6 +20,8 @@ export const ALL_BEHAVIOR_IDS: BehaviorId[] = [
   'music',
   'listenMusicToggle',
   'opacity',
+  'clickSound',
+  'errorClick',
 ];
 
 /** Runtime state a resolver may need, e.g. clickGlow's on/off flag. */
@@ -160,6 +163,26 @@ const BEHAVIOR_RESOLVERS: Record<
     motionProps: {
       ...acc.motionProps,
       opacity: ctx.opacity ?? 1,
+    },
+  }),
+  // Plays a click sound on click (no state change, no glow).
+  clickSound: (acc, ctx) => ({
+    ...acc,
+    onClick: () => {
+      acc.onClick?.();
+      playClickSound();
+    },
+  }),
+  // Non-functional-but-clickable elements (like the lamp in ZykCoding): the
+  // click plays an error sound and emits ERROR_CLICK_EVENT, which
+  // InteractiveLayer uses to shake the layer's *tooltip* — the asset itself
+  // receives no motion, so it stays visually stable.
+  errorClick: (acc, ctx) => ({
+    ...acc,
+    onClick: () => {
+      acc.onClick?.();
+      playSound('error.flac');
+      ctx.emitEvent?.(ERROR_CLICK_EVENT, { id: ctx.layerId });
     },
   }),
 };
