@@ -156,7 +156,10 @@ export const ProjectsSection: React.FC = () => {
           if (idx !== -1) setActiveIndex(idx);
         });
       },
-      { rootMargin: "-50% 0px -50% 0px", threshold: 0 },
+      {
+        rootMargin: "-490px 0px -410px 0px",
+        threshold: 0,
+      },
     );
     items.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
@@ -189,7 +192,7 @@ export const ProjectsSection: React.FC = () => {
               className="md:sticky md:h-fit md:self-start"
               style={{ top: "var(--nav-height, 5rem)" }}
             >
-              <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
+              <p className="mt-4 font-display text-sm uppercase tracking-widest text-zyk-accent">
                 {SECTION_INTRO.eyebrow}
               </p>
               <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">

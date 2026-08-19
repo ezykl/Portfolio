@@ -130,7 +130,7 @@ export const DesignsSection: React.FC = () => {
   return (
     <section
       id="designs"
-      style={{ scrollMarginTop: "5rem" }}
+      style={{ scrollMarginTop: "76px" }}
       className="mx-auto max-w-6xl px-6 py-24"
     >
       <motion.div {...reveal} className="max-w-3xl">
@@ -170,7 +170,11 @@ const ABOUT_BLURB =
   "[Personal bio placeholder — a couple of sentences about who you are outside of the work: your background, what you're curious about, and what makes you, you.]";
 
 // ▶ EDIT ME: quick scannable facts — where you're based, hobbies, fun details.
-const ABOUT_FACTS = ["[Based in ...]", "[A hobby you love]", "[Something playful about you]"];
+const ABOUT_FACTS = [
+  "[Based in ...]",
+  "[A hobby you love]",
+  "[Something playful about you]",
+];
 
 interface ExperienceEntry {
   period: string;
@@ -188,24 +192,21 @@ const EXPERIENCE: ExperienceEntry[] = [
     period: "[20XX — 20XX]",
     role: "[Your Role]",
     org: "[Company / Organization]",
-    blurb:
-      "[One or two sentences on what you did and the impact you made.]",
+    blurb: "[One or two sentences on what you did and the impact you made.]",
     tech: ["Tech", "Used", "Here"],
   },
   {
     period: "[20XX — 20XX]",
     role: "[Your Role]",
     org: "[Company / Organization]",
-    blurb:
-      "[One or two sentences on what you did and the impact you made.]",
+    blurb: "[One or two sentences on what you did and the impact you made.]",
     tech: ["Tech", "Used", "Here"],
   },
   {
     period: "[20XX — Present]",
     role: "[Your Role]",
     org: "[Company / Organization]",
-    blurb:
-      "[One or two sentences on what you did and the impact you made.]",
+    blurb: "[One or two sentences on what you did and the impact you made.]",
     tech: ["Tech", "Used", "Here"],
   },
 ];
@@ -238,7 +239,7 @@ export const JourneySection: React.FC = () => {
   return (
     <section
       id="journey"
-      style={{ scrollMarginTop: "5rem" }}
+      style={{ scrollMarginTop: "76px" }}
       className="mx-auto max-w-6xl px-6 py-24"
     >
       {/* About Me */}
@@ -423,10 +424,7 @@ export const ContactSection: React.FC = () => {
           &copy; {year} Ezekiel Villadolid · Built with React, Tailwind &amp; a
           lot of coffee ☕
         </p>
-        <a
-          href="#home"
-          className="transition-colors hover:text-zyk-bg-end"
-        >
+        <a href="#home" className="transition-colors hover:text-zyk-bg-end">
           Back to top ↑
         </a>
       </div>

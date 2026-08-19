@@ -1,34 +1,48 @@
-// One shared <audio> element per sound file, created lazily on first use and
-// cached — rapid repeat clicks reuse the same element (reset to 0 and replayed)
-// instead of piling up new ones.
+// Preload audio elements for instant playback without delay
 const audioCache: Map<string, HTMLAudioElement> = new Map();
 
+
+function preloadEssentialSounds() {
+  const essentialSounds = ['click.wav', 'error.flac'];
+  essentialSounds.forEach(sound => {
+    if (!audioCache.has(sound)) {
+      const audio = new Audio(`/assets/music/${sound}`);
+      audio.preload = 'auto';
+      audioCache.set(sound, audio);
+    }
+  });
+}
+
+// Call preload immediately when module loads
+if (typeof window !== 'undefined') {
+  preloadEssentialSounds();
+}
+
 /**
- * Returns (creating and caching on first use) the audio element for a file in
- * /assets/music/.
+ * Preloads and returns an audio element for the given sound file
  */
 function getAudio(soundFile: string): HTMLAudioElement {
   if (!audioCache.has(soundFile)) {
     const audio = new Audio(`/assets/music/${soundFile}`);
-    audio.preload = "auto"; // hint to the browser to fetch it up front
+    audio.preload = 'auto'; // Hint to browser to preload
     audioCache.set(soundFile, audio);
   }
   return audioCache.get(soundFile)!;
 }
 
+
 /**
- * Plays a sound effect. Safe to call before any user gesture has unlocked
- * audio only if invoked from a real click — playback errors are swallowed.
+ * Plays a sound effect instantly (no delay from lazy loading)
  */
 export function playSound(soundFile: string): void {
   const audio = getAudio(soundFile);
   audio.currentTime = 0;
-  audio.play().catch(() => {}); // ignore failures from rapid repeat clicks
+  audio.play().catch(() => {}); // Ignoreplayback errors from rapid clicks
 }
 
 /**
- * Plays the standard click sound (backward-compatible shorthand).
+ * Plays the standard click sound (backward compatibility)
  */
 export function playClickSound(): void {
-  playSound("click.wav");
+  playSound('click.wav');
 }

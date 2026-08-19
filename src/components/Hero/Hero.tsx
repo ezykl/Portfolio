@@ -182,7 +182,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
             The inner motion.div is what actually moves (translateY + opacity),
             clipped by this box's `overflow-hidden`, so it reads as rising up
             into view against a backdrop that's already fully in place. */}
-        <div className="relative z-0 mx-auto w-full max-w-295 overflow-hidden mt-6 md:mt-8">
+        <div className="relative z-0 mx-auto w-full max-w-270 overflow-hidden ">
           <motion.div
             initial={reduce ? { opacity: 0 } : { y: "100%", opacity: 0 }}
             animate={
