@@ -91,6 +91,7 @@ const PROJECTS: Project[] = [
       "/assets/gdsc-innoverse/1.png",
       "/assets/gdsc-innoverse/2.png",
     ],
+    tools: [{ label: "Adobe Photoshop", icon: "photoshop", usage: "Primary" }],
   },
   {
     title: "June Design Challenge: Skill Tree",
