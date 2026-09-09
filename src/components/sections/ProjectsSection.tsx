@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Placeholder } from "../ui/Placeholder";
+import { SchoolPaperFlipbook } from "./SchoolPaperFlipbook";
 
 /**
  * Featured Projects chapter (Priority 1) — an editorial, scroll-driven layout.
@@ -33,10 +34,21 @@ interface Project {
   tags: string[];
   /** Description of the illustration/screenshot that belongs on the card. */
   art: string;
+  cover?: string;
+  flipbook?: boolean;
   href?: string;
 }
 
 const PROJECTS: Project[] = [
+  {
+    title: "School Paper Magazine",
+    blurb:
+      "A twelve-page editorial publication presented as an interactive digital magazine, preserving the pacing and tactile rhythm of the original layout.",
+    tags: ["Editorial Design", "Publication Layout", "Print Design"],
+    art: "School Paper Magazine cover",
+    cover: "/assets/school-paper/page-1.png",
+    flipbook: true,
+  },
   {
     title: "Print & Production Design",
     blurb:
@@ -62,7 +74,7 @@ const PROJECTS: Project[] = [
 
 const SECTION_INTRO = {
   eyebrow: "Design in practice",
-  title: "Selected Work",
+  title: "Featured Projects",
   blurb:
     "A focused selection spanning print production, digital campaigns, UI/UX, and visual identity.",
 };
@@ -77,7 +89,8 @@ const ProjectText: React.FC<{
   project: Project;
   index: number;
   total: number;
-}> = ({ project, index, total }) => (
+  onOpenFlipbook?: () => void;
+}> = ({ project, index, total, onOpenFlipbook }) => (
   <>
     <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent">
       {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
@@ -101,11 +114,42 @@ const ProjectText: React.FC<{
         View project &rarr;
       </a>
     )}
+    {project.flipbook && (
+      <button
+        type="button"
+        onClick={onOpenFlipbook}
+        className="mt-5 inline-flex w-fit items-center gap-1 font-display text-sm text-zyk-accent transition-colors hover:text-zyk-primary"
+      >
+        Open flipbook &rarr;
+      </button>
+    )}
   </>
 );
 
+const ProjectVisual: React.FC<{
+  project: Project;
+  className?: string;
+}> = ({ project, className = "" }) =>
+  project.cover ? (
+    <div
+      className={`overflow-hidden rounded-3xl bg-zyk-brown/10 shadow-md ${className}`}
+    >
+      <img
+        src={project.cover}
+        alt={project.art}
+        loading="lazy"
+        decoding="async"
+        className="h-full w-full object-cover object-top"
+      />
+    </div>
+  ) : (
+    <Placeholder label={project.art} aspect="4 / 3" className={className} />
+  );
+
 /** Plain, non-sticky fallback for prefers-reduced-motion — same content, no scroll-driven pinning. */
-const ProjectsStaticList: React.FC = () => (
+const ProjectsStaticList: React.FC<{ onOpenFlipbook: () => void }> = ({
+  onOpenFlipbook,
+}) => (
   <>
     <div className="max-w-2xl">
       <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
@@ -124,9 +168,14 @@ const ProjectsStaticList: React.FC = () => (
           key={project.title}
           className="grid gap-8 rounded-3xl border border-zyk-brown/10 bg-zyk-bg-end/80 p-6 shadow-md md:grid-cols-2 md:items-center"
         >
-          <Placeholder label={project.art} aspect="4 / 3" />
+          <ProjectVisual project={project} className="aspect-4/3" />
           <div>
-            <ProjectText project={project} index={i} total={PROJECTS.length} />
+            <ProjectText
+              project={project}
+              index={i}
+              total={PROJECTS.length}
+              onOpenFlipbook={onOpenFlipbook}
+            />
           </div>
         </div>
       ))}
@@ -138,6 +187,7 @@ export const ProjectsSection: React.FC = () => {
   const reduce = useReducedMotion() ?? false;
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [flipbookOpen, setFlipbookOpen] = useState(false);
 
   // Same "collapse the viewport to a center line" technique as NavBar's
   // scroll-spy: whichever project's text block currently straddles that
@@ -173,7 +223,7 @@ export const ProjectsSection: React.FC = () => {
       className="mx-auto max-w-6xl px-6 py-24"
     >
       {reduce ? (
-        <ProjectsStaticList />
+        <ProjectsStaticList onOpenFlipbook={() => setFlipbookOpen(true)} />
       ) : (
         <>
           {/* Mobile: the pinned-image mechanic needs a tall scrolling column
@@ -181,7 +231,7 @@ export const ProjectsSection: React.FC = () => {
               spacing just becomes dead blank gaps. Reuse the compact static
               list instead — same content, no pin. */}
           <div className="md:hidden">
-            <ProjectsStaticList />
+            <ProjectsStaticList onOpenFlipbook={() => setFlipbookOpen(true)} />
           </div>
 
           <div className="hidden grid-cols-2 gap-16 md:grid">
@@ -213,9 +263,8 @@ export const ProjectsSection: React.FC = () => {
                     transition={{ duration: 0.4, ease: "easeInOut" }}
                     className="absolute inset-0"
                   >
-                    <Placeholder
-                      label={PROJECTS[activeIndex].art}
-                      aspect="4 / 3"
+                    <ProjectVisual
+                      project={PROJECTS[activeIndex]}
                       className="h-full"
                     />
                   </motion.div>
@@ -240,6 +289,7 @@ export const ProjectsSection: React.FC = () => {
                     project={project}
                     index={i}
                     total={PROJECTS.length}
+                    onOpenFlipbook={() => setFlipbookOpen(true)}
                   />
                 </div>
               ))}
@@ -247,6 +297,10 @@ export const ProjectsSection: React.FC = () => {
           </div>
         </>
       )}
+      <SchoolPaperFlipbook
+        open={flipbookOpen}
+        onClose={() => setFlipbookOpen(false)}
+      />
     </section>
   );
 };
