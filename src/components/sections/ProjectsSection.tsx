@@ -108,7 +108,11 @@ const PROJECTS: Project[] = [
     tags: ["Mobile UI/UX", "Product Design", "Marketplace"],
     art: "Rent2Reuse mobile marketplace interface",
     cover: "/assets/rent2reuse/1.png",
-    previewPages: ["/assets/rent2reuse/7.png", "/assets/rent2reuse/4.png"],
+    previewPages: [
+      "/assets/rent2reuse/7.png",
+      "/assets/rent2reuse/4.png",
+      "/assets/rent2reuse/2.png",
+    ],
     imagePreview: true,
     stackedCover: true,
     roundedCover: true,
@@ -292,17 +296,24 @@ const ProjectVisual: React.FC<{
           loading="lazy"
           decoding="async"
           className={`absolute left-1/2 top-1/2 object-contain transition duration-300 ${
-            project.roundedCover ? "rounded-[1.5rem]" : "rounded-sm"
+            project.roundedCover ? "rounded-2xl" : "rounded-sm"
           } ${project.coverShadow === false ? "" : "shadow-xl"} ${
             project.imagePreview && !project.stackedCover
               ? "h-auto max-h-full w-full -translate-x-1/2 -translate-y-1/2 group-hover:scale-[1.01]"
               : `h-[82%] w-auto ${
-                  [
-                    "-translate-x-[76%] -translate-y-[47%] -rotate-[9deg] group-hover:-translate-x-[82%]",
-                    "-translate-x-[62%] -translate-y-[53%] -rotate-[3deg] group-hover:-translate-y-[56%]",
-                    "-translate-x-[38%] -translate-y-[51%] rotate-[4deg] group-hover:-translate-x-[34%]",
-                    "-translate-x-[24%] -translate-y-[46%] rotate-[10deg] group-hover:-translate-x-[18%]",
-                  ][index]
+                  (project.roundedCover
+                    ? [
+                        "-translate-x-[110%] -translate-y-[46%] -rotate-[3deg] group-hover:-translate-x-[118%]",
+                        "-translate-x-[68%] -translate-y-[52%] -rotate-[1deg] group-hover:-translate-x-[72%]",
+                        "-translate-x-[26%] -translate-y-[52%] rotate-[1deg] group-hover:-translate-x-[22%]",
+                        "translate-x-[16%] -translate-y-[46%] rotate-[3deg] group-hover:translate-x-[24%]",
+                      ]
+                    : [
+                        "-translate-x-[76%] -translate-y-[47%] -rotate-[9deg] group-hover:-translate-x-[82%]",
+                        "-translate-x-[62%] -translate-y-[53%] -rotate-[3deg] group-hover:-translate-y-[56%]",
+                        "-translate-x-[38%] -translate-y-[51%] rotate-[4deg] group-hover:-translate-x-[34%]",
+                        "-translate-x-[24%] -translate-y-[46%] rotate-[10deg] group-hover:-translate-x-[18%]",
+                      ])[index]
                 }`
           }`}
         />
