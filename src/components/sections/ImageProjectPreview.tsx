@@ -329,7 +329,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                     {videos.map((src, index) => (
                       <figure
                         key={src}
-                        className="mx-auto flex w-fit max-w-full justify-center overflow-hidden rounded-2xl border border-zyk-brown/10 bg-white p-2 shadow-sm sm:rounded-3xl"
+                        className="mx-auto flex w-full max-w-sm justify-center overflow-hidden rounded-2xl border border-zyk-brown/10 bg-white p-2 shadow-sm sm:rounded-3xl"
                       >
                         <video
                           src={src}
@@ -337,7 +337,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                           controls
                           playsInline
                           preload="metadata"
-                          className="block h-auto max-h-[70vh] w-auto max-w-full rounded-xl sm:rounded-2xl"
+                          className="aspect-[9/16] w-full rounded-xl bg-white object-contain sm:rounded-2xl"
                         />
                       </figure>
                     ))}
