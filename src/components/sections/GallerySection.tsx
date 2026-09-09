@@ -1,59 +1,221 @@
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { Placeholder } from "../ui/Placeholder";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ImageProjectPreview } from "./ImageProjectPreview";
+
+type GalleryCategory =
+  | "Marketing & Social"
+  | "Events & Branding"
+  | "Print Design"
+  | "Apparel"
+  | "UI Design"
+  | "Illustration";
 
 interface GalleryItem {
   title: string;
-  category: string;
-  art: string;
+  category: GalleryCategory;
+  cover: string;
+  images: string[];
+  videos?: string[];
+  /**
+   * Controls the grid span of the card in the collage.
+   *   wide  → 2 columns — good for landscape/horizontal compositions
+   *   tall  → 2 rows    — good for portrait/vertical compositions
+   *   standard → 1×1    — default for square or mixed-aspect content
+   */
+  size?: "standard" | "wide" | "tall";
+  /** "cover" fills the card; "contain" pads and shows the whole design. */
+  coverFit?: "contain" | "cover";
 }
 
-// Replace each placeholder with the matching real portfolio image when the
-// final artwork is available. The categories reflect documented experience.
+/**
+ * 11 curated gallery cards across 6 categories.
+ * All assets now live under /assets/gallery/ with lowercase kebab-case names.
+ *
+ * Cover-pick rationale per collection:
+ *   Marketing & Social  → "1-shoes.png" is a strong, high-contrast hero graphic
+ *   Pixel Art           → "lofi.jpg" is the most atmospheric and recognisable piece
+ *   Mouse Digital Art   → "6.png" is the polished final; the modal opens the full
+ *                         01Base → 0Stroke → 1–6 progression so viewers see the process
+ *   Apparel / other     → "timeless.jpg" has the cleanest standalone composition
+ *   Lampinig            → mockup is stronger as the cover (design + wearable context)
+ */
 const GALLERY_ITEMS: GalleryItem[] = [
+  // ── Events & Branding ──────────────────────────────────────────────────
   {
-    title: "Marketing Materials",
-    category: "Digital Design",
-    art: "Add selected social media and digital marketing designs",
+    title: "GDSC Innoverse",
+    category: "Events & Branding",
+    cover: "/assets/gallery/events/gdsc-innoverse/1.png",
+    images: [
+      "/assets/gallery/events/gdsc-innoverse/1.png",
+      "/assets/gallery/events/gdsc-innoverse/2.png",
+    ],
+    videos: ["/assets/gallery/events/gdsc-innoverse/innoverse-vid.mp4"],
+    size: "wide",
   },
   {
-    title: "Print Campaigns",
+    title: "GDSC G Workshop",
+    category: "Events & Branding",
+    cover: "/assets/gallery/events/g-workshop/c-workshop.jpg",
+    images: ["/assets/gallery/events/g-workshop/c-workshop.jpg"],
+    size: "standard",
+    coverFit: "cover",
+  },
+  {
+    title: "Sinulog Open Ultimate 2026",
+    category: "Events & Branding",
+    cover: "/assets/gallery/events/sinulog-open/1.png",
+    images: [
+      "/assets/gallery/events/sinulog-open/1.png",
+      "/assets/gallery/events/sinulog-open/2.png",
+    ],
+    size: "standard",
+  },
+
+  // ── Marketing & Social ─────────────────────────────────────────────────
+  {
+    title: "Marketing & Social Collection",
+    category: "Marketing & Social",
+    cover: "/assets/gallery/marketing-social/1-shoes.png",
+    images: [
+      "/assets/gallery/marketing-social/1-shoes.png",
+      "/assets/gallery/marketing-social/1a.png",
+      "/assets/gallery/marketing-social/2a.png",
+      "/assets/gallery/marketing-social/2find-your-phase.png",
+      "/assets/gallery/marketing-social/3a.png",
+      "/assets/gallery/marketing-social/3rent2reuse.png",
+      "/assets/gallery/marketing-social/4a.png",
+      "/assets/gallery/marketing-social/5a.png",
+    ],
+    size: "wide",
+    coverFit: "cover",
+  },
+
+  // ── Print Design ───────────────────────────────────────────────────────
+  {
+    title: "Dish Menu Design",
     category: "Print Design",
-    art: "Add selected posters, flyers, and tarpaulin designs",
+    cover: "/assets/gallery/print/dish-menu/1.jpg",
+    images: [
+      "/assets/gallery/print/dish-menu/1.jpg",
+      "/assets/gallery/print/dish-menu/2.jpg",
+    ],
+    size: "tall",
+    coverFit: "cover",
   },
   {
-    title: "Signs & Stickers",
-    category: "Production Design",
-    art: "Add selected signage and sticker artwork",
+    title: "Print Poster",
+    category: "Print Design",
+    cover: "/assets/gallery/print/poster/3x4-poster.png",
+    images: ["/assets/gallery/print/poster/3x4-poster.png"],
+    size: "standard",
+  },
+
+  // ── Apparel ────────────────────────────────────────────────────────────
+  {
+    title: "Lampinig T-Shirt Design",
+    category: "Apparel",
+    cover: "/assets/gallery/apparel/lampinig/lampinig-mockup.jpg",
+    images: [
+      "/assets/gallery/apparel/lampinig/lampinig-design-tshirt.jpg",
+      "/assets/gallery/apparel/lampinig/lampinig-mockup.jpg",
+    ],
+    size: "wide",
+    coverFit: "cover",
   },
   {
-    title: "Apparel Graphics",
-    category: "Merchandise Design",
-    art: "Add selected apparel graphics and finished applications",
+    title: "Apparel Graphics Collection",
+    category: "Apparel",
+    cover: "/assets/gallery/apparel/other/timeless.jpg",
+    images: [
+      "/assets/gallery/apparel/other/timeless.jpg",
+      "/assets/gallery/apparel/other/whispers-of-heaven.jpg",
+      "/assets/gallery/apparel/other/school-paper-adviser.png",
+      "/assets/gallery/apparel/other/mock-up.jpg",
+    ],
+    size: "standard",
+    coverFit: "cover",
+  },
+
+  // ── UI Design ──────────────────────────────────────────────────────────
+  {
+    title: "Subscription Manager UI",
+    category: "UI Design",
+    cover: "/assets/gallery/ui-design/subscription-manager/home.png",
+    images: [
+      "/assets/gallery/ui-design/subscription-manager/getting-started.png",
+      "/assets/gallery/ui-design/subscription-manager/home.png",
+      "/assets/gallery/ui-design/subscription-manager/subscription.png",
+    ],
+    size: "tall",
+  },
+
+  // ── Illustration ───────────────────────────────────────────────────────
+  {
+    title: "Pixel Art Collection",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/lofi.jpg",
+    images: [
+      "/assets/gallery/illustration/pixel-art/lofi.jpg",
+      "/assets/gallery/illustration/pixel-art/hills.jpg",
+      "/assets/gallery/illustration/pixel-art/mini-cooper.jpg",
+      "/assets/gallery/illustration/pixel-art/moods.png",
+      "/assets/gallery/illustration/pixel-art/musicplayer.jpg",
+      "/assets/gallery/illustration/pixel-art/peter.jpg",
+      "/assets/gallery/illustration/pixel-art/restjpg.png",
+      "/assets/gallery/illustration/pixel-art/rizal-park.jpg",
+      "/assets/gallery/illustration/pixel-art/sailing.jpg",
+      "/assets/gallery/illustration/pixel-art/santa-fe.jpg",
+      "/assets/gallery/illustration/pixel-art/volks.jpg",
+    ],
+    size: "wide",
+    coverFit: "cover",
   },
   {
-    title: "Product Mockups",
-    category: "Presentation Design",
-    art: "Add selected product and merchandise mockups",
-  },
-  {
-    title: "Interfaces & Events",
-    category: "UI/UX & Branding",
-    art: "Add selected Figma prototypes and GDSC event visuals",
+    title: "Mouse Digital Art Process",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/mouse-digital-art/6.png",
+    images: [
+      "/assets/gallery/illustration/mouse-digital-art/01base.png",
+      "/assets/gallery/illustration/mouse-digital-art/0stroke.png",
+      "/assets/gallery/illustration/mouse-digital-art/1.png",
+      "/assets/gallery/illustration/mouse-digital-art/2.png",
+      "/assets/gallery/illustration/mouse-digital-art/3.png",
+      "/assets/gallery/illustration/mouse-digital-art/4.png",
+      "/assets/gallery/illustration/mouse-digital-art/5.png",
+      "/assets/gallery/illustration/mouse-digital-art/6.png",
+    ],
+    size: "tall",
+    coverFit: "cover",
   },
 ];
 
+const FILTERS: Array<"All" | GalleryCategory> = [
+  "All",
+  "Events & Branding",
+  "Marketing & Social",
+  "Print Design",
+  "Apparel",
+  "UI Design",
+  "Illustration",
+];
+
+const SIZE_CLASS: Record<NonNullable<GalleryItem["size"]>, string> = {
+  standard: "",
+  wide: "sm:col-span-2",
+  tall: "sm:row-span-2",
+};
+
 export const GallerySection: React.FC = () => {
   const reduce = useReducedMotion() ?? false;
+  const [filter, setFilter] = React.useState<(typeof FILTERS)[number]>("All");
+  const [selectedItem, setSelectedItem] = React.useState<GalleryItem | null>(
+    null,
+  );
 
-  const item = {
-    hidden: reduce ? { opacity: 1 } : { opacity: 0, y: 20 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeOut" as const },
-    },
-  };
+  const visibleItems =
+    filter === "All"
+      ? GALLERY_ITEMS
+      : GALLERY_ITEMS.filter((item) => item.category === filter);
 
   return (
     <section
@@ -75,39 +237,102 @@ export const GallerySection: React.FC = () => {
           Design Gallery
         </h2>
         <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
-          A visual collection of digital, print, production, branding, and
-          interface work.
+          A curated collection of campaign, print, apparel, interface, and
+          illustration work. Select a category or open a piece to explore its
+          full set.
         </p>
       </motion.div>
 
       <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.1 }}
-        variants={{
-          hidden: {},
-          show: { transition: { staggerChildren: reduce ? 0 : 0.1 } },
-        }}
-        className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        initial={reduce ? false : { opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.5, delay: reduce ? 0 : 0.1 }}
+        className="mt-8 flex flex-wrap gap-2"
+        aria-label="Filter design gallery"
       >
-        {GALLERY_ITEMS.map((galleryItem) => (
-          <motion.article
-            key={galleryItem.title}
-            variants={item}
-            className="group overflow-hidden rounded-3xl border border-zyk-brown/10 bg-zyk-bg-end/80 p-4 shadow-md transition duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-          >
-            <div className="overflow-hidden rounded-2xl">
-              <Placeholder label={galleryItem.art} aspect="4 / 3" />
-            </div>
-            <p className="mt-4 font-display text-xs uppercase tracking-[0.2em] text-zyk-accent">
-              {galleryItem.category}
-            </p>
-            <h3 className="mt-1 font-display text-xl text-zyk-heading">
-              {galleryItem.title}
-            </h3>
-          </motion.article>
-        ))}
+        {FILTERS.map((option) => {
+          const active = option === filter;
+          return (
+            <button
+              key={option}
+              type="button"
+              aria-pressed={active}
+              onClick={() => setFilter(option)}
+              className={`rounded-full px-4 py-2 font-display text-xs transition-colors sm:text-sm ${
+                active
+                  ? "bg-zyk-brown text-zyk-bg-end"
+                  : "bg-zyk-secondary/35 text-zyk-heading hover:bg-zyk-secondary/60"
+              }`}
+            >
+              {option}
+            </button>
+          );
+        })}
       </motion.div>
+
+      <motion.div
+        layout={!reduce}
+        className="mt-10 grid auto-rows-[17rem] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        <AnimatePresence mode="popLayout" initial={false}>
+          {visibleItems.map((galleryItem) => (
+            <motion.article
+              layout={!reduce}
+              key={galleryItem.title}
+              initial={reduce ? false : { opacity: 0, scale: 0.97, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={reduce ? undefined : { opacity: 0, scale: 0.97 }}
+              transition={{ duration: reduce ? 0 : 0.3 }}
+              className={SIZE_CLASS[galleryItem.size ?? "standard"]}
+            >
+              <button
+                type="button"
+                onClick={() => setSelectedItem(galleryItem)}
+                aria-label={`View ${galleryItem.title}`}
+                className="group relative h-full w-full overflow-hidden rounded-[1.75rem] border border-zyk-brown/10 bg-zyk-secondary/20 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent"
+              >
+                <img
+                  src={galleryItem.cover}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  className={`h-full w-full transition duration-500 group-hover:scale-[1.025] ${
+                    galleryItem.coverFit === "cover"
+                      ? "object-cover"
+                      : "object-contain p-3"
+                  }`}
+                />
+                <span className="absolute inset-x-0 bottom-0 bg-linear-to-t from-zyk-brown via-zyk-brown/80 to-transparent px-5 pb-5 pt-16 text-zyk-bg-end">
+                  <span className="block font-display text-[0.65rem] uppercase tracking-[0.18em] text-zyk-secondary">
+                    {galleryItem.category}
+                  </span>
+                  <span className="mt-1 block font-display text-xl leading-tight">
+                    {galleryItem.title}
+                  </span>
+                  <span className="mt-2 block translate-y-2 font-body text-xs text-zyk-bg-end/70 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+                    {galleryItem.images.length > 1 ||
+                    (galleryItem.videos?.length ?? 0) > 0
+                      ? "View collection"
+                      : "View design"}
+                  </span>
+                </span>
+              </button>
+            </motion.article>
+          ))}
+        </AnimatePresence>
+      </motion.div>
+
+      <ImageProjectPreview
+        open={selectedItem !== null}
+        title={selectedItem?.title ?? "Gallery preview"}
+        images={selectedItem?.images ?? []}
+        videos={selectedItem?.videos ?? []}
+        imageAlt={selectedItem?.title ?? "Gallery design"}
+        eyebrow="Design Gallery"
+        mediaLayout="gallery"
+        onClose={() => setSelectedItem(null)}
+      />
     </section>
   );
 };
