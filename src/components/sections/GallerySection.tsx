@@ -13,34 +13,18 @@ type GalleryCategory =
 interface GalleryItem {
   title: string;
   category: GalleryCategory;
-  /** Single image shown on the card when `previewImages` is not set. */
   cover: string;
-  /**
-   * When provided, shows a 2×2 mini-collage of these four images on the card
-   * instead of a single cover — ideal for collections with strong variety.
-   */
-  previewImages?: [string, string, string, string];
   images: string[];
   videos?: string[];
-  /**
-   * Grid span hint for the collage layout.
-   *   wide       → 2 columns, 1 row — landscape / horizontal compositions
-   *   tall       → 1 column, 2 rows  — portrait / vertical compositions
-   *   collection → 2 columns, 2 rows — multi-image showcases with ample breathing room
-   *   standard   → 1 column, 1 row  — default
-   */
-  size?: "standard" | "wide" | "tall" | "collection";
 }
 
 /**
- * 10 curated gallery cards across 6 categories.
- *
- * Apparel is a single merged card (Lampinig + other pieces) shown as a
- * 2×2 preview so the variety is immediately visible.
- * Marketing & Social and Pixel Art also use 2×2 previews for the same reason.
+ * All 36 curated works across the 6 design categories.
+ * Interspersed for a visually rich "All" collage, while each category filter
+ * gathers its complete dedicated set.
  */
 const GALLERY_ITEMS: GalleryItem[] = [
-  // ── Events & Branding ──────────────────────────────────────────────────
+  // 1
   {
     title: "GDSC Innoverse",
     category: "Events & Branding",
@@ -50,130 +34,49 @@ const GALLERY_ITEMS: GalleryItem[] = [
       "/assets/gallery/events/gdsc-innoverse/2.png",
     ],
     videos: ["/assets/gallery/events/gdsc-innoverse/innoverse-vid.mp4"],
-    size: "wide",
   },
+  // 2
   {
-    title: "GDSC G Workshop",
-    category: "Events & Branding",
-    cover: "/assets/gallery/events/g-workshop/c-workshop.jpg",
-    images: ["/assets/gallery/events/g-workshop/c-workshop.jpg"],
-    size: "standard",
-  },
-  {
-    title: "Sinulog Open Ultimate 2026",
-    category: "Events & Branding",
-    cover: "/assets/gallery/events/sinulog-open/1.png",
-    images: [
-      "/assets/gallery/events/sinulog-open/1.png",
-      "/assets/gallery/events/sinulog-open/2.png",
-    ],
-    size: "standard",
-  },
-
-  // ── Marketing & Social ─────────────────────────────────────────────────
-  {
-    title: "Marketing & Social Collection",
+    title: "Nike Footwear Campaign",
     category: "Marketing & Social",
     cover: "/assets/gallery/marketing-social/1-shoes.png",
-    previewImages: [
-      "/assets/gallery/marketing-social/1-shoes.png",
-      "/assets/gallery/marketing-social/2a.png",
-      "/assets/gallery/marketing-social/4a.png",
-      "/assets/gallery/marketing-social/5a.png",
-    ],
-    images: [
-      "/assets/gallery/marketing-social/1-shoes.png",
-      "/assets/gallery/marketing-social/1a.png",
-      "/assets/gallery/marketing-social/2a.png",
-      "/assets/gallery/marketing-social/2find-your-phase.png",
-      "/assets/gallery/marketing-social/3a.png",
-      "/assets/gallery/marketing-social/3rent2reuse.png",
-      "/assets/gallery/marketing-social/4a.png",
-      "/assets/gallery/marketing-social/5a.png",
-    ],
-    size: "collection",
+    images: ["/assets/gallery/marketing-social/1-shoes.png"],
   },
-
-  // ── Print Design ───────────────────────────────────────────────────────
+  // 3
   {
-    title: "Dish Menu Design",
+    title: "Lampinig T-Shirt Mockup",
+    category: "Apparel",
+    cover: "/assets/gallery/apparel/lampinig/lampinig-mockup.jpg",
+    images: [
+      "/assets/gallery/apparel/lampinig/lampinig-mockup.jpg",
+      "/assets/gallery/apparel/lampinig/lampinig-design-tshirt.jpg",
+    ],
+  },
+  // 4
+  {
+    title: "Lofi Study",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/lofi.jpg",
+    images: ["/assets/gallery/illustration/pixel-art/lofi.jpg"],
+  },
+  // 5
+  {
+    title: "Dish Menu - Course Selection",
     category: "Print Design",
     cover: "/assets/gallery/print/dish-menu/1.jpg",
     images: [
       "/assets/gallery/print/dish-menu/1.jpg",
       "/assets/gallery/print/dish-menu/2.jpg",
     ],
-    size: "tall",
   },
+  // 6
   {
-    title: "Print Poster",
-    category: "Print Design",
-    cover: "/assets/gallery/print/poster/3x4-poster.png",
-    images: ["/assets/gallery/print/poster/3x4-poster.png"],
-    size: "standard",
+    title: "Find Your Phase Campaign",
+    category: "Marketing & Social",
+    cover: "/assets/gallery/marketing-social/2find-your-phase.png",
+    images: ["/assets/gallery/marketing-social/2find-your-phase.png"],
   },
-
-  // ── Apparel (merged into one card) ────────────────────────────────────
-  {
-    title: "Apparel Collection",
-    category: "Apparel",
-    cover: "/assets/gallery/apparel/lampinig/lampinig-mockup.jpg",
-    previewImages: [
-      "/assets/gallery/apparel/lampinig/lampinig-mockup.jpg",
-      "/assets/gallery/apparel/lampinig/lampinig-design-tshirt.jpg",
-      "/assets/gallery/apparel/other/timeless.jpg",
-      "/assets/gallery/apparel/other/whispers-of-heaven.jpg",
-    ],
-    images: [
-      "/assets/gallery/apparel/lampinig/lampinig-mockup.jpg",
-      "/assets/gallery/apparel/lampinig/lampinig-design-tshirt.jpg",
-      "/assets/gallery/apparel/other/timeless.jpg",
-      "/assets/gallery/apparel/other/whispers-of-heaven.jpg",
-      "/assets/gallery/apparel/other/school-paper-adviser.png",
-      "/assets/gallery/apparel/other/mock-up.jpg",
-    ],
-    size: "collection",
-  },
-
-  // ── UI Design ──────────────────────────────────────────────────────────
-  {
-    title: "Subscription Manager UI",
-    category: "UI Design",
-    cover: "/assets/gallery/ui-design/subscription-manager/home.png",
-    images: [
-      "/assets/gallery/ui-design/subscription-manager/getting-started.png",
-      "/assets/gallery/ui-design/subscription-manager/home.png",
-      "/assets/gallery/ui-design/subscription-manager/subscription.png",
-    ],
-    size: "tall",
-  },
-
-  // ── Illustration ───────────────────────────────────────────────────────
-  {
-    title: "Pixel Art Collection",
-    category: "Illustration",
-    cover: "/assets/gallery/illustration/pixel-art/lofi.jpg",
-    previewImages: [
-      "/assets/gallery/illustration/pixel-art/lofi.jpg",
-      "/assets/gallery/illustration/pixel-art/mini-cooper.jpg",
-      "/assets/gallery/illustration/pixel-art/musicplayer.jpg",
-      "/assets/gallery/illustration/pixel-art/sailing.jpg",
-    ],
-    images: [
-      "/assets/gallery/illustration/pixel-art/lofi.jpg",
-      "/assets/gallery/illustration/pixel-art/hills.jpg",
-      "/assets/gallery/illustration/pixel-art/mini-cooper.jpg",
-      "/assets/gallery/illustration/pixel-art/moods.png",
-      "/assets/gallery/illustration/pixel-art/musicplayer.jpg",
-      "/assets/gallery/illustration/pixel-art/peter.jpg",
-      "/assets/gallery/illustration/pixel-art/restjpg.png",
-      "/assets/gallery/illustration/pixel-art/rizal-park.jpg",
-      "/assets/gallery/illustration/pixel-art/sailing.jpg",
-      "/assets/gallery/illustration/pixel-art/santa-fe.jpg",
-      "/assets/gallery/illustration/pixel-art/volks.jpg",
-    ],
-    size: "collection",
-  },
+  // 7
   {
     title: "Mouse Digital Art Process",
     category: "Illustration",
@@ -188,7 +91,233 @@ const GALLERY_ITEMS: GalleryItem[] = [
       "/assets/gallery/illustration/mouse-digital-art/5.png",
       "/assets/gallery/illustration/mouse-digital-art/6.png",
     ],
-    size: "tall",
+  },
+  // 8
+  {
+    title: "Subscription Manager - Home",
+    category: "UI Design",
+    cover: "/assets/gallery/ui-design/subscription-manager/home.png",
+    images: [
+      "/assets/gallery/ui-design/subscription-manager/home.png",
+      "/assets/gallery/ui-design/subscription-manager/getting-started.png",
+      "/assets/gallery/ui-design/subscription-manager/subscription.png",
+    ],
+  },
+  // 9
+  {
+    title: "Whispers of Heaven Graphic Tee",
+    category: "Apparel",
+    cover: "/assets/gallery/apparel/other/whispers-of-heaven.jpg",
+    images: ["/assets/gallery/apparel/other/whispers-of-heaven.jpg"],
+  },
+  // 10
+  {
+    title: "Mini Cooper Pixel Art",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/mini-cooper.jpg",
+    images: ["/assets/gallery/illustration/pixel-art/mini-cooper.jpg"],
+  },
+  // 11
+  {
+    title: "Rent2Reuse Social Promo",
+    category: "Marketing & Social",
+    cover: "/assets/gallery/marketing-social/3rent2reuse.png",
+    images: ["/assets/gallery/marketing-social/3rent2reuse.png"],
+  },
+  // 12
+  {
+    title: "GDSC G Workshop",
+    category: "Events & Branding",
+    cover: "/assets/gallery/events/g-workshop/c-workshop.jpg",
+    images: ["/assets/gallery/events/g-workshop/c-workshop.jpg"],
+  },
+  // 13
+  {
+    title: "Print Poster (3x4)",
+    category: "Print Design",
+    cover: "/assets/gallery/print/poster/3x4-poster.png",
+    images: ["/assets/gallery/print/poster/3x4-poster.png"],
+  },
+  // 14
+  {
+    title: "Timeless Graphic Apparel",
+    category: "Apparel",
+    cover: "/assets/gallery/apparel/other/timeless.jpg",
+    images: ["/assets/gallery/apparel/other/timeless.jpg"],
+  },
+  // 15
+  {
+    title: "Rizal Park",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/rizal-park.jpg",
+    images: ["/assets/gallery/illustration/pixel-art/rizal-park.jpg"],
+  },
+  // 16
+  {
+    title: "Social Creative I",
+    category: "Marketing & Social",
+    cover: "/assets/gallery/marketing-social/1a.png",
+    images: ["/assets/gallery/marketing-social/1a.png"],
+  },
+  // 17
+  {
+    title: "Sinulog Open Ultimate 2026",
+    category: "Events & Branding",
+    cover: "/assets/gallery/events/sinulog-open/1.png",
+    images: [
+      "/assets/gallery/events/sinulog-open/1.png",
+      "/assets/gallery/events/sinulog-open/2.png",
+    ],
+  },
+  // 18
+  {
+    title: "Lampinig Graphic Tee Print",
+    category: "Apparel",
+    cover: "/assets/gallery/apparel/lampinig/lampinig-design-tshirt.jpg",
+    images: [
+      "/assets/gallery/apparel/lampinig/lampinig-design-tshirt.jpg",
+      "/assets/gallery/apparel/lampinig/lampinig-mockup.jpg",
+    ],
+  },
+  // 19
+  {
+    title: "Santa Fe Scenery",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/santa-fe.jpg",
+    images: ["/assets/gallery/illustration/pixel-art/santa-fe.jpg"],
+  },
+  // 20
+  {
+    title: "Social Creative II",
+    category: "Marketing & Social",
+    cover: "/assets/gallery/marketing-social/2a.png",
+    images: ["/assets/gallery/marketing-social/2a.png"],
+  },
+  // 21
+  {
+    title: "Dish Menu - Complete Layout",
+    category: "Print Design",
+    cover: "/assets/gallery/print/dish-menu/2.jpg",
+    images: [
+      "/assets/gallery/print/dish-menu/2.jpg",
+      "/assets/gallery/print/dish-menu/1.jpg",
+    ],
+  },
+  // 22
+  {
+    title: "Rolling Hills",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/hills.jpg",
+    images: ["/assets/gallery/illustration/pixel-art/hills.jpg"],
+  },
+  // 23
+  {
+    title: "School Paper Adviser Shirt",
+    category: "Apparel",
+    cover: "/assets/gallery/apparel/other/school-paper-adviser.png",
+    images: ["/assets/gallery/apparel/other/school-paper-adviser.png"],
+  },
+  // 24
+  {
+    title: "Social Creative III",
+    category: "Marketing & Social",
+    cover: "/assets/gallery/marketing-social/3a.png",
+    images: ["/assets/gallery/marketing-social/3a.png"],
+  },
+  // 25
+  {
+    title: "Retro Music Player",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/musicplayer.jpg",
+    images: ["/assets/gallery/illustration/pixel-art/musicplayer.jpg"],
+  },
+  // 26
+  {
+    title: "Subscription Manager - Onboarding",
+    category: "UI Design",
+    cover: "/assets/gallery/ui-design/subscription-manager/getting-started.png",
+    images: [
+      "/assets/gallery/ui-design/subscription-manager/getting-started.png",
+      "/assets/gallery/ui-design/subscription-manager/home.png",
+      "/assets/gallery/ui-design/subscription-manager/subscription.png",
+    ],
+  },
+  // 27
+  {
+    title: "Social Creative IV",
+    category: "Marketing & Social",
+    cover: "/assets/gallery/marketing-social/4a.png",
+    images: ["/assets/gallery/marketing-social/4a.png"],
+  },
+  // 28
+  {
+    title: "Classic Volkswagen",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/volks.jpg",
+    images: ["/assets/gallery/illustration/pixel-art/volks.jpg"],
+  },
+  // 29
+  {
+    title: "Streetwear Apparel Mockup",
+    category: "Apparel",
+    cover: "/assets/gallery/apparel/other/mock-up.jpg",
+    images: ["/assets/gallery/apparel/other/mock-up.jpg"],
+  },
+  // 30
+  {
+    title: "Moods",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/moods.png",
+    images: ["/assets/gallery/illustration/pixel-art/moods.png"],
+  },
+  // 31
+  {
+    title: "Social Creative V",
+    category: "Marketing & Social",
+    cover: "/assets/gallery/marketing-social/5a.png",
+    images: ["/assets/gallery/marketing-social/5a.png"],
+  },
+  // 32
+  {
+    title: "Peter Pixel Character",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/peter.jpg",
+    images: ["/assets/gallery/illustration/pixel-art/peter.jpg"],
+  },
+  // 33
+  {
+    title: "Subscription Manager - Plans",
+    category: "UI Design",
+    cover: "/assets/gallery/ui-design/subscription-manager/subscription.png",
+    images: [
+      "/assets/gallery/ui-design/subscription-manager/subscription.png",
+      "/assets/gallery/ui-design/subscription-manager/home.png",
+      "/assets/gallery/ui-design/subscription-manager/getting-started.png",
+    ],
+  },
+  // 34
+  {
+    title: "Sinulog Open - Tournament Bracket",
+    category: "Events & Branding",
+    cover: "/assets/gallery/events/sinulog-open/2.png",
+    images: [
+      "/assets/gallery/events/sinulog-open/2.png",
+      "/assets/gallery/events/sinulog-open/1.png",
+    ],
+  },
+  // 35
+  {
+    title: "Resting Spot",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/restjpg.png",
+    images: ["/assets/gallery/illustration/pixel-art/restjpg.png"],
+  },
+  // 36
+  {
+    title: "Sailing at Dusk",
+    category: "Illustration",
+    cover: "/assets/gallery/illustration/pixel-art/sailing.jpg",
+    images: ["/assets/gallery/illustration/pixel-art/sailing.jpg"],
   },
 ];
 
@@ -201,13 +330,6 @@ const FILTERS: Array<"All" | GalleryCategory> = [
   "UI Design",
   "Illustration",
 ];
-
-const SIZE_CLASS: Record<NonNullable<GalleryItem["size"]>, string> = {
-  standard: "col-span-1 row-span-1",
-  wide: "col-span-1 sm:col-span-2 row-span-1",
-  tall: "col-span-1 row-span-2",
-  collection: "col-span-1 sm:col-span-2 row-span-2",
-};
 
 export const GallerySection: React.FC = () => {
   const reduce = useReducedMotion() ?? false;
@@ -242,8 +364,8 @@ export const GallerySection: React.FC = () => {
         </h2>
         <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
           A curated collection of campaign, print, apparel, interface, and
-          illustration work. Select a category or open a piece to explore its
-          full set.
+          illustration work. Select a category or open any piece to view the
+          full design.
         </p>
       </motion.div>
 
@@ -276,82 +398,70 @@ export const GallerySection: React.FC = () => {
         })}
       </motion.div>
 
-      {/* Collage grid — natural varied spans with dense packing so no big gaps */}
+      {/* Masonry collage — natural uncropped sizes with zero vertical gaps */}
       <motion.div
         layout={!reduce}
-        className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 auto-rows-[230px] sm:auto-rows-[250px] grid-flow-dense"
+        className="mt-10 columns-1 gap-4 sm:columns-2 lg:columns-3"
       >
         <AnimatePresence mode="popLayout" initial={false}>
           {visibleItems.map((galleryItem) => (
             <motion.article
               layout={!reduce}
-              key={galleryItem.title}
-              initial={reduce ? false : { opacity: 0, scale: 0.97, y: 12 }}
+              key={galleryItem.cover}
+              initial={reduce ? false : { opacity: 0, scale: 0.96, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={reduce ? undefined : { opacity: 0, scale: 0.97 }}
-              transition={{ duration: reduce ? 0 : 0.3 }}
-              className={SIZE_CLASS[galleryItem.size ?? "standard"]}
+              exit={reduce ? undefined : { opacity: 0, scale: 0.96 }}
+              transition={{ duration: reduce ? 0 : 0.25 }}
+              className="mb-4 break-inside-avoid"
             >
               <button
                 type="button"
                 onClick={() => setSelectedItem(galleryItem)}
                 aria-label={`View ${galleryItem.title}`}
-                className="group relative h-full w-full overflow-hidden rounded-[1.75rem] text-left shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent"
+                className="group relative block w-full overflow-hidden rounded-2xl bg-zyk-brown/10 text-left shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent"
               >
-                {/* Rest badge for multi-image collections */}
-                {galleryItem.previewImages && (
-                  <span className="absolute top-3.5 right-3.5 z-10 inline-flex items-center gap-1.5 rounded-full border border-zyk-bg-end/30 bg-zyk-brown/85 px-3 py-1 font-display text-[0.68rem] tracking-wider uppercase text-zyk-bg-end shadow-md backdrop-blur-md transition duration-300 group-hover:opacity-0">
+                {/* Discrete piece counter for items with multiple images/video */}
+                {(galleryItem.images.length > 1 ||
+                  (galleryItem.videos?.length ?? 0) > 0) && (
+                  <span className="absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 rounded-full border border-zyk-bg-end/30 bg-zyk-brown/85 px-2.5 py-0.5 font-display text-[0.65rem] tracking-wider uppercase text-zyk-bg-end shadow-md backdrop-blur-md transition duration-300 group-hover:opacity-0">
                     <span className="h-1.5 w-1.5 rounded-full bg-zyk-secondary animate-pulse" />
-                    {galleryItem.images.length} Pieces
+                    {galleryItem.videos?.length
+                      ? "Video & Stills"
+                      : galleryItem.title.includes("Process")
+                        ? `${galleryItem.images.length} Steps`
+                        : `${galleryItem.images.length} Views`}
                   </span>
                 )}
 
-                {/* Card visual — single cover or spacious 2×2 mini-collage */}
-                {galleryItem.previewImages ? (
-                  <div className="grid h-full grid-cols-2 grid-rows-2 gap-1.5 bg-zyk-brown/25 p-1.5">
-                    {galleryItem.previewImages.map((src, idx) => (
-                      <div
-                        key={`${src}-${idx}`}
-                        className="relative overflow-hidden rounded-xl bg-zyk-brown/10"
-                      >
-                        <img
-                          src={src}
-                          alt=""
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <img
-                    src={galleryItem.cover}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
-                  />
-                )}
+                <img
+                  src={galleryItem.cover}
+                  alt={galleryItem.title}
+                  loading="lazy"
+                  decoding="async"
+                  className="block h-auto w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                />
 
                 {/* Dark overlay following portfolio theme for high contrast text readability */}
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#180d07]/95 via-[#180d07]/80 to-[#180d07]/35 p-5 sm:p-6 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+                  className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#180d07]/95 via-[#180d07]/75 to-[#180d07]/20 p-5 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
                 >
-                  <span className="inline-flex items-center gap-2 translate-y-3 font-display text-[0.7rem] uppercase tracking-[0.22em] text-zyk-secondary font-semibold transition duration-300 group-hover:translate-y-0">
+                  <span className="inline-flex items-center gap-2 translate-y-3 font-display text-[0.68rem] uppercase tracking-[0.22em] text-zyk-secondary font-semibold transition duration-300 group-hover:translate-y-0">
                     <span className="h-1.5 w-1.5 rounded-full bg-zyk-accent" />
                     {galleryItem.category}
                   </span>
-                  <span className="mt-1.5 block translate-y-3 font-display text-xl sm:text-2xl font-bold leading-snug text-zyk-bg-end drop-shadow-sm transition delay-[30ms] duration-300 group-hover:translate-y-0">
+                  <span className="mt-1 block translate-y-3 font-display text-lg font-bold leading-snug text-zyk-bg-end drop-shadow-sm transition delay-[25ms] duration-300 group-hover:translate-y-0">
                     {galleryItem.title}
                   </span>
-                  <span className="mt-3.5 inline-flex w-fit items-center gap-2 translate-y-3 rounded-full border border-zyk-secondary/40 bg-zyk-brown/90 px-3.5 py-1.5 font-display text-xs font-medium text-zyk-bg-end shadow-md backdrop-blur-sm transition delay-[60ms] duration-300 group-hover:translate-y-0">
+                  <span className="mt-2.5 inline-flex w-fit items-center gap-2 translate-y-3 rounded-full border border-zyk-secondary/40 bg-zyk-brown/90 px-3 py-1 font-display text-[0.72rem] font-medium text-zyk-bg-end shadow-md backdrop-blur-sm transition delay-[50ms] duration-300 group-hover:translate-y-0">
                     <span>
-                      {galleryItem.previewImages ||
-                      galleryItem.images.length > 1
-                        ? `${galleryItem.images.length} designs · View collection`
-                        : "View design"}
+                      {galleryItem.videos?.length
+                        ? "Watch & Explore"
+                        : galleryItem.title.includes("Process")
+                          ? "View Process"
+                          : galleryItem.images.length > 1
+                            ? "View Full Set"
+                            : "View Design"}
                     </span>
                     <span
                       aria-hidden="true"
@@ -380,4 +490,3 @@ export const GallerySection: React.FC = () => {
     </section>
   );
 };
-
