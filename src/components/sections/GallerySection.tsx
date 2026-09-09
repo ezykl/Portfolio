@@ -13,31 +13,30 @@ type GalleryCategory =
 interface GalleryItem {
   title: string;
   category: GalleryCategory;
+  /** Single image shown on the card when `previewImages` is not set. */
   cover: string;
+  /**
+   * When provided, shows a 2×2 mini-collage of these four images on the card
+   * instead of a single cover — ideal for collections with strong variety.
+   */
+  previewImages?: [string, string, string, string];
   images: string[];
   videos?: string[];
   /**
-   * Controls the grid span of the card in the collage.
-   *   wide  → 2 columns — good for landscape/horizontal compositions
-   *   tall  → 2 rows    — good for portrait/vertical compositions
-   *   standard → 1×1    — default for square or mixed-aspect content
+   * Grid span hint for the collage layout.
+   *   wide  → 2 columns — landscape / horizontal compositions
+   *   tall  → 2 rows    — portrait / vertical compositions
+   *   standard → 1×1   — default
    */
   size?: "standard" | "wide" | "tall";
-  /** "cover" fills the card; "contain" pads and shows the whole design. */
-  coverFit?: "contain" | "cover";
 }
 
 /**
- * 11 curated gallery cards across 6 categories.
- * All assets now live under /assets/gallery/ with lowercase kebab-case names.
+ * 10 curated gallery cards across 6 categories.
  *
- * Cover-pick rationale per collection:
- *   Marketing & Social  → "1-shoes.png" is a strong, high-contrast hero graphic
- *   Pixel Art           → "lofi.jpg" is the most atmospheric and recognisable piece
- *   Mouse Digital Art   → "6.png" is the polished final; the modal opens the full
- *                         01Base → 0Stroke → 1–6 progression so viewers see the process
- *   Apparel / other     → "timeless.jpg" has the cleanest standalone composition
- *   Lampinig            → mockup is stronger as the cover (design + wearable context)
+ * Apparel is a single merged card (Lampinig + other pieces) shown as a
+ * 2×2 preview so the variety is immediately visible.
+ * Marketing & Social and Pixel Art also use 2×2 previews for the same reason.
  */
 const GALLERY_ITEMS: GalleryItem[] = [
   // ── Events & Branding ──────────────────────────────────────────────────
@@ -58,7 +57,6 @@ const GALLERY_ITEMS: GalleryItem[] = [
     cover: "/assets/gallery/events/g-workshop/c-workshop.jpg",
     images: ["/assets/gallery/events/g-workshop/c-workshop.jpg"],
     size: "standard",
-    coverFit: "cover",
   },
   {
     title: "Sinulog Open Ultimate 2026",
@@ -76,6 +74,12 @@ const GALLERY_ITEMS: GalleryItem[] = [
     title: "Marketing & Social Collection",
     category: "Marketing & Social",
     cover: "/assets/gallery/marketing-social/1-shoes.png",
+    previewImages: [
+      "/assets/gallery/marketing-social/1-shoes.png",
+      "/assets/gallery/marketing-social/2a.png",
+      "/assets/gallery/marketing-social/4a.png",
+      "/assets/gallery/marketing-social/5a.png",
+    ],
     images: [
       "/assets/gallery/marketing-social/1-shoes.png",
       "/assets/gallery/marketing-social/1a.png",
@@ -87,7 +91,6 @@ const GALLERY_ITEMS: GalleryItem[] = [
       "/assets/gallery/marketing-social/5a.png",
     ],
     size: "wide",
-    coverFit: "cover",
   },
 
   // ── Print Design ───────────────────────────────────────────────────────
@@ -100,7 +103,6 @@ const GALLERY_ITEMS: GalleryItem[] = [
       "/assets/gallery/print/dish-menu/2.jpg",
     ],
     size: "tall",
-    coverFit: "cover",
   },
   {
     title: "Print Poster",
@@ -110,30 +112,26 @@ const GALLERY_ITEMS: GalleryItem[] = [
     size: "standard",
   },
 
-  // ── Apparel ────────────────────────────────────────────────────────────
+  // ── Apparel (merged into one card) ────────────────────────────────────
   {
-    title: "Lampinig T-Shirt Design",
+    title: "Apparel Collection",
     category: "Apparel",
     cover: "/assets/gallery/apparel/lampinig/lampinig-mockup.jpg",
-    images: [
-      "/assets/gallery/apparel/lampinig/lampinig-design-tshirt.jpg",
+    previewImages: [
       "/assets/gallery/apparel/lampinig/lampinig-mockup.jpg",
+      "/assets/gallery/apparel/lampinig/lampinig-design-tshirt.jpg",
+      "/assets/gallery/apparel/other/timeless.jpg",
+      "/assets/gallery/apparel/other/whispers-of-heaven.jpg",
     ],
-    size: "wide",
-    coverFit: "cover",
-  },
-  {
-    title: "Apparel Graphics Collection",
-    category: "Apparel",
-    cover: "/assets/gallery/apparel/other/timeless.jpg",
     images: [
+      "/assets/gallery/apparel/lampinig/lampinig-mockup.jpg",
+      "/assets/gallery/apparel/lampinig/lampinig-design-tshirt.jpg",
       "/assets/gallery/apparel/other/timeless.jpg",
       "/assets/gallery/apparel/other/whispers-of-heaven.jpg",
       "/assets/gallery/apparel/other/school-paper-adviser.png",
       "/assets/gallery/apparel/other/mock-up.jpg",
     ],
-    size: "standard",
-    coverFit: "cover",
+    size: "wide",
   },
 
   // ── UI Design ──────────────────────────────────────────────────────────
@@ -154,6 +152,12 @@ const GALLERY_ITEMS: GalleryItem[] = [
     title: "Pixel Art Collection",
     category: "Illustration",
     cover: "/assets/gallery/illustration/pixel-art/lofi.jpg",
+    previewImages: [
+      "/assets/gallery/illustration/pixel-art/lofi.jpg",
+      "/assets/gallery/illustration/pixel-art/mini-cooper.jpg",
+      "/assets/gallery/illustration/pixel-art/musicplayer.jpg",
+      "/assets/gallery/illustration/pixel-art/sailing.jpg",
+    ],
     images: [
       "/assets/gallery/illustration/pixel-art/lofi.jpg",
       "/assets/gallery/illustration/pixel-art/hills.jpg",
@@ -168,7 +172,6 @@ const GALLERY_ITEMS: GalleryItem[] = [
       "/assets/gallery/illustration/pixel-art/volks.jpg",
     ],
     size: "wide",
-    coverFit: "cover",
   },
   {
     title: "Mouse Digital Art Process",
@@ -185,7 +188,6 @@ const GALLERY_ITEMS: GalleryItem[] = [
       "/assets/gallery/illustration/mouse-digital-art/6.png",
     ],
     size: "tall",
-    coverFit: "cover",
   },
 ];
 
@@ -243,6 +245,7 @@ export const GallerySection: React.FC = () => {
         </p>
       </motion.div>
 
+      {/* Filter tabs */}
       <motion.div
         initial={reduce ? false : { opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -271,9 +274,10 @@ export const GallerySection: React.FC = () => {
         })}
       </motion.div>
 
+      {/* Collage grid */}
       <motion.div
         layout={!reduce}
-        className="mt-10 grid auto-rows-[17rem] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+        className="mt-10 grid auto-rows-[280px] grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
       >
         <AnimatePresence mode="popLayout" initial={false}>
           {visibleItems.map((galleryItem) => (
@@ -290,31 +294,49 @@ export const GallerySection: React.FC = () => {
                 type="button"
                 onClick={() => setSelectedItem(galleryItem)}
                 aria-label={`View ${galleryItem.title}`}
-                className="group relative h-full w-full overflow-hidden rounded-[1.75rem] border border-zyk-brown/10 bg-zyk-secondary/20 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent"
+                className="group relative h-full w-full overflow-hidden rounded-[1.75rem] text-left shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent"
               >
-                <img
-                  src={galleryItem.cover}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  className={`h-full w-full transition duration-500 group-hover:scale-[1.025] ${
-                    galleryItem.coverFit === "cover"
-                      ? "object-cover"
-                      : "object-contain p-3"
-                  }`}
-                />
-                <span className="absolute inset-x-0 bottom-0 bg-linear-to-t from-zyk-brown via-zyk-brown/80 to-transparent px-5 pb-5 pt-16 text-zyk-bg-end">
-                  <span className="block font-display text-[0.65rem] uppercase tracking-[0.18em] text-zyk-secondary">
+                {/* Card visual — single cover or 2×2 mini-collage */}
+                {galleryItem.previewImages ? (
+                  <div className="grid h-full grid-cols-2 grid-rows-2 gap-px bg-zyk-brown/20">
+                    {galleryItem.previewImages.map((src) => (
+                      <div key={src} className="overflow-hidden">
+                        <img
+                          src={src}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <img
+                    src={galleryItem.cover}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                  />
+                )}
+
+                {/* Hover overlay — hidden at rest, slides up on hover */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/85 via-black/25 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+                >
+                  <span className="block translate-y-3 font-display text-[0.6rem] uppercase tracking-[0.2em] text-white/65 transition duration-300 group-hover:translate-y-0">
                     {galleryItem.category}
                   </span>
-                  <span className="mt-1 block font-display text-xl leading-tight">
+                  <span className="mt-1 block translate-y-3 font-display text-xl leading-tight text-white transition delay-[30ms] duration-300 group-hover:translate-y-0">
                     {galleryItem.title}
                   </span>
-                  <span className="mt-2 block translate-y-2 font-body text-xs text-zyk-bg-end/70 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+                  <span className="mt-2 block translate-y-3 font-body text-xs text-white/55 transition delay-[60ms] duration-300 group-hover:translate-y-0">
                     {galleryItem.images.length > 1 ||
                     (galleryItem.videos?.length ?? 0) > 0
-                      ? "View collection"
-                      : "View design"}
+                      ? "Click to view collection →"
+                      : "Click to view →"}
                   </span>
                 </span>
               </button>
@@ -336,3 +358,4 @@ export const GallerySection: React.FC = () => {
     </section>
   );
 };
+
