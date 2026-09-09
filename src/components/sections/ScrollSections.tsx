@@ -2,7 +2,6 @@ import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ContactForm } from "../Contact/ContactForm";
 import { ContactLinks } from "../Contact/ContactLinks";
-import { Placeholder } from "../ui/Placeholder";
 import { TechIcon, type TechIconName } from "../ui/techIcons";
 
 // Maps our human-readable tech labels to vendored tech-logo icon names. Labels
@@ -19,6 +18,10 @@ const TECH_ICON_MAP: Partial<Record<string, TechIconName>> = {
   Node: "nodejs",
   HTML: "html5",
   CSS: "css3",
+  "Adobe Illustrator": "adobeillustrator",
+  Photoshop: "photoshop",
+  InDesign: "indesign",
+  Canva: "canva",
 };
 
 /** A tag pill with an optional tech-stack-icons logo in front of the label. */
@@ -56,124 +59,13 @@ export const useReveal = () => {
   };
 };
 
-interface DesignPiece {
-  title: string;
-  blurb: string;
-  tags: string[];
-  art: string;
-}
-
-const DESIGN_PIECES: DesignPiece[] = [
-  {
-    title: "UI / UX Thinking",
-    blurb:
-      "Figma flows, interface systems, and screen-level storytelling that feel like part of the same world as the portfolio itself.",
-    tags: ["Figma", "UX", "Interaction"],
-    art: "Warm illustrated wireframe board with hand-drawn UI notes pinned to a wooden wall",
-  },
-  {
-    title: "Illustration & Motion",
-    blurb:
-      "Character-led scenes, cozy compositions, and light motion ideas that bring a handcrafted feel to digital work.",
-    tags: ["Illustration", "Motion", "Storybook"],
-    art: "Cozy poster-style illustration of a small desk scene with layered paper textures and soft lighting",
-  },
-  {
-    title: "Brand & Visual Direction",
-    blurb:
-      "Visual systems that balance playfulness, clarity, and warmth — designed to feel like a place you want to step into.",
-    tags: ["Brand", "Visual", "Identity"],
-    art: "Handcrafted moodboard collage with paper scraps, color swatches, and a tiny painted frame",
-  },
-];
-
-const TagChip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <span className="rounded-full bg-zyk-secondary/40 px-3 py-1 font-body text-xs font-medium text-zyk-heading">
-    {children}
-  </span>
-);
-
-const DesignCard: React.FC<{ piece: DesignPiece; reduce: boolean }> = ({
-  piece,
-  reduce,
-}) => (
-  <motion.article
-    variants={{
-      hidden: reduce ? { opacity: 1 } : { opacity: 0, y: 20 },
-      show: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5, ease: "easeOut" },
-      },
-    }}
-    className="flex flex-col overflow-hidden rounded-3xl border border-zyk-brown/10 bg-zyk-bg-end/80 p-4 shadow-md transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-  >
-    <Placeholder label={piece.art} aspect="4 / 3" />
-    <h3 className="mt-4 font-display text-2xl text-zyk-heading">
-      {piece.title}
-    </h3>
-    <p className="mt-2 flex-1 font-body text-sm leading-relaxed text-zyk-brown/80">
-      {piece.blurb}
-    </p>
-    <div className="mt-4 flex flex-wrap gap-2">
-      {piece.tags.map((tag) => (
-        <TagChip key={tag}>{tag}</TagChip>
-      ))}
-    </div>
-  </motion.article>
-);
-
-export const DesignsSection: React.FC = () => {
-  const reveal = useReveal();
-  const reduce = useReducedMotion() ?? false;
-
-  return (
-    <section
-      id="designs"
-      style={{ scrollMarginTop: "76px" }}
-      className="mx-auto max-w-6xl px-6 py-24"
-    >
-      <motion.div {...reveal} className="max-w-3xl">
-        <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
-          Things I&apos;ve drawn
-        </p>
-        <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
-          Design Collection
-        </h2>
-        <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
-          A cozy collection of visual work — UX thinking, illustration, and
-          playful direction that all belong to the same handmade world.
-        </p>
-      </motion.div>
-
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.15 }}
-        variants={{
-          hidden: {},
-          show: { transition: { staggerChildren: reduce ? 0 : 0.12 } },
-        }}
-        className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3"
-      >
-        {DESIGN_PIECES.map((piece) => (
-          <DesignCard key={piece.title} piece={piece} reduce={reduce} />
-        ))}
-      </motion.div>
-    </section>
-  );
-};
-
-// ▶ EDIT ME: 2-4 sentences on who you are beyond the résumé — background,
-// personality, what drives you. Keep it personal and cozy, not corporate.
 const ABOUT_BLURB =
-  "[Personal bio placeholder — a couple of sentences about who you are outside of the work: your background, what you're curious about, and what makes you, you.]";
+  "I'm a graphic designer and UI/UX designer creating clear, engaging visual work across digital, print, and product experiences. I enjoy shaping ideas into cohesive visuals—from marketing materials and event identities to prototypes and production-ready artwork—while collaborating closely with clients and teams.";
 
-// ▶ EDIT ME: quick scannable facts — where you're based, hobbies, fun details.
 const ABOUT_FACTS = [
-  "[Based in ...]",
-  "[A hobby you love]",
-  "[Something playful about you]",
+  "Digital & Print Design",
+  "UI/UX & Prototyping",
+  "Open to roles & freelance",
 ];
 
 interface ExperienceEntry {
@@ -207,19 +99,6 @@ const WORK_EXPERIENCE: ExperienceEntry[] = [
       "Created digital marketing materials while managing client communication, revisions, deadlines, and design quality.",
     highlights: ["Digital Design", "Client Collaboration", "Quality Control"],
   },
-  {
-    period: "Feb — Apr 2026",
-    role: "Data Annotator Intern",
-    org: "Innodata Knowledge Services, Inc.",
-    blurb:
-      "Annotated image and video datasets, validated structured outputs, and performed quality checks for reliable AI data workflows.",
-    highlights: [
-      "Bounding Boxes",
-      "Skeleton Labeling",
-      "Dataset QA",
-      "Prompt Engineering",
-    ],
-  },
 ];
 
 const LEADERSHIP_EXPERIENCE: ExperienceEntry[] = [
@@ -250,82 +129,32 @@ interface ToolCategory {
   tools: string[];
 }
 
-// Development experience is primarily supported by academic/software projects.
-const PROJECT_TOOLKIT: ToolCategory[] = [
-  {
-    label: "Frontend & Mobile",
-    tools: [
-      "React",
-      "Next.js",
-      "React Native",
-      "Expo",
-      "Expo Router",
-      "HTML",
-      "CSS",
-      "Tailwind CSS",
-      "NativeWind",
-      "Bootstrap",
-      "Material UI",
-      "shadcn/ui",
-    ],
-  },
-  {
-    label: "Backend & APIs",
-    tools: ["Node.js", "Flask", ".NET", "REST APIs", "Third-party APIs"],
-  },
-  {
-    label: "Database & Cloud",
-    tools: [
-      "MySQL",
-      "Firebase",
-      "Firestore",
-      "Firebase Authentication",
-      "Firebase Storage",
-    ],
-  },
-  {
-    label: "AI & Machine Learning",
-    tools: [
-      "Python",
-      "TensorFlow",
-      "Keras",
-      "MobileNetV2",
-      "Transfer Learning",
-      "Image Classification",
-    ],
-  },
+const CREATIVE_TOOLKIT: ToolCategory[] = [
   {
     label: "Design Tools",
     tools: ["Figma", "Adobe Illustrator", "Photoshop", "InDesign", "Canva"],
   },
   {
-    label: "Development Tools",
+    label: "UI/UX Skills",
+    tools: ["Wireframing", "Prototyping", "Mobile UI Design"],
+  },
+  {
+    label: "Print & Production",
     tools: [
-      "Git",
-      "GitHub",
-      "VS Code",
-      "npm",
-      "Vercel",
-      "Google Colab",
-      "Claude Code",
-      "GitHub Copilot",
+      "Print-ready Artwork",
+      "Prepress",
+      "Product Mockups",
+      "Signage",
+      "Apparel Graphics",
     ],
   },
   {
-    label: "Languages",
-    tools: ["JavaScript", "TypeScript", "Python", "Java", "C#", "C"],
-  },
-  {
-    label: "Integrations",
+    label: "Creative Services",
     tools: [
-      "PayPal",
-      "MapLibre",
-      "MapTiler",
-      "OpenCage",
-      "Face++",
-      "OCR Space",
-      "Frankfurter API",
-      "TMDB API",
+      "Branding",
+      "Marketing Materials",
+      "Digital Content",
+      "Client Revisions",
     ],
   },
 ];
@@ -420,7 +249,7 @@ export const JourneySection: React.FC = () => {
               hidden: {},
               show: { transition: { staggerChildren: reduce ? 0 : 0.15 } },
             }}
-            className="grid gap-10 md:grid-cols-3 md:gap-6"
+            className="grid gap-10 md:grid-cols-2 md:gap-8"
           >
             {WORK_EXPERIENCE.map((entry) => (
               <motion.li
@@ -508,25 +337,23 @@ export const JourneySection: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Project-based development experience and categorized toolkit. */}
+      {/* Design-focused tools and capabilities. */}
       <motion.div
         {...reveal}
         className="mt-16 rounded-[2rem] border border-zyk-brown/10 bg-zyk-bg-end/80 p-6 shadow-sm md:p-8"
       >
         <p className="text-center font-display text-sm uppercase tracking-[0.2em] text-zyk-accent">
-          Software Project Experience
+          Creative Toolkit
         </p>
         <h4 className="mt-2 text-center font-display text-2xl text-zyk-heading">
-          Full-Stack Developer &amp; UI/UX Designer
+          Tools &amp; Capabilities
         </h4>
         <p className="mx-auto mt-2 max-w-3xl text-center font-body text-sm leading-relaxed text-zyk-brown/75">
-          Built academic software projects including Rent2Reuse, covering mobile
-          development, authentication, databases, REST APIs, real-time features,
-          maps, payments, image processing, testing, and ML-assisted image
-          classification.
+          A focused set of tools and practical skills used across digital
+          design, UI/UX, branding, and print production.
         </p>
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {PROJECT_TOOLKIT.map((category) => (
+          {CREATIVE_TOOLKIT.map((category) => (
             <div key={category.label}>
               <h5 className="font-display text-sm text-zyk-heading">
                 {category.label}
@@ -601,8 +428,8 @@ export const ContactSection: React.FC = () => {
       <div className="relative z-10 mx-auto mt-16 flex max-w-5xl flex-col items-center gap-2 border-t border-zyk-bg-end/15 pt-6 font-body text-sm text-zyk-bg-end/70 sm:flex-row sm:justify-between">
         <p className="font-display tracking-wide">Zyk</p>
         <p>
-          &copy; {year} Ezekiel Villadolid · Built with React, Tailwind &amp; a
-          lot of coffee ☕
+          &copy; {year} Ezekiel Villadolid · Designed and built with care and a
+          little coffee ☕
         </p>
         <a href="#home" className="transition-colors hover:text-zyk-bg-end">
           Back to top ↑

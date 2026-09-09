@@ -13,7 +13,7 @@ interface HeroProps {
   revealed?: boolean;
 }
 
-const ROLES = ["Software Developer", "Graphic Designer", "UI/UX Designer"];
+const ROLES = ["Graphic Designer", "UI/UX Designer"];
 
 // How long the self-intro holds at the "popped in" spot before it slides up
 // to its resting position.
@@ -152,7 +152,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
             style={{ fontSize: "clamp(1.125rem, 1rem + 0.6vw, 1.5rem)" }}
           >
             {reduce ? (
-              "Software Developer"
+              "Graphic Designer"
             ) : (
               <>
                 {role}
@@ -167,7 +167,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
             className="mt-6 flex flex-wrap items-center justify-center gap-4 md:justify-start"
           >
             <PillButton variant="primary" href="#projects">
-              View Projects
+              View My Work
             </PillButton>
             <PillButton variant="secondary" href="#contact">
               Get in Touch

@@ -38,34 +38,33 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
-    // The site itself is the first showcased project (per the brief).
-    title: "This Portfolio World",
+    title: "Print & Production Design",
     blurb:
-      "An interactive, scroll-through diorama built on a custom declarative scene engine — layered scenes, click-glow behaviors, a custom cursor, and ambient motion. The website is the demo.",
-    tags: ["React", "TypeScript", "Scene Engine", "Framer Motion"],
-    art: "Wide shot of the layered Hero diorama — outside + room + coding desk, softly lit",
-    href: "#home",
+      "Marketing materials, tarpaulins, stickers, signage, apparel graphics, product mockups, and print-ready artwork prepared with production in mind.",
+    tags: ["Illustrator", "Photoshop", "InDesign", "Print Production"],
+    art: "Selected print, signage, apparel, and product-mockup work",
   },
   {
-    title: "[Placeholder Project Two]",
+    title: "Digital Marketing & Client Work",
     blurb:
-      "One-line hook for a real dev project. What problem it solved, your role, and the standout technical or design decision. Keep it case-study, not résumé.",
-    tags: ["Placeholder", "Add", "Real", "Tags"],
-    art: "Cozy illustrated mockup of the project's main screen on a wooden desk",
+      "Digital marketing materials created through freelance collaborations, balancing visual quality with client feedback, revisions, and deadlines.",
+    tags: ["Digital Design", "Canva", "Client Collaboration"],
+    art: "Selected digital campaigns and freelance marketing materials",
   },
   {
-    title: "[Placeholder Project Three]",
+    title: "UI/UX & Event Branding",
     blurb:
-      "Another project hook. Aim for range here — if project two was full-stack, make this one design- or interaction-heavy so the two cards show breadth.",
-    tags: ["Placeholder", "Add", "Real", "Tags"],
-    art: "Hand-drawn UI flow or a small animation still framed like a storybook page",
+      "Figma prototypes, promotional design, and event identities developed while leading and collaborating with student designers and developers.",
+    tags: ["Figma", "Prototyping", "Event Branding"],
+    art: "Selected interface prototypes and GDSC event-branding work",
   },
 ];
 
 const SECTION_INTRO = {
-  eyebrow: "Things I've built",
-  title: "Featured Projects",
-  blurb: "A handful of things I've made — each one a small world of its own.",
+  eyebrow: "Design in practice",
+  title: "Selected Work",
+  blurb:
+    "A focused selection spanning print production, digital campaigns, UI/UX, and visual identity.",
 };
 
 const TagChip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -94,12 +93,14 @@ const ProjectText: React.FC<{
         <TagChip key={tag}>{tag}</TagChip>
       ))}
     </div>
-    <a
-      href={project.href ?? "#projects"}
-      className="mt-5 inline-flex w-fit items-center gap-1 font-display text-sm text-zyk-accent transition-colors hover:text-zyk-primary"
-    >
-      Read case study &rarr;
-    </a>
+    {project.href && (
+      <a
+        href={project.href}
+        className="mt-5 inline-flex w-fit items-center gap-1 font-display text-sm text-zyk-accent transition-colors hover:text-zyk-primary"
+      >
+        View project &rarr;
+      </a>
+    )}
   </>
 );
 
