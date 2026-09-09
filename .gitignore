@@ -38,3 +38,7 @@ Thumbs.db
 # Markdown files (but keep README)
 *.md
 !README.md
+
+# Documentation
+!docs/
+!docs/**/*.md

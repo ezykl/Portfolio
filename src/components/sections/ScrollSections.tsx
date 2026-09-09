@@ -181,46 +181,153 @@ interface ExperienceEntry {
   role: string;
   org: string;
   blurb: string;
-  /** Tech / skills used in this role — the stack, told over time. */
-  tech: string[];
+  /** Concise, role-specific skills and workflow highlights. */
+  highlights: string[];
 }
 
-// ▶ EDIT ME: your real roles, in order — internships, jobs, leadership
-// positions, freelance work. Replace every bracketed placeholder below.
-const EXPERIENCE: ExperienceEntry[] = [
+const WORK_EXPERIENCE: ExperienceEntry[] = [
   {
-    period: "[20XX — 20XX]",
-    role: "[Your Role]",
-    org: "[Company / Organization]",
-    blurb: "[One or two sentences on what you did and the impact you made.]",
-    tech: ["Tech", "Used", "Here"],
+    period: "Aug 2021 — Sep 2023",
+    role: "Graphics Artist",
+    org: "Island Artz Printing and Services",
+    blurb:
+      "Produced marketing collateral, signage, apparel graphics, mockups, and print-ready artwork while coordinating revisions and production.",
+    highlights: [
+      "Print Design",
+      "Product Mockups",
+      "Prepress",
+      "Production Coordination",
+    ],
   },
   {
-    period: "[20XX — 20XX]",
-    role: "[Your Role]",
-    org: "[Company / Organization]",
-    blurb: "[One or two sentences on what you did and the impact you made.]",
-    tech: ["Tech", "Used", "Here"],
+    period: "2024 — 2025",
+    role: "Graphics Artist",
+    org: "Upwork / Freelance",
+    blurb:
+      "Created digital marketing materials while managing client communication, revisions, deadlines, and design quality.",
+    highlights: ["Digital Design", "Client Collaboration", "Quality Control"],
   },
   {
-    period: "[20XX — Present]",
-    role: "[Your Role]",
-    org: "[Company / Organization]",
-    blurb: "[One or two sentences on what you did and the impact you made.]",
-    tech: ["Tech", "Used", "Here"],
+    period: "Feb — Apr 2026",
+    role: "Data Annotator Intern",
+    org: "Innodata Knowledge Services, Inc.",
+    blurb:
+      "Annotated image and video datasets, validated structured outputs, and performed quality checks for reliable AI data workflows.",
+    highlights: [
+      "Bounding Boxes",
+      "Skeleton Labeling",
+      "Dataset QA",
+      "Prompt Engineering",
+    ],
   },
 ];
 
-// At-a-glance current stack, shown as a strip below Experience.
-const TECH_STACK = [
-  "React",
-  "TypeScript",
-  "Tailwind",
-  "Framer Motion",
-  "Figma",
-  "Vite",
-  "Git",
-  "Node",
+const LEADERSHIP_EXPERIENCE: ExperienceEntry[] = [
+  {
+    period: "2023 — 2024",
+    role: "UI/UX Lead",
+    org: "Google Developer Student Clubs, CTU",
+    blurb:
+      "Led UI/UX initiatives, created Figma prototypes, facilitated workshops, and collaborated with student developers and designers.",
+    highlights: ["Figma", "Prototyping", "Workshops", "Team Leadership"],
+  },
+  {
+    period: "2022 — 2023",
+    role: "Graphics Design Lead",
+    org: "Google Developer Student Clubs, CTU",
+    blurb:
+      "Directed promotional design and event branding, maintaining visual consistency through cross-functional collaboration.",
+    highlights: [
+      "Event Branding",
+      "Visual Direction",
+      "Cross-functional Collaboration",
+    ],
+  },
+];
+
+interface ToolCategory {
+  label: string;
+  tools: string[];
+}
+
+// Development experience is primarily supported by academic/software projects.
+const PROJECT_TOOLKIT: ToolCategory[] = [
+  {
+    label: "Frontend & Mobile",
+    tools: [
+      "React",
+      "Next.js",
+      "React Native",
+      "Expo",
+      "Expo Router",
+      "HTML",
+      "CSS",
+      "Tailwind CSS",
+      "NativeWind",
+      "Bootstrap",
+      "Material UI",
+      "shadcn/ui",
+    ],
+  },
+  {
+    label: "Backend & APIs",
+    tools: ["Node.js", "Flask", ".NET", "REST APIs", "Third-party APIs"],
+  },
+  {
+    label: "Database & Cloud",
+    tools: [
+      "MySQL",
+      "Firebase",
+      "Firestore",
+      "Firebase Authentication",
+      "Firebase Storage",
+    ],
+  },
+  {
+    label: "AI & Machine Learning",
+    tools: [
+      "Python",
+      "TensorFlow",
+      "Keras",
+      "MobileNetV2",
+      "Transfer Learning",
+      "Image Classification",
+    ],
+  },
+  {
+    label: "Design Tools",
+    tools: ["Figma", "Adobe Illustrator", "Photoshop", "InDesign", "Canva"],
+  },
+  {
+    label: "Development Tools",
+    tools: [
+      "Git",
+      "GitHub",
+      "VS Code",
+      "npm",
+      "Vercel",
+      "Google Colab",
+      "Claude Code",
+      "GitHub Copilot",
+    ],
+  },
+  {
+    label: "Languages",
+    tools: ["JavaScript", "TypeScript", "Python", "Java", "C#", "C"],
+  },
+  {
+    label: "Integrations",
+    tools: [
+      "PayPal",
+      "MapLibre",
+      "MapTiler",
+      "OpenCage",
+      "Face++",
+      "OCR Space",
+      "Frankfurter API",
+      "TMDB API",
+    ],
+  },
 ];
 
 export const JourneySection: React.FC = () => {
@@ -281,7 +388,14 @@ export const JourneySection: React.FC = () => {
           Experience
         </motion.h3>
 
-        <div className="relative mt-12">
+        <motion.h4
+          {...reveal}
+          className="mt-8 font-display text-xl text-zyk-heading md:text-2xl"
+        >
+          Work Experience
+        </motion.h4>
+
+        <div className="relative mt-8">
           {/* Horizontal connector (desktop) — draws in left→right. */}
           <motion.div
             aria-hidden
@@ -308,7 +422,7 @@ export const JourneySection: React.FC = () => {
             }}
             className="grid gap-10 md:grid-cols-3 md:gap-6"
           >
-            {EXPERIENCE.map((entry) => (
+            {WORK_EXPERIENCE.map((entry) => (
               <motion.li
                 key={`${entry.role}-${entry.org}`}
                 variants={item}
@@ -331,10 +445,10 @@ export const JourneySection: React.FC = () => {
                     {entry.blurb}
                   </p>
                   <div className="mt-3 flex flex-wrap gap-1.5 md:justify-center">
-                    {entry.tech.map((t) => (
+                    {entry.highlights.map((highlight) => (
                       <TechChip
-                        key={t}
-                        label={t}
+                        key={highlight}
+                        label={highlight}
                         className="rounded-full bg-zyk-secondary/35 px-2.5 py-1 text-xs text-zyk-heading"
                       />
                     ))}
@@ -344,23 +458,89 @@ export const JourneySection: React.FC = () => {
             ))}
           </motion.ol>
         </div>
+
+        <motion.h4
+          {...reveal}
+          className="mt-16 font-display text-xl text-zyk-heading md:text-2xl"
+        >
+          Leadership Experience
+        </motion.h4>
+
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={{
+            hidden: {},
+            show: { transition: { staggerChildren: reduce ? 0 : 0.15 } },
+          }}
+          className="mt-6 grid gap-5 md:grid-cols-2"
+        >
+          {LEADERSHIP_EXPERIENCE.map((entry) => (
+            <motion.article
+              key={`${entry.role}-${entry.org}`}
+              variants={item}
+              className="rounded-[1.5rem] border border-zyk-brown/10 bg-zyk-bg-end/70 p-6 shadow-sm"
+            >
+              <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent">
+                {entry.period}
+              </p>
+              <h5 className="mt-1 font-display text-lg text-zyk-heading">
+                {entry.role}
+              </h5>
+              <p className="font-body text-sm font-medium text-zyk-brown/60">
+                {entry.org}
+              </p>
+              <p className="mt-3 font-body text-sm leading-relaxed text-zyk-brown/80">
+                {entry.blurb}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {entry.highlights.map((highlight) => (
+                  <TechChip
+                    key={highlight}
+                    label={highlight}
+                    className="rounded-full bg-zyk-secondary/35 px-2.5 py-1 text-xs text-zyk-heading"
+                  />
+                ))}
+              </div>
+            </motion.article>
+          ))}
+        </motion.div>
       </div>
 
-      {/* Tech Stack summary */}
+      {/* Project-based development experience and categorized toolkit. */}
       <motion.div
         {...reveal}
-        className="mt-16 rounded-[2rem] border border-zyk-brown/10 bg-zyk-bg-end/80 p-6 text-center shadow-sm"
+        className="mt-16 rounded-[2rem] border border-zyk-brown/10 bg-zyk-bg-end/80 p-6 shadow-sm md:p-8"
       >
-        <p className="font-display text-sm uppercase tracking-[0.2em] text-zyk-accent">
-          Tech Stack
+        <p className="text-center font-display text-sm uppercase tracking-[0.2em] text-zyk-accent">
+          Software Project Experience
         </p>
-        <div className="mt-4 flex flex-wrap justify-center gap-2">
-          {TECH_STACK.map((tool) => (
-            <TechChip
-              key={tool}
-              label={tool}
-              className="rounded-full bg-white/70 px-3 py-1.5 text-sm text-zyk-brown/80 shadow-sm"
-            />
+        <h4 className="mt-2 text-center font-display text-2xl text-zyk-heading">
+          Full-Stack Developer &amp; UI/UX Designer
+        </h4>
+        <p className="mx-auto mt-2 max-w-3xl text-center font-body text-sm leading-relaxed text-zyk-brown/75">
+          Built academic software projects including Rent2Reuse, covering mobile
+          development, authentication, databases, REST APIs, real-time features,
+          maps, payments, image processing, testing, and ML-assisted image
+          classification.
+        </p>
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {PROJECT_TOOLKIT.map((category) => (
+            <div key={category.label}>
+              <h5 className="font-display text-sm text-zyk-heading">
+                {category.label}
+              </h5>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {category.tools.map((tool) => (
+                  <TechChip
+                    key={tool}
+                    label={tool}
+                    className="rounded-full bg-white/70 px-2.5 py-1 text-xs text-zyk-brown/80 shadow-sm"
+                  />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </motion.div>

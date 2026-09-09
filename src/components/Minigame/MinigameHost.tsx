@@ -38,7 +38,7 @@ interface Findable {
 const FINDABLES: Findable[] = [
   { id: "room-frisbee", name: "frisbee", img: "/assets/room/Frisbee.png" },
   { id: "grad-pic", name: "graduation photo", img: "/assets/room/grad_pic.png" },
-  { id: "room-longboard", name: "longboard", img: "/assets/room/longboard.png" },
+  { id: "room-longboard", name: "longboard", img: "/assets/room/Longboard.png" },
   { id: "room-gdsc", name: "GDSC plaque", img: "/assets/room/gdsc.png" },
 ];
 

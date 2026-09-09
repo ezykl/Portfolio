@@ -40,7 +40,7 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
   const message = pct >= 100 ? "Come on in!" : line;
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-linear-to-b from-zyk-bg-start] to-zyk-bg-end">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-linear-to-b from-zyk-bg-start to-zyk-bg-end">
       {/* Keyframes are scoped to this screen and injected once — bob/shimmer/
           indeterminate aren't default Tailwind utilities. */}
       <style>{keyframes}</style>

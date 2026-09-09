@@ -13,7 +13,7 @@ interface HeroProps {
   revealed?: boolean;
 }
 
-const ROLES = ["Software Developer", "Graphic Designer", "Game UI Designer"];
+const ROLES = ["Software Developer", "Graphic Designer", "UI/UX Designer"];
 
 // How long the self-intro holds at the "popped in" spot before it slides up
 // to its resting position.
@@ -182,7 +182,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
             The inner motion.div is what actually moves (translateY + opacity),
             clipped by this box's `overflow-hidden`, so it reads as rising up
             into view against a backdrop that's already fully in place. */}
-        <div className="relative z-0 mx-auto w-full max-w-270 overflow-hidden ">
+        <div className="relative z-0 mx-auto w-full max-w-270 mt-10 overflow-hidden ">
           <motion.div
             initial={reduce ? { opacity: 0 } : { y: "100%", opacity: 0 }}
             animate={
