@@ -40,6 +40,19 @@ const TechChip: React.FC<{ label: string; className?: string }> = ({
   );
 };
 
+/** Large featured chip for Design Tools — enlarged logo, same warm theme. */
+const DesignToolChip: React.FC<{ label: string }> = ({ label }) => {
+  const icon = TECH_ICON_MAP[label];
+  return (
+    <span className="inline-flex items-center gap-2.5 rounded-2xl border border-zyk-brown/10 bg-white/85 px-5 py-3 font-body text-sm font-medium text-zyk-heading shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md md:text-base">
+      {icon && (
+        <TechIcon name={icon} className="h-8 w-8 shrink-0 md:h-10 md:w-10" />
+      )}
+      {label}
+    </span>
+  );
+};
+
 /**
  * Anchor scaffolding for the single-page scroll (§3). These are intentionally
  * light placeholders — they establish the section ids the NavBar links to
@@ -60,7 +73,7 @@ export const useReveal = () => {
 };
 
 const ABOUT_BLURB =
-  "I'm a graphic designer and UI/UX designer creating clear, engaging visual work across digital, print, and product experiences. I enjoy shaping ideas into cohesive visuals—from marketing materials and event identities to prototypes and production-ready artwork—while collaborating closely with clients and teams.";
+  "Hi, I’m Ezekiel Villadolid, a Graphic Designer and UI/UX Designer creating clear, purposeful, and engaging visuals across digital and print. I enjoy turning ideas into thoughtful designs that communicate effectively, look great, and create meaningful experiences.";
 
 const ABOUT_FACTS = [
   "Digital & Print Design",
@@ -251,7 +264,7 @@ export const JourneySection: React.FC = () => {
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            style={{ transformOrigin: "left" }}
+            style={{ transformOrigin: "right" }}
             className="absolute left-0 right-0 top-2 hidden h-0.5 bg-zyk-brown/20 md:block"
           />
           {/* Vertical connector (mobile). */}
@@ -371,13 +384,25 @@ export const JourneySection: React.FC = () => {
           A focused set of tools and practical skills used across digital
           design, UI/UX, branding, and print production.
         </p>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {CREATIVE_TOOLKIT.map((category) => (
-            <div key={category.label}>
+        {/* Featured Design Tools — enlarged, centered. */}
+        <div className="mx-auto mt-8 max-w-3xl text-center">
+          <h5 className="font-display text-base tracking-wide text-zyk-heading md:text-lg">
+            {CREATIVE_TOOLKIT[0].label}
+          </h5>
+          <div className="mt-4 flex flex-wrap justify-center gap-3 md:gap-4">
+            {CREATIVE_TOOLKIT[0].tools.map((tool) => (
+              <DesignToolChip key={tool} label={tool} />
+            ))}
+          </div>
+        </div>
+        {/* Remaining skills — centered below the featured row. */}
+        <div className="mx-auto mt-8 grid max-w-4xl gap-6 sm:grid-cols-3">
+          {CREATIVE_TOOLKIT.slice(1).map((category) => (
+            <div key={category.label} className="text-center">
               <h5 className="font-display text-sm text-zyk-heading">
                 {category.label}
               </h5>
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div className="mt-2 flex flex-wrap justify-center gap-1.5">
                 {category.tools.map((tool) => (
                   <TechChip
                     key={tool}
