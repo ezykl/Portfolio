@@ -398,10 +398,10 @@ export const GallerySection: React.FC = () => {
         })}
       </motion.div>
 
-      {/* Masonry collage — natural uncropped sizes with zero vertical gaps */}
+      {/* Masonry collage — responsive 2 to 5 columns on wide screens with controlled height so cards are never overwhelming */}
       <motion.div
         layout={!reduce}
-        className="mt-10 columns-1 gap-4 sm:columns-2 lg:columns-3"
+        className="mt-10 columns-2 gap-3 sm:columns-3 sm:gap-3.5 md:columns-4 lg:columns-4 xl:columns-5"
       >
         <AnimatePresence mode="popLayout" initial={false}>
           {visibleItems.map((galleryItem) => (
@@ -412,19 +412,19 @@ export const GallerySection: React.FC = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={reduce ? undefined : { opacity: 0, scale: 0.96 }}
               transition={{ duration: reduce ? 0 : 0.25 }}
-              className="mb-4 break-inside-avoid"
+              className="mb-3 break-inside-avoid sm:mb-3.5"
             >
               <button
                 type="button"
                 onClick={() => setSelectedItem(galleryItem)}
                 aria-label={`View ${galleryItem.title}`}
-                className="group relative block w-full overflow-hidden rounded-2xl bg-zyk-brown/10 text-left shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent"
+                className="group relative block w-full overflow-hidden rounded-xl bg-zyk-brown/10 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent sm:rounded-2xl"
               >
                 {/* Discrete piece counter for items with multiple images/video */}
                 {(galleryItem.images.length > 1 ||
                   (galleryItem.videos?.length ?? 0) > 0) && (
-                  <span className="absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 rounded-full border border-zyk-bg-end/30 bg-zyk-brown/85 px-2.5 py-0.5 font-display text-[0.65rem] tracking-wider uppercase text-zyk-bg-end shadow-md backdrop-blur-md transition duration-300 group-hover:opacity-0">
-                    <span className="h-1.5 w-1.5 rounded-full bg-zyk-secondary animate-pulse" />
+                  <span className="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-zyk-bg-end/30 bg-zyk-brown/85 px-2 py-0.5 font-display text-[0.6rem] tracking-wider uppercase text-zyk-bg-end shadow-md backdrop-blur-md transition duration-300 group-hover:opacity-0 sm:top-3 sm:right-3">
+                    <span className="h-1 w-1 rounded-full bg-zyk-secondary animate-pulse" />
                     {galleryItem.videos?.length
                       ? "Video & Stills"
                       : galleryItem.title.includes("Process")
@@ -438,22 +438,22 @@ export const GallerySection: React.FC = () => {
                   alt={galleryItem.title}
                   loading="lazy"
                   decoding="async"
-                  className="block h-auto w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                  className="block max-h-[340px] w-full object-cover object-top transition duration-700 group-hover:scale-[1.05] sm:max-h-[360px]"
                 />
 
                 {/* Dark overlay following portfolio theme for high contrast text readability */}
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#180d07]/95 via-[#180d07]/75 to-[#180d07]/20 p-5 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+                  className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#180d07]/95 via-[#180d07]/75 to-[#180d07]/20 p-3.5 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 sm:p-4"
                 >
-                  <span className="inline-flex items-center gap-2 translate-y-3 font-display text-[0.68rem] uppercase tracking-[0.22em] text-zyk-secondary font-semibold transition duration-300 group-hover:translate-y-0">
-                    <span className="h-1.5 w-1.5 rounded-full bg-zyk-accent" />
+                  <span className="inline-flex items-center gap-1.5 translate-y-2.5 font-display text-[0.62rem] uppercase tracking-[0.18em] text-zyk-secondary font-semibold transition duration-300 group-hover:translate-y-0">
+                    <span className="h-1 w-1 rounded-full bg-zyk-accent" />
                     {galleryItem.category}
                   </span>
-                  <span className="mt-1 block translate-y-3 font-display text-lg font-bold leading-snug text-zyk-bg-end drop-shadow-sm transition delay-[25ms] duration-300 group-hover:translate-y-0">
+                  <span className="mt-1 block translate-y-2.5 font-display text-sm sm:text-base font-bold leading-snug text-zyk-bg-end drop-shadow-sm transition delay-[25ms] duration-300 group-hover:translate-y-0 line-clamp-2">
                     {galleryItem.title}
                   </span>
-                  <span className="mt-2.5 inline-flex w-fit items-center gap-2 translate-y-3 rounded-full border border-zyk-secondary/40 bg-zyk-brown/90 px-3 py-1 font-display text-[0.72rem] font-medium text-zyk-bg-end shadow-md backdrop-blur-sm transition delay-[50ms] duration-300 group-hover:translate-y-0">
+                  <span className="mt-2 inline-flex w-fit items-center gap-1.5 translate-y-2.5 rounded-full border border-zyk-secondary/40 bg-zyk-brown/90 px-2.5 py-0.5 font-display text-[0.68rem] font-medium text-zyk-bg-end shadow-md backdrop-blur-sm transition delay-[50ms] duration-300 group-hover:translate-y-0">
                     <span>
                       {galleryItem.videos?.length
                         ? "Watch & Explore"
