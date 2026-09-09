@@ -179,26 +179,45 @@ export const JourneySection: React.FC = () => {
       className="mx-auto max-w-6xl px-6 py-24"
     >
       {/* About Me */}
-      <motion.div {...reveal} className="max-w-3xl">
-        <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
-          Who I am
-        </p>
-        <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
-          About Me
-        </h2>
-        <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
-          {ABOUT_BLURB}
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {ABOUT_FACTS.map((fact) => (
-            <span
-              key={fact}
-              className="rounded-full bg-zyk-secondary/35 px-3 py-1 font-body text-xs font-medium text-zyk-heading"
-            >
-              {fact}
-            </span>
-          ))}
+      <motion.div
+        {...reveal}
+        className="grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(260px,0.72fr)] md:items-center lg:gap-16"
+      >
+        <div className="max-w-3xl">
+          <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
+            Who I am
+          </p>
+          <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
+            About Me
+          </h2>
+          <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
+            {ABOUT_BLURB}
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {ABOUT_FACTS.map((fact) => (
+              <span
+                key={fact}
+                className="rounded-full bg-zyk-secondary/35 px-3 py-1 font-body text-xs font-medium text-zyk-heading"
+              >
+                {fact}
+              </span>
+            ))}
+          </div>
         </div>
+
+        <figure className="relative mx-auto w-full max-w-sm">
+          <div
+            aria-hidden
+            className="absolute inset-x-[4%] bottom-[3%] top-[18%] rotate-2 rounded-[2rem] bg-zyk-secondary/35"
+          />
+          <img
+            src="/assets/me-longhair.png"
+            alt="Portrait of Zyk"
+            loading="lazy"
+            decoding="async"
+            className="relative h-auto w-full object-contain drop-shadow-[0_20px_28px_rgba(140,84,56,0.18)]"
+          />
+        </figure>
       </motion.div>
 
       {/* Experience: a line crossing left→right (top→bottom on mobile) with a
