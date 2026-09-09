@@ -180,7 +180,7 @@ const ProjectVisual: React.FC<{
       type="button"
       onClick={onOpenFlipbook}
       aria-label={`Open ${project.title} flipbook`}
-      className={`group relative block overflow-hidden rounded-3xl bg-zyk-brown/10 text-left shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent ${className}`}
+      className={`group relative block w-full overflow-hidden rounded-3xl bg-zyk-brown/10 text-left shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent ${className}`}
     >
       <span className="absolute inset-0 bg-zyk-secondary/25" />
       {[...(project.previewPages ?? []), project.cover].map(
