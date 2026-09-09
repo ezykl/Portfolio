@@ -210,14 +210,14 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                       {section.images.map((src, imageIndex) => (
                         <figure
                           key={src}
-                          className="mx-auto w-full max-w-sm overflow-hidden rounded-[2rem] border border-zyk-brown/10 bg-white shadow-[0_20px_55px_rgba(140,84,56,0.14)]"
+                          className="mx-auto flex w-full max-w-sm items-center justify-center bg-transparent"
                         >
                           <img
                             src={src}
                             alt={`${imageAlt}: ${section.title} screen ${imageIndex + 1}`}
                             loading={sectionIndex === 0 ? "eager" : "lazy"}
                             decoding="async"
-                            className="h-auto w-full object-contain"
+                            className="h-auto max-h-[82vh] w-auto max-w-full rounded-[2rem] object-contain shadow-[0_20px_55px_rgba(140,84,56,0.14)]"
                           />
                         </figure>
                       ))}
@@ -313,18 +313,14 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                   {images.map((src, index) => (
                     <figure
                       key={src}
-                      className={`overflow-hidden rounded-2xl border border-zyk-brown/10 bg-white shadow-sm sm:rounded-3xl ${
-                        mediaLayout === "gallery" ? "mx-auto w-full" : ""
-                      }`}
+                      className="mx-auto flex w-full items-center justify-center bg-transparent"
                     >
                       <img
                         src={src}
                         alt={`${imageAlt} ${index + 1}`}
                         loading={index === 0 ? "eager" : "lazy"}
                         decoding="async"
-                        className={`h-auto w-full object-contain ${
-                          mediaLayout === "gallery" ? "max-h-[78vh]" : ""
-                        }`}
+                        className="mx-auto block h-auto max-h-[82vh] w-auto max-w-full rounded-2xl object-contain shadow-xl sm:rounded-3xl"
                       />
                     </figure>
                   ))}
