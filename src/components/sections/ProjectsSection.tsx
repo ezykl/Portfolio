@@ -133,6 +133,7 @@ const PROJECTS: Project[] = [
       summary:
         "Rent2Reuse makes it easier for community members to access useful items without buying them, while helping owners give underused tools and equipment a second life.",
       role: "Full-Stack Developer and UI/UX Designer",
+      note: "Selected screen sample: this presentation shows only part of the interface, but each design represents an actual frame from the Rent2Reuse application.",
       facts: [
         { label: "Platform", value: "Mobile application" },
         { label: "Design tool", value: "Figma" },

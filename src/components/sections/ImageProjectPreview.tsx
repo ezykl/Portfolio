@@ -7,6 +7,7 @@ export interface ImageCaseStudy {
   eyebrow: string;
   summary: string;
   role: string;
+  note?: string;
   facts: Array<{
     label: string;
     value: string;
@@ -110,7 +111,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
         <motion.article
           className={
             caseStudy
-              ? "bg-[#f7f3ed] text-zyk-heading"
+              ? "bg-zyk-bg-end text-zyk-heading"
               : "px-3 py-5 sm:px-6 sm:py-8"
           }
           initial={reduce ? false : { opacity: 0, scale: 0.97, y: 18 }}
@@ -134,12 +135,17 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                     <p className="mt-6 max-w-2xl font-body text-base leading-relaxed text-zyk-brown/75 sm:text-lg">
                       {caseStudy.summary}
                     </p>
-                    <p className="mt-5 border-l-2 border-[#49cf86] pl-4 font-body text-sm leading-relaxed text-zyk-brown/70">
+                    <p className="mt-5 border-l-2 border-zyk-primary pl-4 font-body text-sm leading-relaxed text-zyk-brown/70">
                       <span className="font-semibold text-zyk-heading">
                         My role:
                       </span>{" "}
                       {caseStudy.role}
                     </p>
+                    {caseStudy.note && (
+                      <p className="mt-6 max-w-2xl rounded-2xl border border-zyk-brown/10 bg-zyk-secondary/20 px-4 py-3 font-body text-xs leading-relaxed text-zyk-brown/70 sm:text-sm">
+                        {caseStudy.note}
+                      </p>
+                    )}
                   </div>
                   <dl className="grid grid-cols-2 gap-x-6 gap-y-5 rounded-3xl bg-white/75 p-6 shadow-sm">
                     {caseStudy.facts.map((fact) => (
@@ -160,12 +166,14 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                 <section
                   key={section.title}
                   className={`px-5 py-14 sm:px-8 sm:py-20 ${
-                    sectionIndex % 2 === 0 ? "bg-[#e9f8ef]" : "bg-white"
+                    sectionIndex % 2 === 0
+                      ? "bg-zyk-secondary/20"
+                      : "bg-zyk-bg-end"
                   }`}
                 >
                   <div className="mx-auto max-w-6xl">
                     <div className="mb-10 max-w-2xl">
-                      <p className="font-display text-xs uppercase tracking-[0.2em] text-[#26975c]">
+                      <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent">
                         {section.eyebrow}
                       </p>
                       <h4 className="mt-2 font-display text-3xl sm:text-4xl">
@@ -179,7 +187,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                       {section.images.map((src, imageIndex) => (
                         <figure
                           key={src}
-                          className="mx-auto w-full max-w-sm overflow-hidden rounded-[2rem] border border-zyk-brown/10 bg-white shadow-[0_20px_55px_rgba(56,78,66,0.13)]"
+                          className="mx-auto w-full max-w-sm overflow-hidden rounded-[2rem] border border-zyk-brown/10 bg-white shadow-[0_20px_55px_rgba(140,84,56,0.14)]"
                         >
                           <img
                             src={src}
@@ -196,7 +204,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
               ))}
 
               {externalLink && (
-                <section className="bg-zyk-heading px-5 py-16 text-center text-zyk-bg-end sm:px-8 sm:py-20">
+                <section className="bg-zyk-brown px-5 py-16 text-center text-zyk-bg-end sm:px-8 sm:py-20">
                   <p className="font-body text-sm text-zyk-bg-end/65">
                     Explore the implementation and project structure.
                   </p>
@@ -204,7 +212,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                     href={externalLink.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#49cf86] px-6 py-3 font-display text-sm text-zyk-heading transition-transform hover:-translate-y-0.5"
+                    className="mt-5 inline-flex items-center gap-2 rounded-full bg-zyk-primary px-6 py-3 font-display text-sm text-white transition-transform hover:-translate-y-0.5"
                   >
                     {externalLink.label}
                     <IconExternalLink size={17} />
