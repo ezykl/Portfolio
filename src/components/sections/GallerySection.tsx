@@ -24,11 +24,12 @@ interface GalleryItem {
   videos?: string[];
   /**
    * Grid span hint for the collage layout.
-   *   wide  → 2 columns — landscape / horizontal compositions
-   *   tall  → 2 rows    — portrait / vertical compositions
-   *   standard → 1×1   — default
+   *   wide       → 2 columns, 1 row — landscape / horizontal compositions
+   *   tall       → 1 column, 2 rows  — portrait / vertical compositions
+   *   collection → 2 columns, 2 rows — multi-image showcases with ample breathing room
+   *   standard   → 1 column, 1 row  — default
    */
-  size?: "standard" | "wide" | "tall";
+  size?: "standard" | "wide" | "tall" | "collection";
 }
 
 /**
@@ -90,7 +91,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
       "/assets/gallery/marketing-social/4a.png",
       "/assets/gallery/marketing-social/5a.png",
     ],
-    size: "wide",
+    size: "collection",
   },
 
   // ── Print Design ───────────────────────────────────────────────────────
@@ -131,7 +132,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
       "/assets/gallery/apparel/other/school-paper-adviser.png",
       "/assets/gallery/apparel/other/mock-up.jpg",
     ],
-    size: "wide",
+    size: "collection",
   },
 
   // ── UI Design ──────────────────────────────────────────────────────────
@@ -171,7 +172,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
       "/assets/gallery/illustration/pixel-art/santa-fe.jpg",
       "/assets/gallery/illustration/pixel-art/volks.jpg",
     ],
-    size: "wide",
+    size: "collection",
   },
   {
     title: "Mouse Digital Art Process",
@@ -202,9 +203,10 @@ const FILTERS: Array<"All" | GalleryCategory> = [
 ];
 
 const SIZE_CLASS: Record<NonNullable<GalleryItem["size"]>, string> = {
-  standard: "",
-  wide: "sm:col-span-2",
-  tall: "sm:row-span-2",
+  standard: "col-span-1 row-span-1",
+  wide: "col-span-1 sm:col-span-2 row-span-1",
+  tall: "col-span-1 row-span-2",
+  collection: "col-span-1 sm:col-span-2 row-span-2",
 };
 
 export const GallerySection: React.FC = () => {
@@ -274,10 +276,10 @@ export const GallerySection: React.FC = () => {
         })}
       </motion.div>
 
-      {/* Collage grid */}
+      {/* Collage grid — natural varied spans with dense packing so no big gaps */}
       <motion.div
         layout={!reduce}
-        className="mt-10 grid auto-rows-[280px] grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
+        className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 auto-rows-[230px] sm:auto-rows-[250px] grid-flow-dense"
       >
         <AnimatePresence mode="popLayout" initial={false}>
           {visibleItems.map((galleryItem) => (
@@ -296,17 +298,28 @@ export const GallerySection: React.FC = () => {
                 aria-label={`View ${galleryItem.title}`}
                 className="group relative h-full w-full overflow-hidden rounded-[1.75rem] text-left shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent"
               >
-                {/* Card visual — single cover or 2×2 mini-collage */}
+                {/* Rest badge for multi-image collections */}
+                {galleryItem.previewImages && (
+                  <span className="absolute top-3.5 right-3.5 z-10 inline-flex items-center gap-1.5 rounded-full border border-zyk-bg-end/30 bg-zyk-brown/85 px-3 py-1 font-display text-[0.68rem] tracking-wider uppercase text-zyk-bg-end shadow-md backdrop-blur-md transition duration-300 group-hover:opacity-0">
+                    <span className="h-1.5 w-1.5 rounded-full bg-zyk-secondary animate-pulse" />
+                    {galleryItem.images.length} Pieces
+                  </span>
+                )}
+
+                {/* Card visual — single cover or spacious 2×2 mini-collage */}
                 {galleryItem.previewImages ? (
-                  <div className="grid h-full grid-cols-2 grid-rows-2 gap-px bg-zyk-brown/20">
-                    {galleryItem.previewImages.map((src) => (
-                      <div key={src} className="overflow-hidden">
+                  <div className="grid h-full grid-cols-2 grid-rows-2 gap-1.5 bg-zyk-brown/25 p-1.5">
+                    {galleryItem.previewImages.map((src, idx) => (
+                      <div
+                        key={`${src}-${idx}`}
+                        className="relative overflow-hidden rounded-xl bg-zyk-brown/10"
+                      >
                         <img
                           src={src}
                           alt=""
                           loading="lazy"
                           decoding="async"
-                          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]"
                         />
                       </div>
                     ))}
@@ -321,22 +334,31 @@ export const GallerySection: React.FC = () => {
                   />
                 )}
 
-                {/* Hover overlay — hidden at rest, slides up on hover */}
+                {/* Dark overlay following portfolio theme for high contrast text readability */}
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/85 via-black/25 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+                  className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#180d07]/95 via-[#180d07]/80 to-[#180d07]/35 p-5 sm:p-6 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
                 >
-                  <span className="block translate-y-3 font-display text-[0.6rem] uppercase tracking-[0.2em] text-white/65 transition duration-300 group-hover:translate-y-0">
+                  <span className="inline-flex items-center gap-2 translate-y-3 font-display text-[0.7rem] uppercase tracking-[0.22em] text-zyk-secondary font-semibold transition duration-300 group-hover:translate-y-0">
+                    <span className="h-1.5 w-1.5 rounded-full bg-zyk-accent" />
                     {galleryItem.category}
                   </span>
-                  <span className="mt-1 block translate-y-3 font-display text-xl leading-tight text-white transition delay-[30ms] duration-300 group-hover:translate-y-0">
+                  <span className="mt-1.5 block translate-y-3 font-display text-xl sm:text-2xl font-bold leading-snug text-zyk-bg-end drop-shadow-sm transition delay-[30ms] duration-300 group-hover:translate-y-0">
                     {galleryItem.title}
                   </span>
-                  <span className="mt-2 block translate-y-3 font-body text-xs text-white/55 transition delay-[60ms] duration-300 group-hover:translate-y-0">
-                    {galleryItem.images.length > 1 ||
-                    (galleryItem.videos?.length ?? 0) > 0
-                      ? "Click to view collection →"
-                      : "Click to view →"}
+                  <span className="mt-3.5 inline-flex w-fit items-center gap-2 translate-y-3 rounded-full border border-zyk-secondary/40 bg-zyk-brown/90 px-3.5 py-1.5 font-display text-xs font-medium text-zyk-bg-end shadow-md backdrop-blur-sm transition delay-[60ms] duration-300 group-hover:translate-y-0">
+                    <span>
+                      {galleryItem.previewImages ||
+                      galleryItem.images.length > 1
+                        ? `${galleryItem.images.length} designs · View collection`
+                        : "View design"}
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="text-zyk-secondary font-bold"
+                    >
+                      →
+                    </span>
                   </span>
                 </span>
               </button>

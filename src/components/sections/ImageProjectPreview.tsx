@@ -41,6 +41,8 @@ interface ImageProjectPreviewProps {
   images: string[];
   videos?: string[];
   imageAlt: string;
+  eyebrow?: string;
+  mediaLayout?: "presentation" | "gallery";
   externalLink?: {
     label: string;
     href: string;
@@ -56,6 +58,8 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
   images,
   videos = [],
   imageAlt,
+  eyebrow = "Featured Project",
+  mediaLayout = "presentation",
   externalLink,
   caseStudy,
   context,
@@ -96,7 +100,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <div>
             <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-secondary">
-              Featured Project
+              {eyebrow}
             </p>
             <h2 id={titleId} className="font-display text-xl sm:text-2xl">
               {title}
@@ -293,18 +297,32 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                     )}
                   </div>
                 )}
-                <div className="flex flex-col gap-5 sm:gap-8">
+                <div
+                  className={
+                    mediaLayout === "gallery"
+                      ? images.length === 1
+                        ? "mx-auto max-w-4xl"
+                        : images.length === 2
+                          ? "grid items-start gap-5 sm:grid-cols-2 sm:gap-8"
+                          : "grid items-start gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+                      : "flex flex-col gap-5 sm:gap-8"
+                  }
+                >
                   {images.map((src, index) => (
                     <figure
                       key={src}
-                      className="overflow-hidden rounded-2xl border border-zyk-brown/10 bg-white shadow-sm sm:rounded-3xl"
+                      className={`overflow-hidden rounded-2xl border border-zyk-brown/10 bg-white shadow-sm sm:rounded-3xl ${
+                        mediaLayout === "gallery" ? "mx-auto w-full" : ""
+                      }`}
                     >
                       <img
                         src={src}
                         alt={`${imageAlt} ${index + 1}`}
                         loading={index === 0 ? "eager" : "lazy"}
                         decoding="async"
-                        className="h-auto w-full object-contain"
+                        className={`h-auto w-full object-contain ${
+                          mediaLayout === "gallery" ? "max-h-[78vh]" : ""
+                        }`}
                       />
                     </figure>
                   ))}
