@@ -58,6 +58,7 @@ const PROJECTS: Project[] = [
     art: "School Paper Magazine cover",
     cover: "/assets/school-paper/page-1.png",
     previewPages: [
+      "/assets/school-paper/page-4.png",
       "/assets/school-paper/page-3.png",
       "/assets/school-paper/page-2.png",
     ],
@@ -182,28 +183,26 @@ const ProjectVisual: React.FC<{
       className={`group relative block overflow-hidden rounded-3xl bg-zyk-brown/10 text-left shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent ${className}`}
     >
       <span className="absolute inset-0 bg-zyk-secondary/25" />
-      {project.previewPages?.map((previewPage, index) => (
-        <img
-          key={previewPage}
-          src={previewPage}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-          className={`absolute left-1/2 top-1/2 h-[86%] w-auto rounded-sm object-contain shadow-lg transition duration-300 ${
-            index === 0
-              ? "-translate-x-[62%] -translate-y-1/2 -rotate-6 group-hover:-translate-x-[68%]"
-              : "-translate-x-[38%] -translate-y-1/2 rotate-6 group-hover:-translate-x-[32%]"
-          }`}
-        />
-      ))}
-      <img
-        src={project.cover}
-        alt={project.art}
-        loading="lazy"
-        decoding="async"
-        className="absolute left-1/2 top-1/2 h-[91%] w-auto -translate-x-1/2 -translate-y-1/2 rounded-sm object-contain shadow-xl transition duration-300 group-hover:scale-[1.02] group-hover:brightness-75 group-focus-visible:scale-[1.02] group-focus-visible:brightness-75"
-      />
+      {[...(project.previewPages ?? []), project.cover].map(
+        (previewPage, index, pages) => (
+          <img
+            key={previewPage}
+            src={previewPage}
+            alt={index === pages.length - 1 ? project.art : ""}
+            aria-hidden={index !== pages.length - 1}
+            loading="lazy"
+            decoding="async"
+            className={`absolute left-1/2 top-1/2 h-[82%] w-auto rounded-sm object-contain shadow-xl transition duration-300 ${
+              [
+                "-translate-x-[76%] -translate-y-[47%] -rotate-[9deg] group-hover:-translate-x-[82%]",
+                "-translate-x-[62%] -translate-y-[53%] -rotate-[3deg] group-hover:-translate-y-[56%]",
+                "-translate-x-[38%] -translate-y-[51%] rotate-[4deg] group-hover:-translate-x-[34%]",
+                "-translate-x-[24%] -translate-y-[46%] rotate-[10deg] group-hover:-translate-x-[18%]",
+              ][index]
+            }`}
+          />
+        ),
+      )}
       <span className="absolute inset-0 flex items-center justify-center bg-zyk-brown/15 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
         <span className="rounded-full bg-zyk-bg-end/95 px-5 py-2.5 font-display text-sm text-zyk-heading shadow-lg">
           Open Flipbook
