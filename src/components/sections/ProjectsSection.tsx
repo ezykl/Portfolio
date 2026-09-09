@@ -331,12 +331,10 @@ const ProjectVisual: React.FC<{
             project.imagePreview && !project.stackedCover
               ? "h-auto max-h-full w-full -translate-x-1/2 -translate-y-1/2 group-hover:scale-[1.01]"
               : project.comparisonCover
-                ? `h-auto max-h-[78%] w-[88%] ${
-                    [
-                      "-translate-x-[56%] -translate-y-[57%] -rotate-[2deg] group-hover:-translate-x-[59%] group-hover:-translate-y-[59%]",
-                      "-translate-x-[44%] -translate-y-[43%] rotate-[2deg] group-hover:-translate-x-[41%] group-hover:-translate-y-[41%]",
-                    ][index]
-                  }`
+                ? [
+                    "h-auto max-h-none w-[76%] -translate-x-[58%] -translate-y-[62%] -rotate-[2deg] group-hover:-translate-x-[61%] group-hover:-translate-y-[64%]",
+                    "h-auto max-h-none w-[84%] -translate-x-[42%] -translate-y-[38%] rotate-[2deg] group-hover:-translate-x-[39%] group-hover:-translate-y-[36%]",
+                  ][index]
                 : `h-[82%] w-auto ${
                     (project.roundedCover
                       ? [
