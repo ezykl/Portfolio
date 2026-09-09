@@ -280,15 +280,6 @@ const ProjectText: React.FC<{
         View project &rarr;
       </a>
     )}
-    {project.flipbook && (
-      <button
-        type="button"
-        onClick={onOpenFlipbook}
-        className="mt-5 inline-flex w-fit items-center gap-1 font-display text-sm text-zyk-accent transition-colors hover:text-zyk-primary"
-      >
-        Open Flipbook &rarr;
-      </button>
-    )}
   </>
 );
 

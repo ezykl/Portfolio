@@ -1,6 +1,9 @@
 import React from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ImageProjectPreview } from "./ImageProjectPreview";
+import {
+  ImageProjectPreview,
+  type ImagePreviewContext,
+} from "./ImageProjectPreview";
 
 type GalleryCategory =
   | "Marketing & Social"
@@ -19,6 +22,7 @@ interface GalleryItem {
   images: string[];
   videos?: string[];
   badgeText?: string;
+  context?: ImagePreviewContext;
 }
 
 const GALLERY_ITEMS: GalleryItem[] = [
@@ -119,22 +123,36 @@ const GALLERY_ITEMS: GalleryItem[] = [
     cover: "/assets/gallery/marketing-social/2find-your-phase.png",
     images: ["/assets/gallery/marketing-social/2find-your-phase.png"],
   },
-  // 8: Illustration - 8-step painting process
+  // 8: Illustration - Curated mouse painting progression
   {
     title: "Mouse Digital Art Process",
     category: "Illustration",
-    cover: "/assets/gallery/illustration/mouse-digital-art/6.png",
+    cover: "/assets/gallery/illustration/mouse-digital-art/5.png",
     images: [
-      "/assets/gallery/illustration/mouse-digital-art/01base.png",
       "/assets/gallery/illustration/mouse-digital-art/0stroke.png",
+      "/assets/gallery/illustration/mouse-digital-art/01base.png",
       "/assets/gallery/illustration/mouse-digital-art/1.png",
       "/assets/gallery/illustration/mouse-digital-art/2.png",
-      "/assets/gallery/illustration/mouse-digital-art/3.png",
       "/assets/gallery/illustration/mouse-digital-art/4.png",
-      "/assets/gallery/illustration/mouse-digital-art/5.png",
       "/assets/gallery/illustration/mouse-digital-art/6.png",
     ],
-    badgeText: "8 Steps",
+    badgeText: "6 Stages",
+    context: {
+      eyebrow: "Digital Illustration",
+      summary:
+        "A 2019 digital artwork created entirely with a standard optical computer mouse — without any graphics tablet, stylus, or drawing pen. Completed over 1 week of dedicated hand-drawn mousework.",
+      role: "Digital Artist",
+      note: "Crafted in 2019 using optical mouse clicks and bezier control in Photoshop. Took 1 week of precision work to complete.",
+      facts: [
+        { label: "Year", value: "2019" },
+        { label: "Input Device", value: "Optical Mouse Only" },
+        { label: "Timeframe", value: "1 Week" },
+        { label: "Milestones", value: "Stroke, Base, Adding Details, Light & Shadow, Refinement, Final Touches" },
+      ],
+      imageHeading: "Curated Creation Progression",
+      imageDescription:
+        "Selected milestone stages showing the full evolution: initial stroke linework, base color blocking, secondary shading, and final lighting render.",
+    },
   },
   // 9: Apparel single
   {
@@ -467,6 +485,7 @@ export const GallerySection: React.FC = () => {
         imageAlt={selectedItem?.title ?? "Gallery design"}
         eyebrow="Design Gallery"
         mediaLayout="gallery"
+        context={selectedItem?.context}
         onClose={() => setSelectedItem(null)}
       />
     </section>

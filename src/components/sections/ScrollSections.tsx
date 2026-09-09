@@ -92,6 +92,14 @@ interface ExperienceEntry {
 
 const WORK_EXPERIENCE: ExperienceEntry[] = [
   {
+    period: "2024 — 2025",
+    role: "Graphics Artist",
+    org: "Upwork / Freelance",
+    blurb:
+      "Created digital marketing materials while managing client communication, revisions, deadlines, and design quality.",
+    highlights: ["Digital Design", "Client Collaboration", "Quality Control"],
+  },
+  {
     period: "Aug 2021 — Sep 2023",
     role: "Graphics Artist",
     org: "Island Artz Printing and Services",
@@ -103,14 +111,6 @@ const WORK_EXPERIENCE: ExperienceEntry[] = [
       "Prepress",
       "Production Coordination",
     ],
-  },
-  {
-    period: "2024 — 2025",
-    role: "Graphics Artist",
-    org: "Upwork / Freelance",
-    blurb:
-      "Created digital marketing materials while managing client communication, revisions, deadlines, and design quality.",
-    highlights: ["Digital Design", "Client Collaboration", "Quality Control"],
   },
 ];
 
@@ -436,15 +436,7 @@ export const ContactSection: React.FC = () => {
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.12]"
-        style={{
-          backgroundColor: "#FEF5EB",
-          WebkitMaskImage: "url(/assets/ui/bg-pattern.svg)",
-          maskImage: "url(/assets/ui/bg-pattern.svg)",
-          WebkitMaskRepeat: "repeat",
-          maskRepeat: "repeat",
-          WebkitMaskSize: "300px",
-          maskSize: "300px",
-        }}
+       
       />
 
       <motion.div {...reveal} className="relative z-10 mx-auto max-w-2xl">
