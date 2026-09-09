@@ -6,10 +6,15 @@ import {
   IconChevronLeft,
   IconChevronRight,
   IconDownload,
+  IconZoomIn,
+  IconZoomOut,
   IconX,
 } from "@tabler/icons-react";
 
 const PAGE_COUNT = 12;
+const MIN_ZOOM = 0.8;
+const MAX_ZOOM = 1.6;
+const ZOOM_STEP = 0.2;
 const PAGES = Array.from(
   { length: PAGE_COUNT },
   (_, index) => `/assets/school-paper/page-${index + 1}.png`,
@@ -44,6 +49,7 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
   const bookRef = React.useRef<any>(null);
   const reduce = useReducedMotion() ?? false;
   const [page, setPage] = React.useState(0);
+  const [zoom, setZoom] = React.useState(1);
 
   const softenAllPages = React.useCallback(() => {
     const pageFlip = bookRef.current?.pageFlip();
@@ -61,6 +67,12 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
       if (event.key === "Escape") onClose();
       if (event.key === "ArrowLeft") bookRef.current?.pageFlip().flipPrev();
       if (event.key === "ArrowRight") bookRef.current?.pageFlip().flipNext();
+      if (event.key === "+" || event.key === "=") {
+        setZoom((value) => Math.min(MAX_ZOOM, value + ZOOM_STEP));
+      }
+      if (event.key === "-") {
+        setZoom((value) => Math.max(MIN_ZOOM, value - ZOOM_STEP));
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
 
@@ -71,7 +83,10 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
   }, [onClose, open]);
 
   React.useEffect(() => {
-    if (open) setPage(0);
+    if (open) {
+      setPage(0);
+      setZoom(1);
+    }
   }, [open]);
 
   if (!open) return null;
@@ -116,47 +131,60 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden py-4">
-        <HTMLFlipBook
-          ref={bookRef}
-          className="school-paper-book"
-          style={{}}
-          startPage={0}
-          size="stretch"
-          width={420}
-          height={594}
-          minWidth={260}
-          maxWidth={430}
-          minHeight={368}
-          maxHeight={608}
-          drawShadow={!reduce}
-          flippingTime={reduce ? 1 : 700}
-          usePortrait
-          startZIndex={0}
-          autoSize
-          maxShadowOpacity={0.35}
-          showCover
-          mobileScrollSupport
-          clickEventForward
-          useMouseEvents
-          swipeDistance={24}
-          showPageCorners={!reduce}
-          disableFlipByClick={false}
-          onInit={softenAllPages}
-          onUpdate={softenAllPages}
-          onChangeOrientation={softenAllPages}
-          onFlip={(event) => {
-            softenAllPages();
-            setPage(event.data);
+      <div className="min-h-0 flex-1 overflow-auto py-4">
+        <div
+          className="flex min-h-full min-w-full items-center justify-center p-3 transition-[width,height] duration-200"
+          style={{
+            width: `${Math.max(100, zoom * 100)}%`,
+            height: `${Math.max(100, zoom * 100)}%`,
           }}
         >
-          {PAGES.map((src, index) => (
-            <MagazinePage key={src} src={src} pageNumber={index + 1} />
-          ))}
-        </HTMLFlipBook>
+          <div
+            className="transition-transform duration-200 ease-out"
+            style={{ transform: `scale(${zoom})` }}
+          >
+            <HTMLFlipBook
+              ref={bookRef}
+              className="school-paper-book"
+              style={{}}
+              startPage={0}
+              size="stretch"
+              width={420}
+              height={594}
+              minWidth={260}
+              maxWidth={430}
+              minHeight={368}
+              maxHeight={608}
+              drawShadow={!reduce}
+              flippingTime={reduce ? 1 : 700}
+              usePortrait
+              startZIndex={0}
+              autoSize
+              maxShadowOpacity={0.35}
+              showCover
+              mobileScrollSupport
+              clickEventForward
+              useMouseEvents
+              swipeDistance={24}
+              showPageCorners={!reduce}
+              disableFlipByClick={false}
+              onInit={softenAllPages}
+              onUpdate={softenAllPages}
+              onChangeOrientation={softenAllPages}
+              onFlip={(event) => {
+                softenAllPages();
+                setPage(event.data);
+              }}
+            >
+              {PAGES.map((src, index) => (
+                <MagazinePage key={src} src={src} pageNumber={index + 1} />
+              ))}
+            </HTMLFlipBook>
+          </div>
+        </div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-md items-center justify-between gap-4">
+      <div className="mx-auto flex w-full max-w-2xl flex-wrap items-center justify-center gap-3 sm:justify-between">
         <button
           type="button"
           onClick={() => bookRef.current?.pageFlip().flipPrev()}
@@ -168,6 +196,33 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
         <p className="font-body text-sm text-zyk-bg-end/75">
           {page + 1} / {PAGE_COUNT}
         </p>
+        <div className="flex items-center rounded-full bg-zyk-bg-end/10">
+          <button
+            type="button"
+            onClick={() =>
+              setZoom((value) => Math.max(MIN_ZOOM, value - ZOOM_STEP))
+            }
+            disabled={zoom <= MIN_ZOOM}
+            aria-label="Zoom out"
+            className="flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:bg-zyk-bg-end/10 disabled:cursor-not-allowed disabled:opacity-35"
+          >
+            <IconZoomOut size={19} />
+          </button>
+          <span className="min-w-14 text-center font-body text-xs text-zyk-bg-end/75">
+            {Math.round(zoom * 100)}%
+          </span>
+          <button
+            type="button"
+            onClick={() =>
+              setZoom((value) => Math.min(MAX_ZOOM, value + ZOOM_STEP))
+            }
+            disabled={zoom >= MAX_ZOOM}
+            aria-label="Zoom in"
+            className="flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:bg-zyk-bg-end/10 disabled:cursor-not-allowed disabled:opacity-35"
+          >
+            <IconZoomIn size={19} />
+          </button>
+        </div>
         <button
           type="button"
           onClick={() => bookRef.current?.pageFlip().flipNext()}
@@ -178,7 +233,7 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
         </button>
       </div>
       <p className="mt-3 text-center font-body text-xs text-zyk-bg-end/55">
-        Drag a page corner, swipe, or use the arrow keys.
+        Drag a page corner, swipe, or use the arrow and +/- keys.
       </p>
     </div>,
     document.body,

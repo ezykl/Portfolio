@@ -36,6 +36,7 @@ interface Project {
   /** Description of the illustration/screenshot that belongs on the card. */
   art: string;
   cover?: string;
+  previewPages?: string[];
   flipbook?: boolean;
   contribution?: string;
   tools?: Array<{
@@ -56,6 +57,10 @@ const PROJECTS: Project[] = [
     tags: ["Editorial Design", "Publication Layout", "Client Work"],
     art: "School Paper Magazine cover",
     cover: "/assets/school-paper/page-1.png",
+    previewPages: [
+      "/assets/school-paper/page-3.png",
+      "/assets/school-paper/page-2.png",
+    ],
     flipbook: true,
     tools: [
       { label: "Adobe InDesign", icon: "indesign", usage: "Primary" },
@@ -176,12 +181,28 @@ const ProjectVisual: React.FC<{
       aria-label={`Open ${project.title} flipbook`}
       className={`group relative block overflow-hidden rounded-3xl bg-zyk-brown/10 text-left shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent ${className}`}
     >
+      <span className="absolute inset-0 bg-zyk-secondary/25" />
+      {project.previewPages?.map((previewPage, index) => (
+        <img
+          key={previewPage}
+          src={previewPage}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className={`absolute left-1/2 top-1/2 h-[86%] w-auto rounded-sm object-contain shadow-lg transition duration-300 ${
+            index === 0
+              ? "-translate-x-[62%] -translate-y-1/2 -rotate-6 group-hover:-translate-x-[68%]"
+              : "-translate-x-[38%] -translate-y-1/2 rotate-6 group-hover:-translate-x-[32%]"
+          }`}
+        />
+      ))}
       <img
         src={project.cover}
         alt={project.art}
         loading="lazy"
         decoding="async"
-        className="h-full w-full object-cover object-top transition duration-300 group-hover:scale-[1.02] group-hover:brightness-75 group-focus-visible:scale-[1.02] group-focus-visible:brightness-75"
+        className="absolute left-1/2 top-1/2 h-[91%] w-auto -translate-x-1/2 -translate-y-1/2 rounded-sm object-contain shadow-xl transition duration-300 group-hover:scale-[1.02] group-hover:brightness-75 group-focus-visible:scale-[1.02] group-focus-visible:brightness-75"
       />
       <span className="absolute inset-0 flex items-center justify-center bg-zyk-brown/15 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
         <span className="rounded-full bg-zyk-bg-end/95 px-5 py-2.5 font-display text-sm text-zyk-heading shadow-lg">
