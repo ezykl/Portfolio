@@ -44,9 +44,11 @@ interface Project {
   flipbook?: boolean;
   imagePreview?: boolean;
   stackedCover?: boolean;
+  comparisonCover?: boolean;
   roundedCover?: boolean;
   coverShadow?: boolean;
   galleryImages?: string[];
+  galleryVideos?: string[];
   externalLink?: {
     label: string;
     href: string;
@@ -81,23 +83,6 @@ const PROJECTS: Project[] = [
       { label: "Adobe InDesign", icon: "indesign", usage: "Primary" },
       { label: "Adobe Photoshop", icon: "photoshop", usage: "Supporting" },
     ],
-  },
-  {
-    title: "GDSC Innoverse",
-    blurb:
-      "Event cover designs created for GDSC Innoverse, presenting its space-inspired theme across community and social-media formats.",
-    contribution:
-      "I was tasked with designing the Bevy event cover and a matching social-media cover.",
-    tags: ["Event Branding", "Social Media Design", "Digital Design"],
-    art: "GDSC Innoverse event and social-media cover",
-    cover: "/assets/gdsc-innoverse/1.png",
-    imagePreview: true,
-    coverShadow: false,
-    galleryImages: [
-      "/assets/gdsc-innoverse/1.png",
-      "/assets/gdsc-innoverse/2.png",
-    ],
-    tools: [{ label: "Adobe Photoshop", icon: "photoshop", usage: "Primary" }],
   },
   {
     title: "Rent2Reuse",
@@ -181,13 +166,37 @@ const PROJECTS: Project[] = [
       ],
     },
   },
+  {
+    title: "Vintage Poster Restoration",
+    blurb:
+      "Restored more than 1,000 vintage poster images into clean, high-quality digital formats while maintaining a consistent output across a fast-paced production workflow.",
+    contribution:
+      "Graphics Artist / Photoshop Editor — background removal, perspective correction, blemish repair, generative reconstruction, quality checking, and organized delivery of 100+ images per day.",
+    tags: ["Image Restoration", "Photo Retouching", "Production Workflow"],
+    art: "Vintage poster restoration before-and-after comparison",
+    cover: "/assets/image-restoration/1.png",
+    previewPages: ["/assets/image-restoration/2.png"],
+    imagePreview: true,
+    stackedCover: true,
+    comparisonCover: true,
+    roundedCover: true,
+    galleryImages: [
+      "/assets/image-restoration/1.png",
+      "/assets/image-restoration/2.png",
+    ],
+    galleryVideos: [
+      "/assets/image-restoration/restore.mp4",
+      "/assets/image-restoration/restore2.mp4",
+    ],
+    tools: [{ label: "Adobe Photoshop", icon: "photoshop", usage: "Primary" }],
+  },
 ];
 
 const SECTION_INTRO = {
   eyebrow: "Design in practice",
   title: "Featured Projects",
   blurb:
-    "A focused selection spanning editorial design, event branding, and mobile UI/UX.",
+    "A focused selection spanning editorial design, mobile UI/UX, and digital image restoration.",
 };
 
 const TagChip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -300,21 +309,28 @@ const ProjectVisual: React.FC<{
           } ${project.coverShadow === false ? "" : "shadow-xl"} ${
             project.imagePreview && !project.stackedCover
               ? "h-auto max-h-full w-full -translate-x-1/2 -translate-y-1/2 group-hover:scale-[1.01]"
-              : `h-[82%] w-auto ${
-                  (project.roundedCover
-                    ? [
-                        "-translate-x-[110%] -translate-y-[46%] -rotate-[3deg] group-hover:-translate-x-[118%]",
-                        "-translate-x-[68%] -translate-y-[52%] -rotate-[1deg] group-hover:-translate-x-[72%]",
-                        "-translate-x-[26%] -translate-y-[52%] rotate-[1deg] group-hover:-translate-x-[22%]",
-                        "translate-x-[16%] -translate-y-[46%] rotate-[3deg] group-hover:translate-x-[24%]",
-                      ]
-                    : [
-                        "-translate-x-[76%] -translate-y-[47%] -rotate-[9deg] group-hover:-translate-x-[82%]",
-                        "-translate-x-[62%] -translate-y-[53%] -rotate-[3deg] group-hover:-translate-y-[56%]",
-                        "-translate-x-[38%] -translate-y-[51%] rotate-[4deg] group-hover:-translate-x-[34%]",
-                        "-translate-x-[24%] -translate-y-[46%] rotate-[10deg] group-hover:-translate-x-[18%]",
-                      ])[index]
-                }`
+              : project.comparisonCover
+                ? `h-auto max-h-[78%] w-[88%] ${
+                    [
+                      "-translate-x-[56%] -translate-y-[57%] -rotate-[2deg] group-hover:-translate-x-[59%] group-hover:-translate-y-[59%]",
+                      "-translate-x-[44%] -translate-y-[43%] rotate-[2deg] group-hover:-translate-x-[41%] group-hover:-translate-y-[41%]",
+                    ][index]
+                  }`
+                : `h-[82%] w-auto ${
+                    (project.roundedCover
+                      ? [
+                          "-translate-x-[110%] -translate-y-[46%] -rotate-[3deg] group-hover:-translate-x-[118%]",
+                          "-translate-x-[68%] -translate-y-[52%] -rotate-[1deg] group-hover:-translate-x-[72%]",
+                          "-translate-x-[26%] -translate-y-[52%] rotate-[1deg] group-hover:-translate-x-[22%]",
+                          "translate-x-[16%] -translate-y-[46%] rotate-[3deg] group-hover:translate-x-[24%]",
+                        ]
+                      : [
+                          "-translate-x-[76%] -translate-y-[47%] -rotate-[9deg] group-hover:-translate-x-[82%]",
+                          "-translate-x-[62%] -translate-y-[53%] -rotate-[3deg] group-hover:-translate-y-[56%]",
+                          "-translate-x-[38%] -translate-y-[51%] rotate-[4deg] group-hover:-translate-x-[34%]",
+                          "-translate-x-[24%] -translate-y-[46%] rotate-[10deg] group-hover:-translate-x-[18%]",
+                        ])[index]
+                  }`
           }`}
         />
       ))}
@@ -516,6 +532,7 @@ export const ProjectsSection: React.FC = () => {
         open={imagePreviewProject !== null}
         title={imagePreviewProject?.title ?? "Project preview"}
         images={imagePreviewProject?.galleryImages ?? []}
+        videos={imagePreviewProject?.galleryVideos ?? []}
         imageAlt={imagePreviewProject?.art ?? "Project design"}
         externalLink={imagePreviewProject?.externalLink}
         caseStudy={imagePreviewProject?.caseStudy}

@@ -24,6 +24,7 @@ interface ImageProjectPreviewProps {
   open: boolean;
   title: string;
   images: string[];
+  videos?: string[];
   imageAlt: string;
   externalLink?: {
     label: string;
@@ -37,6 +38,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
   open,
   title,
   images,
+  videos = [],
   imageAlt,
   externalLink,
   caseStudy,
@@ -233,6 +235,21 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                     loading={index === 0 ? "eager" : "lazy"}
                     decoding="async"
                     className="h-auto w-full object-contain"
+                  />
+                </figure>
+              ))}
+              {videos.map((src, index) => (
+                <figure
+                  key={src}
+                  className="mx-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-zyk-bg-end/10 bg-black/40 sm:rounded-3xl"
+                >
+                  <video
+                    src={src}
+                    aria-label={`${imageAlt} process video ${index + 1}`}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="mx-auto block h-auto max-h-[72vh] w-auto max-w-full"
                   />
                 </figure>
               ))}
