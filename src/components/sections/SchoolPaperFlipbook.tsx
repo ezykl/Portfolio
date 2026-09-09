@@ -45,10 +45,11 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
   const reduce = useReducedMotion() ?? false;
   const [page, setPage] = React.useState(0);
 
-  const softenOuterPages = React.useCallback(() => {
+  const softenAllPages = React.useCallback(() => {
     const pageFlip = bookRef.current?.pageFlip();
-    pageFlip?.getPage(0)?.setDensity("soft");
-    pageFlip?.getPage(PAGE_COUNT - 1)?.setDensity("soft");
+    for (let pageIndex = 0; pageIndex < PAGE_COUNT; pageIndex += 1) {
+      pageFlip?.getPage(pageIndex)?.setDensity("soft");
+    }
   }, []);
 
   React.useEffect(() => {
@@ -141,11 +142,11 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
           swipeDistance={24}
           showPageCorners={!reduce}
           disableFlipByClick={false}
-          onInit={softenOuterPages}
-          onUpdate={softenOuterPages}
-          onChangeOrientation={softenOuterPages}
+          onInit={softenAllPages}
+          onUpdate={softenAllPages}
+          onChangeOrientation={softenAllPages}
           onFlip={(event) => {
-            softenOuterPages();
+            softenAllPages();
             setPage(event.data);
           }}
         >
