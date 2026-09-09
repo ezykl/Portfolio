@@ -304,7 +304,9 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                         ? "mx-auto max-w-4xl"
                         : images.length === 2
                           ? "grid items-start gap-5 sm:grid-cols-2 sm:gap-8"
-                          : "grid items-start gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+                          : images.length === 3
+                            ? "grid items-start gap-4 sm:grid-cols-3 sm:gap-6 lg:gap-8 max-w-6xl mx-auto"
+                            : "grid items-start gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
                       : "flex flex-col gap-5 sm:gap-8"
                   }
                 >

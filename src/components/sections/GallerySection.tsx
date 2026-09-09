@@ -349,47 +349,58 @@ export const GallerySection: React.FC = () => {
                   {/* Multi-image preview containers with individual corner radius on each child tile */}
                   {galleryItem.previewLayout === "3-cols" &&
                   galleryItem.previewImages ? (
-                    <div className="grid grid-cols-3 gap-1.5 bg-zyk-brown/15 p-1.5">
+                    <div
+                      style={{ display: "flex", flexDirection: "row", width: "100%" }}
+                      className="flex w-full flex-row items-stretch gap-1.5 bg-zyk-brown/15 p-1.5"
+                    >
                       {galleryItem.previewImages.map((src, idx) => (
                         <div
                           key={`${src}-${idx}`}
-                          className="relative aspect-[9/19] overflow-hidden rounded-xl bg-zyk-brown/10 shadow-sm"
+                          style={{ flex: "1 1 0%", minWidth: 0, aspectRatio: "9/19" }}
+                          className="relative flex-1 min-w-0 overflow-hidden rounded-xl bg-zyk-brown/10 shadow-sm"
                         >
                           <img
                             src={src}
                             alt=""
                             loading="lazy"
                             decoding="async"
-                            className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.05]"
+                            className="absolute inset-0 h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.05]"
                           />
                         </div>
                       ))}
                     </div>
                   ) : galleryItem.previewLayout === "side-by-side" &&
                     galleryItem.previewImages ? (
-                    <div className="grid grid-cols-2 gap-1.5 bg-zyk-brown/15 p-1.5">
+                    <div
+                      style={{ display: "flex", flexDirection: "row", width: "100%" }}
+                      className="flex w-full flex-row items-stretch gap-1.5 bg-zyk-brown/15 p-1.5"
+                    >
                       {galleryItem.previewImages.map((src, idx) => (
                         <div
                           key={`${src}-${idx}`}
-                          className="relative aspect-[3/4] overflow-hidden rounded-xl bg-zyk-brown/10 shadow-sm"
+                          style={{ flex: "1 1 0%", minWidth: 0, aspectRatio: "3/4" }}
+                          className="relative flex-1 min-w-0 overflow-hidden rounded-xl bg-zyk-brown/10 shadow-sm"
                         >
                           <img
                             src={src}
                             alt=""
                             loading="lazy"
                             decoding="async"
-                            className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.05]"
+                            className="absolute inset-0 h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.05]"
                           />
                         </div>
                       ))}
                     </div>
                   ) : galleryItem.previewLayout === "2x2" &&
                     galleryItem.previewImages ? (
-                    <div className="grid aspect-square w-full grid-cols-2 grid-rows-2 gap-1.5 bg-zyk-brown/15 p-1.5">
+                    <div
+                      style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", aspectRatio: "1/1", width: "100%" }}
+                      className="grid aspect-square w-full grid-cols-2 grid-rows-2 gap-1.5 bg-zyk-brown/15 p-1.5"
+                    >
                       {galleryItem.previewImages.map((src, idx) => (
                         <div
                           key={`${src}-${idx}`}
-                          className="relative overflow-hidden rounded-xl bg-zyk-brown/10 shadow-sm"
+                          className="relative h-full w-full overflow-hidden rounded-xl bg-zyk-brown/10 shadow-sm"
                         >
                           <img
                             src={src}
