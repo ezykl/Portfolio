@@ -183,38 +183,46 @@ const ProjectVisual: React.FC<{
   className?: string;
   onOpenFlipbook?: () => void;
   onOpenImagePreview?: () => void;
-}> = ({ project, className = "", onOpenFlipbook, onOpenImagePreview }) =>
-  project.cover && (project.flipbook || project.imagePreview) ? (
+}> = ({ project, className = "", onOpenFlipbook, onOpenImagePreview }) => {
+  const previewImages = project.imagePreview
+    ? project.cover
+      ? [project.cover]
+      : []
+    : [
+        ...(project.previewPages ?? []),
+        ...(project.cover ? [project.cover] : []),
+      ];
+
+  return project.cover && (project.flipbook || project.imagePreview) ? (
     <button
       type="button"
       onClick={project.flipbook ? onOpenFlipbook : onOpenImagePreview}
       aria-label={`Open ${project.title} ${project.flipbook ? "flipbook" : "project preview"}`}
-      className={`group relative block w-full overflow-hidden rounded-3xl bg-zyk-brown/10 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent ${className}`}
+      className={`group relative block w-full overflow-visible text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent ${className}`}
     >
-      <span className="absolute inset-0 bg-zyk-secondary/25" />
-      {[...(project.previewPages ?? []), project.cover].map(
-        (previewPage, index, pages) => (
-          <img
-            key={previewPage}
-            src={previewPage}
-            alt={index === pages.length - 1 ? project.art : ""}
-            aria-hidden={index !== pages.length - 1}
-            loading="lazy"
-            decoding="async"
-            className={`absolute left-1/2 top-1/2 rounded-sm object-contain shadow-xl transition duration-300 ${
-              project.imagePreview ? "h-[78%] w-[82%]" : "h-[82%] w-auto"
-            } ${
-              [
-                "-translate-x-[76%] -translate-y-[47%] -rotate-[9deg] group-hover:-translate-x-[82%]",
-                "-translate-x-[62%] -translate-y-[53%] -rotate-[3deg] group-hover:-translate-y-[56%]",
-                "-translate-x-[38%] -translate-y-[51%] rotate-[4deg] group-hover:-translate-x-[34%]",
-                "-translate-x-[24%] -translate-y-[46%] rotate-[10deg] group-hover:-translate-x-[18%]",
-              ][index]
-            }`}
-          />
-        ),
-      )}
-      <span className="absolute inset-0 flex items-center justify-center bg-zyk-brown/15 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+      {previewImages.map((previewPage, index, pages) => (
+        <img
+          key={previewPage}
+          src={previewPage}
+          alt={index === pages.length - 1 ? project.art : ""}
+          aria-hidden={index !== pages.length - 1}
+          loading="lazy"
+          decoding="async"
+          className={`absolute left-1/2 top-1/2 rounded-sm object-contain shadow-xl transition duration-300 ${
+            project.imagePreview
+              ? "h-auto max-h-full w-full -translate-x-1/2 -translate-y-1/2 group-hover:scale-[1.01]"
+              : `h-[82%] w-auto ${
+                  [
+                    "-translate-x-[76%] -translate-y-[47%] -rotate-[9deg] group-hover:-translate-x-[82%]",
+                    "-translate-x-[62%] -translate-y-[53%] -rotate-[3deg] group-hover:-translate-y-[56%]",
+                    "-translate-x-[38%] -translate-y-[51%] rotate-[4deg] group-hover:-translate-x-[34%]",
+                    "-translate-x-[24%] -translate-y-[46%] rotate-[10deg] group-hover:-translate-x-[18%]",
+                  ][index]
+                }`
+          }`}
+        />
+      ))}
+      <span className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
         <span className="rounded-full bg-zyk-bg-end/95 px-5 py-2.5 font-display text-sm text-zyk-heading shadow-lg">
           {project.flipbook ? "Open Flipbook" : "View Project"}
         </span>
@@ -235,6 +243,7 @@ const ProjectVisual: React.FC<{
   ) : (
     <Placeholder label={project.art} aspect="4 / 3" className={className} />
   );
+};
 
 /** Plain, non-sticky fallback for prefers-reduced-motion — same content, no scroll-driven pinning. */
 const ProjectsStaticList: React.FC<{
