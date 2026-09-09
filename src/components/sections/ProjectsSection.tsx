@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Placeholder } from "../ui/Placeholder";
+import { TechIcon, type TechIconName } from "../ui/techIcons";
 import { SchoolPaperFlipbook } from "./SchoolPaperFlipbook";
 
 /**
@@ -36,6 +37,12 @@ interface Project {
   art: string;
   cover?: string;
   flipbook?: boolean;
+  contribution?: string;
+  tools?: Array<{
+    label: string;
+    icon: TechIconName;
+    usage: "Primary" | "Supporting";
+  }>;
   href?: string;
 }
 
@@ -43,11 +50,17 @@ const PROJECTS: Project[] = [
   {
     title: "School Paper Magazine",
     blurb:
-      "A twelve-page editorial publication presented as an interactive digital magazine, preserving the pacing and tactile rhythm of the original layout.",
-    tags: ["Editorial Design", "Publication Layout", "Print Design"],
+      "A twelve-page editorial publication designed around the client's content, audience, and communication needs, presented here as an interactive digital magazine.",
+    contribution:
+      "I created the publication's visual design and page layouts. The written and editorial content was supplied by the client.",
+    tags: ["Editorial Design", "Publication Layout", "Client Work"],
     art: "School Paper Magazine cover",
     cover: "/assets/school-paper/page-1.png",
     flipbook: true,
+    tools: [
+      { label: "Adobe InDesign", icon: "indesign", usage: "Primary" },
+      { label: "Adobe Photoshop", icon: "photoshop", usage: "Supporting" },
+    ],
   },
   {
     title: "Print & Production Design",
@@ -101,11 +114,36 @@ const ProjectText: React.FC<{
     <p className="mt-3 font-body text-base leading-relaxed text-zyk-brown/80">
       {project.blurb}
     </p>
+    {project.contribution && (
+      <p className="mt-3 border-l-2 border-zyk-primary/50 pl-3 font-body text-sm leading-relaxed text-zyk-brown/70">
+        <span className="font-semibold text-zyk-heading">My role:</span>{" "}
+        {project.contribution}
+      </p>
+    )}
     <div className="mt-4 flex flex-wrap gap-2">
       {project.tags.map((tag) => (
         <TagChip key={tag}>{tag}</TagChip>
       ))}
     </div>
+    {project.tools && (
+      <div className="mt-4">
+        <p className="font-display text-xs uppercase tracking-[0.18em] text-zyk-brown/55">
+          Design tools
+        </p>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {project.tools.map((tool) => (
+            <span
+              key={tool.label}
+              className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1.5 font-body text-xs font-medium text-zyk-heading shadow-sm"
+            >
+              <TechIcon name={tool.icon} className="h-4 w-4 shrink-0" />
+              {tool.label}
+              <span className="text-zyk-accent">· {tool.usage}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
     {project.href && (
       <a
         href={project.href}
@@ -120,7 +158,7 @@ const ProjectText: React.FC<{
         onClick={onOpenFlipbook}
         className="mt-5 inline-flex w-fit items-center gap-1 font-display text-sm text-zyk-accent transition-colors hover:text-zyk-primary"
       >
-        Open flipbook &rarr;
+        Open Flipbook &rarr;
       </button>
     )}
   </>
@@ -129,8 +167,29 @@ const ProjectText: React.FC<{
 const ProjectVisual: React.FC<{
   project: Project;
   className?: string;
-}> = ({ project, className = "" }) =>
-  project.cover ? (
+  onOpenFlipbook?: () => void;
+}> = ({ project, className = "", onOpenFlipbook }) =>
+  project.cover && project.flipbook ? (
+    <button
+      type="button"
+      onClick={onOpenFlipbook}
+      aria-label={`Open ${project.title} flipbook`}
+      className={`group relative block overflow-hidden rounded-3xl bg-zyk-brown/10 text-left shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent ${className}`}
+    >
+      <img
+        src={project.cover}
+        alt={project.art}
+        loading="lazy"
+        decoding="async"
+        className="h-full w-full object-cover object-top transition duration-300 group-hover:scale-[1.02] group-hover:brightness-75 group-focus-visible:scale-[1.02] group-focus-visible:brightness-75"
+      />
+      <span className="absolute inset-0 flex items-center justify-center bg-zyk-brown/15 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+        <span className="rounded-full bg-zyk-bg-end/95 px-5 py-2.5 font-display text-sm text-zyk-heading shadow-lg">
+          Open Flipbook
+        </span>
+      </span>
+    </button>
+  ) : project.cover ? (
     <div
       className={`overflow-hidden rounded-3xl bg-zyk-brown/10 shadow-md ${className}`}
     >
@@ -168,7 +227,11 @@ const ProjectsStaticList: React.FC<{ onOpenFlipbook: () => void }> = ({
           key={project.title}
           className="grid gap-8 rounded-3xl border border-zyk-brown/10 bg-zyk-bg-end/80 p-6 shadow-md md:grid-cols-2 md:items-center"
         >
-          <ProjectVisual project={project} className="aspect-4/3" />
+          <ProjectVisual
+            project={project}
+            className="aspect-4/3"
+            onOpenFlipbook={onOpenFlipbook}
+          />
           <div>
             <ProjectText
               project={project}
@@ -266,6 +329,7 @@ export const ProjectsSection: React.FC = () => {
                     <ProjectVisual
                       project={PROJECTS[activeIndex]}
                       className="h-full"
+                      onOpenFlipbook={() => setFlipbookOpen(true)}
                     />
                   </motion.div>
                 </AnimatePresence>
