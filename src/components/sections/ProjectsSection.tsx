@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Placeholder } from "../ui/Placeholder";
 import { TechIcon, type TechIconName } from "../ui/techIcons";
-import { ImageProjectPreview } from "./ImageProjectPreview";
+import {
+  ImageProjectPreview,
+  type ImageCaseStudy,
+} from "./ImageProjectPreview";
 import { SchoolPaperFlipbook } from "./SchoolPaperFlipbook";
 
 /**
@@ -40,12 +43,15 @@ interface Project {
   previewPages?: string[];
   flipbook?: boolean;
   imagePreview?: boolean;
+  stackedCover?: boolean;
+  roundedCover?: boolean;
   coverShadow?: boolean;
   galleryImages?: string[];
   externalLink?: {
     label: string;
     href: string;
   };
+  caseStudy?: ImageCaseStudy;
   contribution?: string;
   tools?: Array<{
     label: string;
@@ -94,26 +100,81 @@ const PROJECTS: Project[] = [
     tools: [{ label: "Adobe Photoshop", icon: "photoshop", usage: "Primary" }],
   },
   {
-    title: "June Design Challenge: Skill Tree",
+    title: "Rent2Reuse",
     blurb:
-      "A game UI concept exploring a dark-fantasy skill tree and progression interface, created for a June Design Challenge in Howard Lee's Discord community.",
+      "A peer-to-peer mobile marketplace designed to help people rent and lend underused items within their community.",
     contribution:
-      "I designed the interface concept, visual system, and presentation boards in Figma.",
-    tags: ["Game UI", "UI/UX Design", "Design Challenge"],
-    art: "June Design Challenge Skill Tree game UI",
-    cover: "/assets/skill-tree/1.png",
-    previewPages: ["/assets/skill-tree/3.png", "/assets/skill-tree/2.png"],
+      "I worked as the Full-Stack Developer and UI/UX Designer, shaping the mobile experience and implementing the product.",
+    tags: ["Mobile UI/UX", "Product Design", "Marketplace"],
+    art: "Rent2Reuse mobile marketplace interface",
+    cover: "/assets/rent2reuse/1.png",
+    previewPages: ["/assets/rent2reuse/7.png", "/assets/rent2reuse/4.png"],
     imagePreview: true,
+    stackedCover: true,
+    roundedCover: true,
     galleryImages: [
-      "/assets/skill-tree/1.png",
-      "/assets/skill-tree/2.png",
-      "/assets/skill-tree/3.png",
+      "/assets/rent2reuse/1.png",
+      "/assets/rent2reuse/2.png",
+      "/assets/rent2reuse/3.png",
+      "/assets/rent2reuse/4.png",
+      "/assets/rent2reuse/5.png",
+      "/assets/rent2reuse/6.png",
+      "/assets/rent2reuse/7.png",
+      "/assets/rent2reuse/8.png",
+      "/assets/rent2reuse/9.png",
     ],
     externalLink: {
-      label: "View in Figma",
-      href: "https://www.figma.com/proto/hZANlkiFX0XiawU13HxCtk/June-Design-Challenge-Skill-Tree?node-id=4471-117&p=f&t=RjffZjJHRnfKN1Ve-0&scaling=contain&content-scaling=fixed&page-id=4471%3A117&fuid=1293388493346889524",
+      label: "View on GitHub",
+      href: "https://github.com/ezykl/rent2reuse",
     },
     tools: [{ label: "Figma", icon: "figma", usage: "Primary" }],
+    caseStudy: {
+      eyebrow: "Mobile marketplace · UI/UX case study",
+      summary:
+        "Rent2Reuse makes it easier for community members to access useful items without buying them, while helping owners give underused tools and equipment a second life.",
+      role: "Full-Stack Developer and UI/UX Designer",
+      facts: [
+        { label: "Platform", value: "Mobile application" },
+        { label: "Design tool", value: "Figma" },
+        { label: "Product type", value: "Peer-to-peer marketplace" },
+        { label: "Primary focus", value: "Rental and lending flows" },
+      ],
+      sections: [
+        {
+          eyebrow: "01 · Introduction",
+          title: "A clear start to community reuse",
+          description:
+            "The onboarding sequence introduces search, lending, and community value through a focused message on each screen.",
+          images: [
+            "/assets/rent2reuse/1.png",
+            "/assets/rent2reuse/2.png",
+            "/assets/rent2reuse/3.png",
+          ],
+        },
+        {
+          eyebrow: "02 · Account access",
+          title: "Simple entry and recovery flows",
+          description:
+            "Login, password recovery, and account creation use consistent fields, actions, spacing, and status cues.",
+          images: [
+            "/assets/rent2reuse/4.png",
+            "/assets/rent2reuse/5.png",
+            "/assets/rent2reuse/6.png",
+          ],
+        },
+        {
+          eyebrow: "03 · Rental details",
+          title: "Decisions presented one step at a time",
+          description:
+            "Time, payment, and date selection screens break important rental decisions into direct, readable steps.",
+          images: [
+            "/assets/rent2reuse/7.png",
+            "/assets/rent2reuse/8.png",
+            "/assets/rent2reuse/9.png",
+          ],
+        },
+      ],
+    },
   },
 ];
 
@@ -121,7 +182,7 @@ const SECTION_INTRO = {
   eyebrow: "Design in practice",
   title: "Featured Projects",
   blurb:
-    "A focused selection spanning print production, digital campaigns, UI/UX, and visual identity.",
+    "A focused selection spanning editorial design, event branding, and mobile UI/UX.",
 };
 
 const TagChip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -202,14 +263,15 @@ const ProjectVisual: React.FC<{
   onOpenFlipbook?: () => void;
   onOpenImagePreview?: (project: Project) => void;
 }> = ({ project, className = "", onOpenFlipbook, onOpenImagePreview }) => {
-  const previewImages = project.imagePreview
-    ? project.cover
-      ? [project.cover]
-      : []
-    : [
-        ...(project.previewPages ?? []),
-        ...(project.cover ? [project.cover] : []),
-      ];
+  const previewImages =
+    project.imagePreview && !project.stackedCover
+      ? project.cover
+        ? [project.cover]
+        : []
+      : [
+          ...(project.previewPages ?? []),
+          ...(project.cover ? [project.cover] : []),
+        ];
 
   return project.cover && (project.flipbook || project.imagePreview) ? (
     <button
@@ -228,10 +290,10 @@ const ProjectVisual: React.FC<{
           aria-hidden={index !== pages.length - 1}
           loading="lazy"
           decoding="async"
-          className={`absolute left-1/2 top-1/2 rounded-sm object-contain transition duration-300 ${
-            project.coverShadow === false ? "" : "shadow-xl"
-          } ${
-            project.imagePreview
+          className={`absolute left-1/2 top-1/2 object-contain transition duration-300 ${
+            project.roundedCover ? "rounded-[1.5rem]" : "rounded-sm"
+          } ${project.coverShadow === false ? "" : "shadow-xl"} ${
+            project.imagePreview && !project.stackedCover
               ? "h-auto max-h-full w-full -translate-x-1/2 -translate-y-1/2 group-hover:scale-[1.01]"
               : `h-[82%] w-auto ${
                   [
@@ -444,6 +506,7 @@ export const ProjectsSection: React.FC = () => {
         images={imagePreviewProject?.galleryImages ?? []}
         imageAlt={imagePreviewProject?.art ?? "Project design"}
         externalLink={imagePreviewProject?.externalLink}
+        caseStudy={imagePreviewProject?.caseStudy}
         onClose={() => setImagePreviewProject(null)}
       />
     </section>
