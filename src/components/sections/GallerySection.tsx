@@ -14,6 +14,7 @@ interface GalleryItem {
   title: string;
   category: GalleryCategory;
   cover: string;
+  previewImages?: [string, string, string, string];
   images: string[];
   videos?: string[];
 }
@@ -154,10 +155,22 @@ const GALLERY_ITEMS: GalleryItem[] = [
   },
   // 16
   {
-    title: "Social Creative I",
+    title: "Brand Social Media Series",
     category: "Marketing & Social",
     cover: "/assets/gallery/marketing-social/1a.png",
-    images: ["/assets/gallery/marketing-social/1a.png"],
+    previewImages: [
+      "/assets/gallery/marketing-social/1a.png",
+      "/assets/gallery/marketing-social/2a.png",
+      "/assets/gallery/marketing-social/3a.png",
+      "/assets/gallery/marketing-social/4a.png",
+    ],
+    images: [
+      "/assets/gallery/marketing-social/1a.png",
+      "/assets/gallery/marketing-social/2a.png",
+      "/assets/gallery/marketing-social/3a.png",
+      "/assets/gallery/marketing-social/4a.png",
+      "/assets/gallery/marketing-social/5a.png",
+    ],
   },
   // 17
   {
@@ -188,13 +201,6 @@ const GALLERY_ITEMS: GalleryItem[] = [
   },
   // 20
   {
-    title: "Social Creative II",
-    category: "Marketing & Social",
-    cover: "/assets/gallery/marketing-social/2a.png",
-    images: ["/assets/gallery/marketing-social/2a.png"],
-  },
-  // 21
-  {
     title: "Dish Menu - Complete Layout",
     category: "Print Design",
     cover: "/assets/gallery/print/dish-menu/2.jpg",
@@ -203,35 +209,28 @@ const GALLERY_ITEMS: GalleryItem[] = [
       "/assets/gallery/print/dish-menu/1.jpg",
     ],
   },
-  // 22
+  // 21
   {
     title: "Rolling Hills",
     category: "Illustration",
     cover: "/assets/gallery/illustration/pixel-art/hills.jpg",
     images: ["/assets/gallery/illustration/pixel-art/hills.jpg"],
   },
-  // 23
+  // 22
   {
     title: "School Paper Adviser Shirt",
     category: "Apparel",
     cover: "/assets/gallery/apparel/other/school-paper-adviser.png",
     images: ["/assets/gallery/apparel/other/school-paper-adviser.png"],
   },
-  // 24
-  {
-    title: "Social Creative III",
-    category: "Marketing & Social",
-    cover: "/assets/gallery/marketing-social/3a.png",
-    images: ["/assets/gallery/marketing-social/3a.png"],
-  },
-  // 25
+  // 23
   {
     title: "Retro Music Player",
     category: "Illustration",
     cover: "/assets/gallery/illustration/pixel-art/musicplayer.jpg",
     images: ["/assets/gallery/illustration/pixel-art/musicplayer.jpg"],
   },
-  // 26
+  // 24
   {
     title: "Subscription Manager - Onboarding",
     category: "UI Design",
@@ -242,40 +241,26 @@ const GALLERY_ITEMS: GalleryItem[] = [
       "/assets/gallery/ui-design/subscription-manager/subscription.png",
     ],
   },
-  // 27
-  {
-    title: "Social Creative IV",
-    category: "Marketing & Social",
-    cover: "/assets/gallery/marketing-social/4a.png",
-    images: ["/assets/gallery/marketing-social/4a.png"],
-  },
-  // 28
+  // 25
   {
     title: "Classic Volkswagen",
     category: "Illustration",
     cover: "/assets/gallery/illustration/pixel-art/volks.jpg",
     images: ["/assets/gallery/illustration/pixel-art/volks.jpg"],
   },
-  // 29
+  // 26
   {
     title: "Streetwear Apparel Mockup",
     category: "Apparel",
     cover: "/assets/gallery/apparel/other/mock-up.jpg",
     images: ["/assets/gallery/apparel/other/mock-up.jpg"],
   },
-  // 30
+  // 27
   {
     title: "Moods",
     category: "Illustration",
     cover: "/assets/gallery/illustration/pixel-art/moods.png",
     images: ["/assets/gallery/illustration/pixel-art/moods.png"],
-  },
-  // 31
-  {
-    title: "Social Creative V",
-    category: "Marketing & Social",
-    cover: "/assets/gallery/marketing-social/5a.png",
-    images: ["/assets/gallery/marketing-social/5a.png"],
   },
   // 32
   {
@@ -429,17 +414,37 @@ export const GallerySection: React.FC = () => {
                       ? "Video & Stills"
                       : galleryItem.title.includes("Process")
                         ? `${galleryItem.images.length} Steps`
-                        : `${galleryItem.images.length} Views`}
+                        : `${galleryItem.images.length} Designs`}
                   </span>
                 )}
 
-                <img
-                  src={galleryItem.cover}
-                  alt={galleryItem.title}
-                  loading="lazy"
-                  decoding="async"
-                  className="block max-h-[340px] w-full object-cover object-top transition duration-700 group-hover:scale-[1.05] sm:max-h-[360px]"
-                />
+                {/* Card visual — 2×2 mini-collage if previewImages exists, or single cover image */}
+                {galleryItem.previewImages ? (
+                  <div className="grid aspect-square w-full grid-cols-2 grid-rows-2 gap-1 bg-zyk-brown/20 p-1">
+                    {galleryItem.previewImages.map((src, idx) => (
+                      <div
+                        key={`${src}-${idx}`}
+                        className="relative overflow-hidden rounded-lg bg-zyk-brown/10"
+                      >
+                        <img
+                          src={src}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <img
+                    src={galleryItem.cover}
+                    alt={galleryItem.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="block max-h-[340px] w-full object-cover object-top transition duration-700 group-hover:scale-[1.05] sm:max-h-[360px]"
+                  />
+                )}
 
                 {/* Dark overlay following portfolio theme for high contrast text readability */}
                 <span
