@@ -40,6 +40,7 @@ interface Project {
   previewPages?: string[];
   flipbook?: boolean;
   imagePreview?: boolean;
+  coverShadow?: boolean;
   galleryImages?: string[];
   externalLink?: {
     label: string;
@@ -85,6 +86,7 @@ const PROJECTS: Project[] = [
     art: "GDSC Innoverse event and social-media cover",
     cover: "/assets/gdsc-innoverse/1.png",
     imagePreview: true,
+    coverShadow: false,
     galleryImages: [
       "/assets/gdsc-innoverse/1.png",
       "/assets/gdsc-innoverse/2.png",
@@ -225,7 +227,9 @@ const ProjectVisual: React.FC<{
           aria-hidden={index !== pages.length - 1}
           loading="lazy"
           decoding="async"
-          className={`absolute left-1/2 top-1/2 rounded-sm object-contain shadow-xl transition duration-300 ${
+          className={`absolute left-1/2 top-1/2 rounded-sm object-contain transition duration-300 ${
+            project.coverShadow === false ? "" : "shadow-xl"
+          } ${
             project.imagePreview
               ? "h-auto max-h-full w-full -translate-x-1/2 -translate-y-1/2 group-hover:scale-[1.01]"
               : `h-[82%] w-auto ${
