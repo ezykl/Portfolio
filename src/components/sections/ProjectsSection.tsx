@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Placeholder } from "../ui/Placeholder";
 import { TechIcon, type TechIconName } from "../ui/techIcons";
+import { ImageProjectPreview } from "./ImageProjectPreview";
 import { SchoolPaperFlipbook } from "./SchoolPaperFlipbook";
-import { SkillTreePreview } from "./SkillTreePreview";
 
 /**
  * Featured Projects chapter (Priority 1) — an editorial, scroll-driven layout.
@@ -40,6 +40,11 @@ interface Project {
   previewPages?: string[];
   flipbook?: boolean;
   imagePreview?: boolean;
+  galleryImages?: string[];
+  externalLink?: {
+    label: string;
+    href: string;
+  };
   contribution?: string;
   tools?: Array<{
     label: string;
@@ -71,18 +76,19 @@ const PROJECTS: Project[] = [
     ],
   },
   {
-    title: "Print & Production Design",
+    title: "GDSC Innoverse",
     blurb:
-      "Marketing materials, tarpaulins, stickers, signage, apparel graphics, product mockups, and print-ready artwork prepared with production in mind.",
-    tags: ["Illustrator", "Photoshop", "InDesign", "Print Production"],
-    art: "Selected print, signage, apparel, and product-mockup work",
-  },
-  {
-    title: "Digital Marketing & Client Work",
-    blurb:
-      "Digital marketing materials created through freelance collaborations, balancing visual quality with client feedback, revisions, and deadlines.",
-    tags: ["Digital Design", "Canva", "Client Collaboration"],
-    art: "Selected digital campaigns and freelance marketing materials",
+      "Event cover designs created for GDSC Innoverse, presenting its space-inspired theme across community and social-media formats.",
+    contribution:
+      "I was tasked with designing the Bevy event cover and a matching social-media cover.",
+    tags: ["Event Branding", "Social Media Design", "Digital Design"],
+    art: "GDSC Innoverse event and social-media cover",
+    cover: "/assets/gdsc-innoverse/1.png",
+    imagePreview: true,
+    galleryImages: [
+      "/assets/gdsc-innoverse/1.png",
+      "/assets/gdsc-innoverse/2.png",
+    ],
   },
   {
     title: "June Design Challenge: Skill Tree",
@@ -95,6 +101,15 @@ const PROJECTS: Project[] = [
     cover: "/assets/skill-tree/1.png",
     previewPages: ["/assets/skill-tree/3.png", "/assets/skill-tree/2.png"],
     imagePreview: true,
+    galleryImages: [
+      "/assets/skill-tree/1.png",
+      "/assets/skill-tree/2.png",
+      "/assets/skill-tree/3.png",
+    ],
+    externalLink: {
+      label: "View in Figma",
+      href: "https://www.figma.com/proto/hZANlkiFX0XiawU13HxCtk/June-Design-Challenge-Skill-Tree?node-id=4471-117&p=f&t=RjffZjJHRnfKN1Ve-0&scaling=contain&content-scaling=fixed&page-id=4471%3A117&fuid=1293388493346889524",
+    },
     tools: [{ label: "Figma", icon: "figma", usage: "Primary" }],
   },
 ];
@@ -182,7 +197,7 @@ const ProjectVisual: React.FC<{
   project: Project;
   className?: string;
   onOpenFlipbook?: () => void;
-  onOpenImagePreview?: () => void;
+  onOpenImagePreview?: (project: Project) => void;
 }> = ({ project, className = "", onOpenFlipbook, onOpenImagePreview }) => {
   const previewImages = project.imagePreview
     ? project.cover
@@ -196,7 +211,9 @@ const ProjectVisual: React.FC<{
   return project.cover && (project.flipbook || project.imagePreview) ? (
     <button
       type="button"
-      onClick={project.flipbook ? onOpenFlipbook : onOpenImagePreview}
+      onClick={
+        project.flipbook ? onOpenFlipbook : () => onOpenImagePreview?.(project)
+      }
       aria-label={`Open ${project.title} ${project.flipbook ? "flipbook" : "project preview"}`}
       className={`group relative block w-full overflow-visible text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent ${className}`}
     >
@@ -248,7 +265,7 @@ const ProjectVisual: React.FC<{
 /** Plain, non-sticky fallback for prefers-reduced-motion — same content, no scroll-driven pinning. */
 const ProjectsStaticList: React.FC<{
   onOpenFlipbook: () => void;
-  onOpenImagePreview: () => void;
+  onOpenImagePreview: (project: Project) => void;
 }> = ({ onOpenFlipbook, onOpenImagePreview }) => (
   <>
     <div className="max-w-2xl">
@@ -293,7 +310,8 @@ export const ProjectsSection: React.FC = () => {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [flipbookOpen, setFlipbookOpen] = useState(false);
-  const [skillTreeOpen, setSkillTreeOpen] = useState(false);
+  const [imagePreviewProject, setImagePreviewProject] =
+    useState<Project | null>(null);
 
   // Same "collapse the viewport to a center line" technique as NavBar's
   // scroll-spy: whichever project's text block currently straddles that
@@ -331,7 +349,7 @@ export const ProjectsSection: React.FC = () => {
       {reduce ? (
         <ProjectsStaticList
           onOpenFlipbook={() => setFlipbookOpen(true)}
-          onOpenImagePreview={() => setSkillTreeOpen(true)}
+          onOpenImagePreview={setImagePreviewProject}
         />
       ) : (
         <>
@@ -342,7 +360,7 @@ export const ProjectsSection: React.FC = () => {
           <div className="md:hidden">
             <ProjectsStaticList
               onOpenFlipbook={() => setFlipbookOpen(true)}
-              onOpenImagePreview={() => setSkillTreeOpen(true)}
+              onOpenImagePreview={setImagePreviewProject}
             />
           </div>
 
@@ -379,7 +397,7 @@ export const ProjectsSection: React.FC = () => {
                       project={PROJECTS[activeIndex]}
                       className="h-full"
                       onOpenFlipbook={() => setFlipbookOpen(true)}
-                      onOpenImagePreview={() => setSkillTreeOpen(true)}
+                      onOpenImagePreview={setImagePreviewProject}
                     />
                   </motion.div>
                 </AnimatePresence>
@@ -415,9 +433,13 @@ export const ProjectsSection: React.FC = () => {
         open={flipbookOpen}
         onClose={() => setFlipbookOpen(false)}
       />
-      <SkillTreePreview
-        open={skillTreeOpen}
-        onClose={() => setSkillTreeOpen(false)}
+      <ImageProjectPreview
+        open={imagePreviewProject !== null}
+        title={imagePreviewProject?.title ?? "Project preview"}
+        images={imagePreviewProject?.galleryImages ?? []}
+        imageAlt={imagePreviewProject?.art ?? "Project design"}
+        externalLink={imagePreviewProject?.externalLink}
+        onClose={() => setImagePreviewProject(null)}
       />
     </section>
   );
