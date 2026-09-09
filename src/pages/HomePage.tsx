@@ -1,6 +1,7 @@
 import React from "react";
 import { Hero } from "../components/Hero/Hero";
 import { ProjectsSection } from "../components/sections/ProjectsSection";
+import { GallerySection } from "../components/sections/GallerySection";
 import {
   JourneySection,
   ContactSection,
@@ -21,6 +22,7 @@ export const HomePage: React.FC<HomePageProps> = ({ revealed }) => (
   <main className="bg-linear-to-b from-[#f2bf83] to-[#fef5eb]">
     <Hero revealed={revealed} />
     <ProjectsSection />
+    <GallerySection />
     <JourneySection />
     <ContactSection />
   </main>
