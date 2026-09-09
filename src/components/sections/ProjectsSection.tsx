@@ -5,6 +5,7 @@ import { TechIcon, type TechIconName } from "../ui/techIcons";
 import {
   ImageProjectPreview,
   type ImageCaseStudy,
+  type ImagePreviewContext,
 } from "./ImageProjectPreview";
 import { SchoolPaperFlipbook } from "./SchoolPaperFlipbook";
 
@@ -54,6 +55,7 @@ interface Project {
     href: string;
   };
   caseStudy?: ImageCaseStudy;
+  previewContext?: ImagePreviewContext;
   contribution?: string;
   tools?: Array<{
     label: string;
@@ -189,6 +191,25 @@ const PROJECTS: Project[] = [
       "/assets/image-restoration/restore2.mp4",
     ],
     tools: [{ label: "Adobe Photoshop", icon: "photoshop", usage: "Primary" }],
+    previewContext: {
+      eyebrow: "Completed commission · Upwork client",
+      summary:
+        "A high-volume restoration project completed for an international client, transforming damaged vintage poster scans into clean, high-quality digital assets.",
+      role: "Graphics Artist / Photoshop Editor",
+      note: "Selected samples from the completed commission are shown here. The remaining client work is not included in this portfolio.",
+      facts: [
+        { label: "Client", value: "International · Upwork" },
+        { label: "Scope", value: "1,000+ poster images" },
+        { label: "Daily delivery", value: "100+ images" },
+        { label: "Primary tool", value: "Adobe Photoshop" },
+      ],
+      imageHeading: "Selected before-and-after samples",
+      imageDescription:
+        "The examples show background cleanup, perspective correction, blemish removal, and reconstruction of missing areas.",
+      videoHeading: "Restoration process",
+      videoDescription:
+        "Portrait process recordings provide a closer look at the Photoshop editing workflow behind the selected restorations.",
+    },
   },
 ];
 
@@ -536,6 +557,7 @@ export const ProjectsSection: React.FC = () => {
         imageAlt={imagePreviewProject?.art ?? "Project design"}
         externalLink={imagePreviewProject?.externalLink}
         caseStudy={imagePreviewProject?.caseStudy}
+        context={imagePreviewProject?.previewContext}
         onClose={() => setImagePreviewProject(null)}
       />
     </section>

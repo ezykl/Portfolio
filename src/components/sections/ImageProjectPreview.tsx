@@ -20,6 +20,21 @@ export interface ImageCaseStudy {
   }>;
 }
 
+export interface ImagePreviewContext {
+  eyebrow: string;
+  summary: string;
+  role: string;
+  note?: string;
+  facts: Array<{
+    label: string;
+    value: string;
+  }>;
+  imageHeading?: string;
+  imageDescription?: string;
+  videoHeading?: string;
+  videoDescription?: string;
+}
+
 interface ImageProjectPreviewProps {
   open: boolean;
   title: string;
@@ -31,6 +46,7 @@ interface ImageProjectPreviewProps {
     href: string;
   };
   caseStudy?: ImageCaseStudy;
+  context?: ImagePreviewContext;
   onClose: () => void;
 }
 
@@ -42,6 +58,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
   imageAlt,
   externalLink,
   caseStudy,
+  context,
   onClose,
 }) => {
   const reduce = useReducedMotion() ?? false;
@@ -70,12 +87,12 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
-      className="fixed inset-0 z-[200] flex flex-col bg-zyk-brown/95 text-zyk-bg-end backdrop-blur-sm"
+      className="fixed inset-0 z-[200] flex flex-col bg-zyk-bg-end text-zyk-heading"
       initial={reduce ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: reduce ? 0 : 0.2 }}
     >
-      <header className="shrink-0 border-b border-zyk-bg-end/10 bg-zyk-brown/90 px-4 py-3 backdrop-blur sm:px-6 sm:py-4">
+      <header className="shrink-0 border-b border-zyk-bg-end/10 bg-zyk-brown/95 px-4 py-3 text-zyk-bg-end backdrop-blur-sm sm:px-6 sm:py-4">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <div>
             <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-secondary">
@@ -114,7 +131,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
           className={
             caseStudy
               ? "bg-zyk-bg-end text-zyk-heading"
-              : "px-3 py-5 sm:px-6 sm:py-8"
+              : "bg-linear-to-b from-zyk-bg-end to-zyk-secondary/15 px-3 py-8 text-zyk-heading sm:px-6 sm:py-12"
           }
           initial={reduce ? false : { opacity: 0, scale: 0.97, y: 18 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -223,36 +240,110 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
               )}
             </>
           ) : (
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 sm:gap-8">
-              {images.map((src, index) => (
-                <figure
-                  key={src}
-                  className="overflow-hidden rounded-2xl border border-zyk-bg-end/10 bg-black/40 sm:rounded-3xl"
-                >
-                  <img
-                    src={src}
-                    alt={`${imageAlt} ${index + 1}`}
-                    loading={index === 0 ? "eager" : "lazy"}
-                    decoding="async"
-                    className="h-auto w-full object-contain"
-                  />
-                </figure>
-              ))}
-              {videos.map((src, index) => (
-                <figure
-                  key={src}
-                  className="mx-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-zyk-bg-end/10 bg-black/40 sm:rounded-3xl"
-                >
-                  <video
-                    src={src}
-                    aria-label={`${imageAlt} process video ${index + 1}`}
-                    controls
-                    playsInline
-                    preload="metadata"
-                    className="mx-auto block h-auto max-h-[72vh] w-auto max-w-full"
-                  />
-                </figure>
-              ))}
+            <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 sm:gap-16">
+              {context && (
+                <section className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
+                  <div>
+                    <p className="font-display text-xs uppercase tracking-[0.22em] text-zyk-accent">
+                      {context.eyebrow}
+                    </p>
+                    <h3 className="mt-3 max-w-3xl font-display text-4xl leading-tight sm:text-5xl">
+                      {title}
+                    </h3>
+                    <p className="mt-5 max-w-2xl font-body text-base leading-relaxed text-zyk-brown/75 sm:text-lg">
+                      {context.summary}
+                    </p>
+                    <p className="mt-5 border-l-2 border-zyk-primary pl-4 font-body text-sm leading-relaxed text-zyk-brown/70">
+                      <span className="font-semibold text-zyk-heading">
+                        My role:
+                      </span>{" "}
+                      {context.role}
+                    </p>
+                    {context.note && (
+                      <p className="mt-6 max-w-2xl rounded-2xl border border-zyk-brown/10 bg-zyk-secondary/25 px-4 py-3 font-body text-xs leading-relaxed text-zyk-brown/70 sm:text-sm">
+                        {context.note}
+                      </p>
+                    )}
+                  </div>
+                  <dl className="grid grid-cols-2 gap-x-5 gap-y-5 rounded-3xl bg-white/80 p-5 shadow-sm sm:p-6">
+                    {context.facts.map((fact) => (
+                      <div key={fact.label}>
+                        <dt className="font-display text-[0.65rem] uppercase tracking-[0.16em] text-zyk-brown/45">
+                          {fact.label}
+                        </dt>
+                        <dd className="mt-1 font-body text-sm font-semibold text-zyk-heading">
+                          {fact.value}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </section>
+              )}
+
+              <section>
+                {context?.imageHeading && (
+                  <div className="mb-6 max-w-2xl">
+                    <h4 className="font-display text-2xl sm:text-3xl">
+                      {context.imageHeading}
+                    </h4>
+                    {context.imageDescription && (
+                      <p className="mt-2 font-body text-sm leading-relaxed text-zyk-brown/70 sm:text-base">
+                        {context.imageDescription}
+                      </p>
+                    )}
+                  </div>
+                )}
+                <div className="flex flex-col gap-5 sm:gap-8">
+                  {images.map((src, index) => (
+                    <figure
+                      key={src}
+                      className="overflow-hidden rounded-2xl border border-zyk-brown/10 bg-white shadow-sm sm:rounded-3xl"
+                    >
+                      <img
+                        src={src}
+                        alt={`${imageAlt} ${index + 1}`}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        decoding="async"
+                        className="h-auto w-full object-contain"
+                      />
+                    </figure>
+                  ))}
+                </div>
+              </section>
+
+              {videos.length > 0 && (
+                <section>
+                  {context?.videoHeading && (
+                    <div className="mb-6 max-w-2xl">
+                      <h4 className="font-display text-2xl sm:text-3xl">
+                        {context.videoHeading}
+                      </h4>
+                      {context.videoDescription && (
+                        <p className="mt-2 font-body text-sm leading-relaxed text-zyk-brown/70 sm:text-base">
+                          {context.videoDescription}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  <div className="grid items-start gap-6 md:grid-cols-2">
+                    {videos.map((src, index) => (
+                      <figure
+                        key={src}
+                        className="mx-auto flex w-fit max-w-full justify-center overflow-hidden rounded-2xl border border-zyk-brown/10 bg-white p-2 shadow-sm sm:rounded-3xl"
+                      >
+                        <video
+                          src={src}
+                          aria-label={`${imageAlt} process video ${index + 1}`}
+                          controls
+                          playsInline
+                          preload="metadata"
+                          className="block h-auto max-h-[70vh] w-auto max-w-full rounded-xl sm:rounded-2xl"
+                        />
+                      </figure>
+                    ))}
+                  </div>
+                </section>
+              )}
             </div>
           )}
         </motion.article>
