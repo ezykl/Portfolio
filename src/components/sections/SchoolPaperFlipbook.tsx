@@ -128,7 +128,7 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
           startZIndex={0}
           autoSize
           maxShadowOpacity={0.35}
-          showCover
+          showCover={false}
           mobileScrollSupport
           clickEventForward
           useMouseEvents
