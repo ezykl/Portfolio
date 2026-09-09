@@ -142,7 +142,12 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
           showPageCorners={!reduce}
           disableFlipByClick={false}
           onInit={softenOuterPages}
-          onFlip={(event) => setPage(event.data)}
+          onUpdate={softenOuterPages}
+          onChangeOrientation={softenOuterPages}
+          onFlip={(event) => {
+            softenOuterPages();
+            setPage(event.data);
+          }}
         >
           {PAGES.map((src, index) => (
             <MagazinePage key={src} src={src} pageNumber={index + 1} />
