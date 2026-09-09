@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Placeholder } from "../ui/Placeholder";
 import { TechIcon, type TechIconName } from "../ui/techIcons";
 import { SchoolPaperFlipbook } from "./SchoolPaperFlipbook";
+import { SkillTreePreview } from "./SkillTreePreview";
 
 /**
  * Featured Projects chapter (Priority 1) — an editorial, scroll-driven layout.
@@ -38,6 +39,7 @@ interface Project {
   cover?: string;
   previewPages?: string[];
   flipbook?: boolean;
+  imagePreview?: boolean;
   contribution?: string;
   tools?: Array<{
     label: string;
@@ -83,11 +85,17 @@ const PROJECTS: Project[] = [
     art: "Selected digital campaigns and freelance marketing materials",
   },
   {
-    title: "UI/UX & Event Branding",
+    title: "June Design Challenge: Skill Tree",
     blurb:
-      "Figma prototypes, promotional design, and event identities developed while leading and collaborating with student designers and developers.",
-    tags: ["Figma", "Prototyping", "Event Branding"],
-    art: "Selected interface prototypes and GDSC event-branding work",
+      "A game UI concept exploring a dark-fantasy skill tree and progression interface, created for a June Design Challenge in Howard Lee's Discord community.",
+    contribution:
+      "I designed the interface concept, visual system, and presentation boards in Figma.",
+    tags: ["Game UI", "UI/UX Design", "Design Challenge"],
+    art: "June Design Challenge Skill Tree game UI",
+    cover: "/assets/skill-tree/1.png",
+    previewPages: ["/assets/skill-tree/3.png", "/assets/skill-tree/2.png"],
+    imagePreview: true,
+    tools: [{ label: "Figma", icon: "figma", usage: "Primary" }],
   },
 ];
 
@@ -174,12 +182,13 @@ const ProjectVisual: React.FC<{
   project: Project;
   className?: string;
   onOpenFlipbook?: () => void;
-}> = ({ project, className = "", onOpenFlipbook }) =>
-  project.cover && project.flipbook ? (
+  onOpenImagePreview?: () => void;
+}> = ({ project, className = "", onOpenFlipbook, onOpenImagePreview }) =>
+  project.cover && (project.flipbook || project.imagePreview) ? (
     <button
       type="button"
-      onClick={onOpenFlipbook}
-      aria-label={`Open ${project.title} flipbook`}
+      onClick={project.flipbook ? onOpenFlipbook : onOpenImagePreview}
+      aria-label={`Open ${project.title} ${project.flipbook ? "flipbook" : "project preview"}`}
       className={`group relative block w-full overflow-hidden rounded-3xl bg-zyk-brown/10 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent ${className}`}
     >
       <span className="absolute inset-0 bg-zyk-secondary/25" />
@@ -192,7 +201,9 @@ const ProjectVisual: React.FC<{
             aria-hidden={index !== pages.length - 1}
             loading="lazy"
             decoding="async"
-            className={`absolute left-1/2 top-1/2 h-[82%] w-auto rounded-sm object-contain shadow-xl transition duration-300 ${
+            className={`absolute left-1/2 top-1/2 rounded-sm object-contain shadow-xl transition duration-300 ${
+              project.imagePreview ? "h-[78%] w-[82%]" : "h-[82%] w-auto"
+            } ${
               [
                 "-translate-x-[76%] -translate-y-[47%] -rotate-[9deg] group-hover:-translate-x-[82%]",
                 "-translate-x-[62%] -translate-y-[53%] -rotate-[3deg] group-hover:-translate-y-[56%]",
@@ -205,7 +216,7 @@ const ProjectVisual: React.FC<{
       )}
       <span className="absolute inset-0 flex items-center justify-center bg-zyk-brown/15 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
         <span className="rounded-full bg-zyk-bg-end/95 px-5 py-2.5 font-display text-sm text-zyk-heading shadow-lg">
-          Open Flipbook
+          {project.flipbook ? "Open Flipbook" : "View Project"}
         </span>
       </span>
     </button>
@@ -226,9 +237,10 @@ const ProjectVisual: React.FC<{
   );
 
 /** Plain, non-sticky fallback for prefers-reduced-motion — same content, no scroll-driven pinning. */
-const ProjectsStaticList: React.FC<{ onOpenFlipbook: () => void }> = ({
-  onOpenFlipbook,
-}) => (
+const ProjectsStaticList: React.FC<{
+  onOpenFlipbook: () => void;
+  onOpenImagePreview: () => void;
+}> = ({ onOpenFlipbook, onOpenImagePreview }) => (
   <>
     <div className="max-w-2xl">
       <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
@@ -251,6 +263,7 @@ const ProjectsStaticList: React.FC<{ onOpenFlipbook: () => void }> = ({
             project={project}
             className="aspect-4/3"
             onOpenFlipbook={onOpenFlipbook}
+            onOpenImagePreview={onOpenImagePreview}
           />
           <div>
             <ProjectText
@@ -271,6 +284,7 @@ export const ProjectsSection: React.FC = () => {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [flipbookOpen, setFlipbookOpen] = useState(false);
+  const [skillTreeOpen, setSkillTreeOpen] = useState(false);
 
   // Same "collapse the viewport to a center line" technique as NavBar's
   // scroll-spy: whichever project's text block currently straddles that
@@ -306,7 +320,10 @@ export const ProjectsSection: React.FC = () => {
       className="mx-auto max-w-6xl px-6 py-24"
     >
       {reduce ? (
-        <ProjectsStaticList onOpenFlipbook={() => setFlipbookOpen(true)} />
+        <ProjectsStaticList
+          onOpenFlipbook={() => setFlipbookOpen(true)}
+          onOpenImagePreview={() => setSkillTreeOpen(true)}
+        />
       ) : (
         <>
           {/* Mobile: the pinned-image mechanic needs a tall scrolling column
@@ -314,7 +331,10 @@ export const ProjectsSection: React.FC = () => {
               spacing just becomes dead blank gaps. Reuse the compact static
               list instead — same content, no pin. */}
           <div className="md:hidden">
-            <ProjectsStaticList onOpenFlipbook={() => setFlipbookOpen(true)} />
+            <ProjectsStaticList
+              onOpenFlipbook={() => setFlipbookOpen(true)}
+              onOpenImagePreview={() => setSkillTreeOpen(true)}
+            />
           </div>
 
           <div className="hidden grid-cols-2 gap-16 md:grid">
@@ -350,6 +370,7 @@ export const ProjectsSection: React.FC = () => {
                       project={PROJECTS[activeIndex]}
                       className="h-full"
                       onOpenFlipbook={() => setFlipbookOpen(true)}
+                      onOpenImagePreview={() => setSkillTreeOpen(true)}
                     />
                   </motion.div>
                 </AnimatePresence>
@@ -384,6 +405,10 @@ export const ProjectsSection: React.FC = () => {
       <SchoolPaperFlipbook
         open={flipbookOpen}
         onClose={() => setFlipbookOpen(false)}
+      />
+      <SkillTreePreview
+        open={skillTreeOpen}
+        onClose={() => setSkillTreeOpen(false)}
       />
     </section>
   );
