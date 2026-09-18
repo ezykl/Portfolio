@@ -18,6 +18,17 @@ import { SceneEngine, type Scene, type SceneLayer } from "../../engine";
  */
 export const zykCodingItems: SceneLayer[] = [
   // Image – Table (base layer)
+
+  {
+    id: "zyk-background",
+    src: "/assets/me/blob.png",
+    type: "image",
+    left: 0,
+    top: -34,
+    width: 140,
+    height: 160,
+    opacity: 0.3,
+  },
   {
     id: "zyk-table",
     src: "/assets/me/Table.png",
