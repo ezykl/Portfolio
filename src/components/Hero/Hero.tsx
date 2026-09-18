@@ -115,10 +115,18 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
       // layout box; with overflow-hidden still on, that offset content gets
       // clipped instead of shown. ZykCoding's own reveal clipping is handled
       // locally by its own wrapper div below, so this doesn't affect it.
-      className="relative flex flex-col items-center justify-start pt-24 md:pt-16 bg-[#252E3D]"
+      className="relative flex flex-col items-center justify-start pt-24 md:pt-16 bg-[#252E3D] overflow-hidden"
       style={{ scrollMarginTop: "var(--nav-height, 5rem)" }}
     >
-      <div className="flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
+      {/* Decorative background pattern — sits behind all hero content. */}
+      <img
+        src="/assets/ui/hero-pattern.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-14 z-0 h-full w-full object-cover opacity-10 scale-80"
+      />
+
+      <div className="relative z-10 flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
         {/* H1 entrance: invisible while loading, pops in once revealed, holds,
             then slides up to its resting position. */}
         <motion.div
@@ -182,7 +190,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
             The inner motion.div is what actually moves (translateY + opacity),
             clipped by this box's `overflow-hidden`, so it reads as rising up
             into view against a backdrop that's already fully in place. */}
-        <div className="relative z-0 mx-auto w-full max-w-270 mt-10 overflow-hidden ">
+        <div className="relative z-0 mx-auto w-full max-w-270 mr-10 mt-10 overflow-hidden ">
           <motion.div
             initial={reduce ? { opacity: 0 } : { y: "100%", opacity: 0 }}
             animate={
