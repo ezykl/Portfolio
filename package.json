@@ -4,19 +4,23 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "node ./node_modules/typescript/bin/tsc --noEmit && node ./node_modules/vite/bin/vite.js build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "prettier --check src",
+    "format": "prettier --write src"
   },
   "dependencies": {
     "@tabler/icons-react": "^3.45.0",
     "framer-motion": "^10.16.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-pageflip": "^2.0.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.2.0",
     "autoprefixer": "^10.5.4",
     "playwright": "^1.62.0",

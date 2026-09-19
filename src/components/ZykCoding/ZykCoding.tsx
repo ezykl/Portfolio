@@ -6,15 +6,29 @@ import { SceneEngine, type Scene, type SceneLayer } from "../../engine";
  * `public/assets/me/` (video + images). The outer div uses the CSS class
  * `zykCoding` for styling.
  *
- * Coffee, Cup Holder, Lamp, Notebook, meCoding, and Laptop all carry
- * `behaviors: ["clickGlow"]` — click one to light it up; clicking a
- * different clickGlow asset (in this scene or any other) turns the
- * previous one off, since only one can be lit at a time. To make a new
- * asset clickable-and-glowing, just add `behaviors: ["clickGlow"]` to its
- * entry below — nothing in InteractiveLayer or the renderer needs to change.
+ * Interactivity is declared per item via `behaviors` (see the engine registry):
+ * - `hoverGlow` / `clickGlow` — soft glow on hover; `clickGlow` also makes the
+ *   item click-selectable (persistent glow, one lit at a time across all scenes).
+ * - `tooltip` (+ a `tooltip` string) — floating label on hover.
+ * - `popup` (+ `popup` content) — "me" opens an intro message on click.
+ * - `toggle` (+ `toggle` media) — coffee swaps cold png �� ⇄ hot webm (steam).
+ * - `openMinigame` — the notebook opens the AllScene find-the-object game.
+ * Add/adjust behaviors on any entry below — nothing in InteractiveLayer or the
+ * renderer needs to change.
  */
 export const zykCodingItems: SceneLayer[] = [
   // Image – Table (base layer)
+
+  {
+    id: "zyk-background",
+    src: "/assets/me/blob.png",
+    type: "image",
+    left: 0,
+    top: -34,
+    width: 140,
+    height: 160,
+    opacity: 0.3,
+  },
   {
     id: "zyk-table",
     src: "/assets/me/Table.png",
@@ -23,6 +37,41 @@ export const zykCodingItems: SceneLayer[] = [
     top: 58,
     width: 90,
     height: 56.25,
+  },
+  {
+    // Music notes layer (hidden by default, smoothly revealed and floating when desk music is playing)
+    id: "zyk-music-notes",
+    src: "/assets/me/musicnotes.webm",
+    type: "video",
+    left: 10,
+    top: 14,
+    width: 60,
+    height: 60,
+    behaviors: ["listenMusicToggle"],
+    opacity: 1,
+    videoAttrs: {
+      autoPlay: true,
+      loop: true,
+      muted: true,
+    },
+  },
+
+  {
+    // Desk music player: click to play/pause music and toggle music notes.
+    id: "zyk-music",
+    src: "/assets/me/soundbox.png",
+    type: "image",
+    left: 20,
+    top: 62,
+    width: 13,
+    height: 17,
+    behaviors: ["hoverGlow", "tooltip", "music", "toggle", "clickSound"],
+    tooltip: "Want some music?",
+    toggle: {
+      src: "/assets/me/soundbox.png",
+      type: "image",
+      tooltip: "Music is playing",
+    },
   },
 
   {
@@ -33,7 +82,8 @@ export const zykCodingItems: SceneLayer[] = [
     top: 27,
     width: 44,
     height: 100,
-    behaviors: ["clickGlow"],
+    behaviors: ["clickGlow", "tooltip"],
+    tooltip: "My laptop — where the building happens",
     videoAttrs: {
       autoPlay: true,
       loop: true,
@@ -43,6 +93,7 @@ export const zykCodingItems: SceneLayer[] = [
   },
 
   {
+    // Not click-selectable; clicking opens the AllScene find-the-object game.
     id: "zyk-notebook",
     src: "/assets/me/Notebook.png",
     type: "image",
@@ -50,27 +101,37 @@ export const zykCodingItems: SceneLayer[] = [
     top: 65,
     width: 15,
     height: 40,
-    behaviors: ["clickGlow"],
+    behaviors: ["hoverGlow", "tooltip", "openMinigame"],
+    tooltip: "Psst — wanna play a game?",
   },
   {
+    // Cold by default (still PNG, no steam); clicking toggles to the hot webm
+    // with animated steam and back again.
     id: "zyk-coffee",
-    src: "/assets/me/Coffe.webm",
-    type: "video",
+    src: "/assets/me/Coffe.png",
+    type: "image",
     left: 27,
     top: 30,
     width: 12,
     height: 100,
-    behaviors: ["clickGlow"],
-    videoAttrs: {
-      autoPlay: true,
-      loop: true,
-      muted: true,
-      poster: "/assets/me/Coffe.png",
+    behaviors: ["hoverGlow", "tooltip", "toggle", "clickSound"],
+    tooltip: "The coffee isn't hot yet.",
+    toggle: {
+      src: "/assets/me/Coffe.webm",
+      type: "video",
+      tooltip: "Coffee is already hot.",
+      videoAttrs: {
+        autoPlay: true,
+        loop: true,
+        muted: true,
+        poster: "/assets/me/Coffe.png",
+      },
     },
   },
 
   // Image – Coffee cup (on top of laptop)
   {
+    // No interaction yet — placeholder until finalized.
     id: "zyk-cup-holder",
     src: "/assets/me/cupHolder.png",
     type: "image",
@@ -78,10 +139,10 @@ export const zykCodingItems: SceneLayer[] = [
     top: 50,
     width: 10,
     height: 24,
-    behaviors: ["clickGlow"],
   },
   // Image – Lap (assumed surface)
   {
+    // Not functionally clickable, but gives feedback on click with error sound and shake.
     id: "zyk-lamp",
     src: "/assets/me/Lamp.png",
     type: "image",
@@ -89,7 +150,8 @@ export const zykCodingItems: SceneLayer[] = [
     top: 32,
     width: 23,
     height: 60,
-    behaviors: ["clickGlow"],
+    behaviors: ["hoverGlow", "tooltip", "errorClick"],
+    tooltip: "Night Mode is currently under maintenance.",
   },
   // Image – Person (standing on lap)
 
@@ -101,7 +163,12 @@ export const zykCodingItems: SceneLayer[] = [
     top: 0,
     width: 100,
     height: 100,
-    behaviors: ["clickGlow"],
+    behaviors: ["clickGlow", "tooltip", "popup"],
+    tooltip: "That's me — click to say hi",
+    popup: {
+      title: "Hey, I'm Zyk! 👋",
+      body: "Welcome to my creative corner. I'm a graphic designer and UI/UX designer who enjoys turning ideas into clear, playful, and thoughtfully crafted visual experiences. Explore my work, look around the studio, and feel free to reach out.",
+    },
     videoAttrs: {
       autoPlay: true,
       loop: true,

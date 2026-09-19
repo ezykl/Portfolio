@@ -2,6 +2,10 @@
 node_modules/
 
 # Build output
+node_modules
+dist
+dist-ssr
+*.local
 dist/
 dist-ssr/
 *.local
@@ -38,3 +42,7 @@ Thumbs.db
 # Markdown files (but keep README)
 *.md
 !README.md
+
+# Documentation
+!docs/
+!docs/**/*.md

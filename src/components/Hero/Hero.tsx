@@ -1,222 +1,223 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { OutsideScene } from "../OutsideScene/OutsideScene";
-import { RoomScene } from "../RoomScene/RoomScene";
+import React from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { ZykCoding } from "../ZykCoding/ZykCoding";
-import { WelcomeOverlay } from "../WelcomeOverlay/WelcomeOverlay";
-import { Toggle } from "../Toggle/Toggle";
-import { CustomCursor } from "../CustomCursor/CustomCursor";
-import {
-  IconSunHigh,
-  IconMoonStars,
-  IconMusic,
-  IconMusicOff,
-} from "@tabler/icons-react";
-import { SceneGlowProvider } from "../../engine";
-
-// Matches the warm-gold accent already used for clickGlow elsewhere in the
-// app, so an "on" icon reads as the same kind of "lit up" as those assets.
-const ICON_GOLD = "#3a2b22";
-const ICON_NEUTRAL = "#3a2b22";
-
-// Tints blended onto the knob's own wood texture per state — a second,
-// more prominent state cue alongside the icon and text.
-const TINT_DAY = "#ffb347"; // warm sunlight
-const TINT_NIGHT = "#3b4a8f"; // deep night-sky indigo
-const TINT_MUTED = "#8a8a8a"; // neutral gray
-const TINT_PLAYING = "#f0a83c"; // warm gold, matches clickGlow's accent
+import { PillButton } from "../ui/PillButton";
+import { PopupHost } from "../Popup/PopupHost";
+import { MinigameHost } from "../Minigame/MinigameHost";
+import { useTypewriterCycle } from "../../hook/useTypewriterCycle";
 
 interface HeroProps {
+  /** True once the loading screen has revealed the page. Gates the entrance
+   *  animation below — Hero mounts under the loading overlay, so animating on
+   *  mount alone would finish before anyone could see it. */
   revealed?: boolean;
 }
 
+const ROLES = ["Graphic Designer", "UI/UX Designer"];
+
+// How long the self-intro holds at the "popped in" spot before it slides up
+// to its resting position.
+const READ_DELAY_MS = 1000;
+
+type TextPhase = "hidden" | "pop" | "settled";
+
+const textVariants = {
+  hidden: { opacity: 0, scale: 0.85, y: "24vh" }, // fully invisible while loading
+  pop: {
+    opacity: 1,
+    scale: 1,
+    y: "24vh",
+    transition: { type: "spring", stiffness: 260, damping: 18 },
+  },
+  settled: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 1, ease: "easeOut" },
+  },
+};
+
+const detailItemVariants = {
+  hidden: { opacity: 0, scale: 0.85, y: 8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 280, damping: 18 },
+  },
+};
+
+const buttonVariants = {
+  ...detailItemVariants,
+  visible: {
+    ...detailItemVariants.visible,
+    transition: { type: "spring", stiffness: 280, damping: 18, delay: 0.18 },
+  },
+};
+
 /**
- * Hero section for the portfolio.
- * Displays a heading and the extracted Framer component (`Me`).
+ * Hero — the landing chapter. A compact self-intro (heading, tagline, two CTA
+ * pills) above the animated ZykCoding workspace scene.
+ *
+ * Entrance sequence (plays once `revealed` flips true): the intro text is
+ * invisible while the loading screen is up, pops into place with a spring
+ * once revealed, holds briefly, then eases up into its resting spot — after
+ * which the tagline starts cycling through roles via a typewriter loop.
+ * ZykCoding rises into view via a transform (translateY + opacity) on an inner
+ * wrapper, while its outer box stays a constant size throughout — so the Hero
+ * backdrop itself never resizes, only the content animates within it.
+ *
+ * This iteration intentionally hides the full composited AllScene diorama
+ * (OutsideScene + RoomScene + wooden frame + music/light toggles) — ZykCoding
+ * stands in as the hero visual. Those scene components still exist and can be
+ * re-composed here later. The optional exploration mini-game and the custom
+ * cursor were also removed for now. Planned next: left-to-right overlay of
+ * popping/floating tech elements around ZykCoding, and a click-to-open
+ * popup/message on ZykCoding.
  */
 export const Hero: React.FC<HeroProps> = ({ revealed }) => {
-  // Off by default — background music only ever starts from an explicit
-  // click on the Music toggle, so there's no autoplay-policy fight either.
-  const [musicOn, setMusicOn] = useState(false);
-  // Not wired to any effect yet — no lighting effect has been built. Ready
-  // for whatever "Light" ends up controlling once that's specified.
-  const [lightOn, setLightOn] = useState(false);
-  const bgAudioRef = useRef<HTMLAudioElement | null>(null);
-  // Tracks the whole Hero box (scene + border + HUD), not just the scene
-  // content, so the custom cursor also applies over the toggle controls.
-  const cursorAreaRef = useRef<HTMLDivElement | null>(null);
+  const reduce = useReducedMotion();
+  const [phase, setPhase] = React.useState<TextPhase>("hidden");
+  const [detailsVisible, setDetailsVisible] = React.useState(false);
+  const [typewriterActive, setTypewriterActive] = React.useState(false);
 
-  useEffect(() => {
-    const audio = bgAudioRef.current;
-    if (!audio) return;
-    if (musicOn) audio.play().catch(() => {});
-    else audio.pause();
-  }, [musicOn]);
+  React.useEffect(() => {
+    if (!revealed) {
+      setPhase("hidden");
+      setDetailsVisible(false);
+      setTypewriterActive(false);
+      return;
+    }
+    if (reduce) {
+      // Skip the pop + slide for reduced motion — show everything immediately.
+      setPhase("settled");
+      setDetailsVisible(true);
+      setTypewriterActive(true);
+      return;
+    }
+    setPhase("pop"); // loading just finished — pop in
+  }, [revealed, reduce]);
+
+  // Keep the supporting content hidden while the H1 pops in and settles.
+  React.useEffect(() => {
+    if (phase !== "pop" || reduce) return;
+    const timer = window.setTimeout(() => setPhase("settled"), READ_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [phase, reduce]);
+
+  const role = useTypewriterCycle(ROLES, { active: typewriterActive });
 
   return (
-    <section className="m-0 flex flex-col justify-center items-center min-h-screen border-2 overflow-hidden border border-red-300">
-      {/* <h1 className="text-4xl font-bold mb-4">Welcome to My Portfolio</h1> */}
-      <div
-        ref={cursorAreaRef}
-        className=" w-full mx-auto relative"
-        style={{
-          minWidth: "800px",
-          maxWidth: "1400px",
-          // 16:9 aspect ratio – height will be calculated automatically
-          aspectRatio: "16 / 9", // height scales with width
-          cursor: "none",
-          border: "2px solid red", // Debugging border to visualize the Hero section
-        }}
-      >
-        {/*
-          The border image is rendered at the full, unmodified size of this
-          box (no offset hacks) — its own frame artwork already spans edge
-          to edge. To get the picture-frame "straddle" look (the frame's
-          wood band overlapping the scene's edge on both sides), the scene
-          content is inset into a smaller box instead of enlarging the
-          border image — enlarging it would risk getting clipped by an
-          ancestor's overflow.
+    <section
+      id="home"
+      // NOTE: `overflow-hidden` removed here — the text block's `hidden`/`pop`
+      // states sit at `y: 24vh`, which is past the section's un-transformed
+      // layout box; with overflow-hidden still on, that offset content gets
+      // clipped instead of shown. ZykCoding's own reveal clipping is handled
+      // locally by its own wrapper div below, so this doesn't affect it.
+      className="relative flex flex-col items-center justify-start pt-24 md:pt-16 bg-zyk-bg-start overflow-hidden"
+      style={{ scrollMarginTop: "var(--nav-height, 5rem)" }}
+    >
+      {/* Decorative background pattern — sits behind all hero content. */}
+      <img
+        src="/assets/ui/hero-pattern.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-14 z-0 h-full w-full object-cover opacity-10 scale-80"
+      />
 
-          The inset amounts (0.72% sides, 1.28% top/bottom) come from
-          measuring 16x9_border.png's actual alpha channel: it has a ~10px
-          transparent margin before the wood band starts, and the band
-          itself is ~51-52px thick (on its 5000x2813 canvas). Half that
-          band's centerline sits at ~36px in from the image edge on every
-          side — 36/5000 horizontally, 36/2813 vertically. Re-measure if
-          the border asset is ever replaced.
-        */}
-        <div
-          style={{
-            position: "absolute",
-            top: "1.28%",
-            bottom: "1.28%",
-            left: "0.72%",
-            right: "0.72%",
-            overflow: "hidden",
-            borderRadius: "20px",
+      <div className="relative z-10 flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
+        {/* H1 entrance: invisible while loading, pops in once revealed, holds,
+            then slides up to its resting position. */}
+        <motion.div
+          variants={textVariants}
+          initial="hidden"
+          animate={phase}
+          onAnimationComplete={(definition) => {
+            if (definition === "settled") {
+              setDetailsVisible(true);
+              setTypewriterActive(true);
+            }
           }}
+          className="flex w-full flex-col items-center text-center mt-4 -mb-6 sm:mt-8 sm:-mb-10 md:mt-10 md:-mb-12"
         >
-          {/*
-            Outside/Room/ZykCoding are three separate SceneEngine instances,
-            but visually they overlap into what reads as one composited
-            scene — so clickGlow exclusivity needs to span all three, not
-            reset at each scene's own boundary. This one shared provider is
-            what each scene's own (nesting-safe) SceneGlowProvider defers to
-            instead of creating its own independent glow state.
-          */}
-          <SceneGlowProvider>
-            {/* Position each scene as needed – each wrapped with absolute positioning */}
-            <div
-              style={{
-                position: "absolute",
-                width: "55%",
-                height: "auto",
-                top: "20%",
-                left: 30,
-              }}
-            >
-              <OutsideScene />
-            </div>
-            {/* Adjust the inline styles below for RoomScene and ZykCoding as needed */}
-            <div
-              style={{
-                position: "absolute",
-                left: -4,
-                top: -1,
-                width: "102%",
-                height: "auto",
-              }}
-            >
-              <RoomScene />
-            </div>
+          <h1
+            className="font-display leading-tight text-zyk-heading font-bold"
+            style={{ fontSize: "clamp(3rem, 2rem + 4vw, 6rem)" }}
+          >
+            Hi, I&apos;m Zyk.
+          </h1>
+        </motion.div>
 
-            <motion.div
-              style={{
-                position: "absolute",
-
-                width: "80%",
-                height: "auto",
-                bottom: 0,
-                right: -50,
-              }}
-              initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-            >
-              <ZykCoding />
-            </motion.div>
-
-            <WelcomeOverlay show={Boolean(revealed)} />
-          </SceneGlowProvider>
+        {/* After the H1 reaches its fixed position, pop in the role first and
+            the buttons just after it. */}
+        <div className="flex w-full flex-col items-center text-center mt-6 sm:mt-10 md:mt-12">
+          <motion.p
+            variants={detailItemVariants}
+            initial="hidden"
+            animate={detailsVisible ? "visible" : "hidden"}
+            className="mt-3 font-medium text-zyk-accent"
+            style={{ fontSize: "clamp(1.125rem, 1rem + 0.6vw, 1.5rem)" }}
+          >
+            {reduce ? (
+              "Graphic Designer"
+            ) : (
+              <>
+                {role}
+                <span className="ml-0.5 inline-block h-[1em] w-0.5 translate-y-0.5 bg-zyk-accent animate-pulse" />
+              </>
+            )}
+          </motion.p>
+          <motion.div
+            variants={buttonVariants}
+            initial="hidden"
+            animate={detailsVisible ? "visible" : "hidden"}
+            className="mt-6 flex flex-wrap items-center justify-center gap-4 md:justify-start"
+          >
+            <PillButton variant="primary" href="#projects">
+              View My Work
+            </PillButton>
+            <PillButton variant="secondary" href="#contact">
+              Get in Touch
+            </PillButton>
+          </motion.div>
         </div>
 
-        {/* Decorative frame over the whole 16:9 box — matches the asset's own
-            aspect ratio exactly, so plain `fill` doesn't distort it, and
-            renders at this box's full, unclipped size (see inset comment
-            above for why the scene content shrinks instead of this growing). */}
-        <img
-          src="/assets/ui/16x9_border.png"
-          alt=""
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "fill",
-            pointerEvents: "none",
-            zIndex: 60,
-          }}
-        />
-
-        {/* HUD controls — sit above the frame (zIndex 60) since they're
-            real controls, not scene decoration. */}
-        <div
-          style={{
-            position: "absolute",
-            top: "3%",
-            right: "2%",
-            zIndex: 70,
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
-          }}
-        >
-          {/* <Toggle
-            checked={lightOn}
-            onChange={setLightOn}
-            icon={
-              lightOn ? (
-                <IconMoonStars size="60%" color={ICON_GOLD} />
-              ) : (
-                <IconSunHigh size="60%" color={ICON_NEUTRAL} />
-              )
+        {/* ZykCoding workspace. This outer box is a plain, unanimated element
+            sized by ZykCoding's own natural layout height — its rendered size
+            never changes, so the Hero (and the whole page's height) stays
+            constant throughout the intro; only the content inside animates.
+            The inner motion.div is what actually moves (translateY + opacity),
+            clipped by this box's `overflow-hidden`, so it reads as rising up
+            into view against a backdrop that's already fully in place. */}
+        <div className="relative z-0 mx-auto w-full max-w-270 mr-10 mt-10 overflow-hidden ">
+          <motion.div
+            initial={reduce ? { opacity: 0 } : { y: "100%", opacity: 0 }}
+            animate={
+              revealed
+                ? { y: 0, opacity: 1 }
+                : reduce
+                  ? { opacity: 0 }
+                  : { y: "100%", opacity: 0 }
             }
-            label="Toggle light"
-            stateText={lightOn ? "Night" : "Day"}
-            knobTint={lightOn ? TINT_NIGHT : TINT_DAY}
-          /> */}
-          <Toggle
-            checked={musicOn}
-            onChange={setMusicOn}
-            icon={
-              musicOn ? (
-                <IconMusic size="60%" color={ICON_GOLD} />
-              ) : (
-                <IconMusicOff size="60%" color={ICON_NEUTRAL} />
-              )
-            }
-            label="Toggle background music"
-            stateText={musicOn ? "Music" : "Mute"}
-            knobTint={musicOn ? TINT_PLAYING : TINT_MUTED}
-          />
+            transition={{
+              duration: 1,
+              ease: "easeOut",
+              delay: revealed && !reduce ? 2 : 0,
+            }}
+          >
+            <ZykCoding />
+          </motion.div>
         </div>
-
-        <audio ref={bgAudioRef} loop preload="none">
-          <source src={encodeURI("/assets/music/komii - downtown.mp3")} />
-        </audio>
-
-        <CustomCursor containerRef={cursorAreaRef} />
       </div>
+
+      {/* Renders the click-to-open message popup for any scene layer that
+          carries the `popup` behavior (e.g. clicking "me" in ZykCoding). */}
+      <PopupHost />
+
+      {/* The AllScene find-the-object mini-game, opened by the notebook's
+          `openMinigame` behavior. */}
+      <MinigameHost />
     </section>
   );
 };
