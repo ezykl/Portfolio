@@ -53,12 +53,12 @@ export interface ResolvedBehaviors {
 // Exported so InteractiveLayer can centralize glow rendering (it composes the
 // persistent click glow with the transient hover glow, which the resolvers
 // can't do alone since hover is per-render local state).
-export const GLOW_OFF = 'drop-shadow(0 0 0px rgba(255, 200, 80, 0)) brightness(1)';
+export const GLOW_OFF = 'drop-shadow(0 0 0px rgba(56, 189, 248, 0)) brightness(1)';
 export const GLOW_ON =
-  'drop-shadow(0 0 6px rgba(255, 210, 90, 1)) drop-shadow(0 0 26px rgba(255, 170, 40, 0.95)) brightness(1.15)';
+  'drop-shadow(0 0 6px rgba(56, 189, 248, 0.95)) drop-shadow(0 0 24px rgba(99, 102, 241, 0.75)) brightness(1.2)';
 // A softer, single-halo version for the transient on-hover light.
 export const GLOW_HOVER =
-  'drop-shadow(0 0 6px rgba(255, 214, 110, 0.85)) brightness(1.06)';
+  'drop-shadow(0 0 8px rgba(56, 189, 248, 0.85)) brightness(1.1)';
 const HUNT_SCALE = 1.03;
 
 /**

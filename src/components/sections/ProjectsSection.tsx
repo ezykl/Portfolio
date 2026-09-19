@@ -221,7 +221,7 @@ const SECTION_INTRO = {
 };
 
 const TagChip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <span className="rounded-full bg-zyk-secondary/40 px-3 py-1 font-body text-xs font-medium text-zyk-heading">
+  <span className="rounded-full border border-zyk-primary/30 bg-zyk-primary/15 px-3 py-1 font-body text-xs font-medium text-indigo-200">
     {children}
   </span>
 );
@@ -231,20 +231,21 @@ const ProjectText: React.FC<{
   index: number;
   total: number;
   onOpenFlipbook?: () => void;
-}> = ({ project, index, total, onOpenFlipbook }) => (
+  onOpenImagePreview?: (project: Project) => void;
+}> = ({ project, index, total, onOpenFlipbook, onOpenImagePreview }) => (
   <>
-    <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent">
+    <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent font-semibold">
       {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
     </p>
-    <h3 className="mt-2 font-display text-3xl text-zyk-heading md:text-4xl">
+    <h3 className="mt-2 font-display text-3xl font-bold text-white md:text-4xl">
       {project.title}
     </h3>
-    <p className="mt-3 font-body text-base leading-relaxed text-zyk-brown/80">
+    <p className="mt-3 font-body text-base leading-relaxed text-slate-300">
       {project.blurb}
     </p>
     {project.contribution && (
-      <p className="mt-3 border-l-2 border-zyk-primary/50 pl-3 font-body text-sm leading-relaxed text-zyk-brown/70">
-        <span className="font-semibold text-zyk-heading">My role:</span>{" "}
+      <p className="mt-3 border-l-2 border-zyk-accent/70 pl-3 font-body text-sm leading-relaxed text-slate-300">
+        <span className="font-semibold text-white">My role:</span>{" "}
         {project.contribution}
       </p>
     )}
@@ -255,31 +256,45 @@ const ProjectText: React.FC<{
     </div>
     {project.tools && (
       <div className="mt-4">
-        <p className="font-display text-xs uppercase tracking-[0.18em] text-zyk-brown/55">
+        <p className="font-display text-xs uppercase tracking-[0.18em] text-slate-400 font-medium">
           Design tools
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
           {project.tools.map((tool) => (
             <span
               key={tool.label}
-              className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1.5 font-body text-xs font-medium text-zyk-heading shadow-sm"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-body text-xs font-medium text-slate-200 shadow-sm"
             >
               <TechIcon name={tool.icon} className="h-4 w-4 shrink-0" />
               {tool.label}
-              <span className="text-zyk-accent">· {tool.usage}</span>
+              <span className="text-zyk-accent font-medium">· {tool.usage}</span>
             </span>
           ))}
         </div>
       </div>
     )}
-    {project.href && (
-      <a
-        href={project.href}
-        className="mt-5 inline-flex w-fit items-center gap-1 font-display text-sm text-zyk-accent transition-colors hover:text-zyk-primary"
+    <div className="mt-6 flex flex-wrap items-center gap-4">
+      <button
+        type="button"
+        onClick={
+          project.flipbook
+            ? onOpenFlipbook
+            : () => onOpenImagePreview?.(project)
+        }
+        className="inline-flex items-center gap-2 rounded-full bg-zyk-primary px-5 py-2.5 font-display text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-lg hover:shadow-indigo-500/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zyk-accent"
       >
-        View project &rarr;
-      </a>
-    )}
+        <span>{project.flipbook ? "Open Flipbook" : "View Project"}</span>
+        <span aria-hidden="true" className="font-bold">&rarr;</span>
+      </button>
+      {project.href && (
+        <a
+          href={project.href}
+          className="inline-flex w-fit items-center gap-1 font-display text-sm font-semibold text-zyk-accent transition-colors hover:text-white"
+        >
+          View project &rarr;
+        </a>
+      )}
+    </div>
   </>
 );
 
@@ -316,7 +331,7 @@ const ProjectVisual: React.FC<{
           aria-hidden={index !== pages.length - 1}
           loading="lazy"
           decoding="async"
-          className={`absolute left-1/2 top-1/2 object-contain transition duration-300 ${
+          className={`absolute left-1/2 top-1/2 object-contain transition duration-300 group-hover:blur-[2px] ${
             project.roundedCover ? "rounded-2xl" : "rounded-sm"
           } ${project.coverShadow === false ? "" : "shadow-xl"} ${
             project.imagePreview && !project.stackedCover
@@ -344,15 +359,16 @@ const ProjectVisual: React.FC<{
           }`}
         />
       ))}
-      <span className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
-        <span className="rounded-full bg-zyk-bg-end/95 px-5 py-2.5 font-display text-sm text-zyk-heading shadow-lg">
-          {project.flipbook ? "Open Flipbook" : "View Project"}
+      <span className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+        <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-slate-900/90 px-5 py-2.5 font-display text-sm font-semibold text-white shadow-2xl backdrop-blur-md transition-transform duration-200 group-hover:scale-105">
+          <span>{project.flipbook ? "Open Flipbook" : "View Project"}</span>
+          <span aria-hidden="true" className="text-zyk-accent font-bold">&rarr;</span>
         </span>
       </span>
     </button>
   ) : project.cover ? (
     <div
-      className={`overflow-hidden rounded-3xl bg-zyk-brown/10 shadow-md ${className}`}
+      className={`overflow-hidden rounded-3xl bg-zyk-accent/10 shadow-md ${className}`}
     >
       <img
         src={project.cover}
@@ -374,13 +390,13 @@ const ProjectsStaticList: React.FC<{
 }> = ({ onOpenFlipbook, onOpenImagePreview }) => (
   <>
     <div className="max-w-2xl">
-      <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
+      <p className="font-display text-sm uppercase tracking-widest text-zyk-accent font-semibold">
         {SECTION_INTRO.eyebrow}
       </p>
-      <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
+      <h2 className="mt-2 font-display text-4xl font-bold text-white md:text-5xl">
         {SECTION_INTRO.title}
       </h2>
-      <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
+      <p className="mt-4 font-body text-lg leading-relaxed text-slate-300">
         {SECTION_INTRO.blurb}
       </p>
     </div>
@@ -388,7 +404,7 @@ const ProjectsStaticList: React.FC<{
       {PROJECTS.map((project, i) => (
         <div
           key={project.title}
-          className="grid gap-8 rounded-3xl border border-zyk-brown/10 bg-zyk-bg-end/80 p-6 shadow-md md:grid-cols-2 md:items-center"
+          className="grid gap-8 rounded-3xl border border-zyk-accent/10 bg-white/5 p-6 shadow-md md:grid-cols-2 md:items-center"
         >
           <ProjectVisual
             project={project}
@@ -402,6 +418,7 @@ const ProjectsStaticList: React.FC<{
               index={i}
               total={PROJECTS.length}
               onOpenFlipbook={onOpenFlipbook}
+              onOpenImagePreview={onOpenImagePreview}
             />
           </div>
         </div>
@@ -478,13 +495,13 @@ export const ProjectsSection: React.FC = () => {
               className="md:sticky md:h-fit md:self-start"
               style={{ top: "var(--nav-height, 5rem)" }}
             >
-              <p className="mt-4 font-display text-sm uppercase tracking-widest text-zyk-accent">
+              <p className="mt-4 font-display text-sm uppercase tracking-widest text-zyk-accent font-semibold">
                 {SECTION_INTRO.eyebrow}
               </p>
-              <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
+              <h2 className="mt-2 font-display text-4xl font-bold text-white md:text-5xl">
                 {SECTION_INTRO.title}
               </h2>
-              <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
+              <p className="mt-4 font-body text-lg leading-relaxed text-slate-300">
                 {SECTION_INTRO.blurb}
               </p>
 
@@ -527,6 +544,7 @@ export const ProjectsSection: React.FC = () => {
                     index={i}
                     total={PROJECTS.length}
                     onOpenFlipbook={() => setFlipbookOpen(true)}
+                    onOpenImagePreview={setImagePreviewProject}
                   />
                 </div>
               ))}

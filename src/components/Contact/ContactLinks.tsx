@@ -54,7 +54,7 @@ const CONTACT_LINKS: ContactLink[] = [
 ];
 
 export const ContactLinks: React.FC = () => (
-  <ul className="mx-auto flex max-w-lg flex-wrap items-center justify-center gap-x-6 gap-y-3">
+  <ul className="mx-auto flex max-w-lg flex-wrap items-center justify-center gap-3">
     {CONTACT_LINKS.map(({ label, href, icon: Icon, display, external }) => (
       <li key={label}>
         <a
@@ -63,12 +63,12 @@ export const ContactLinks: React.FC = () => (
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}
           aria-label={label}
-          className="group inline-flex items-center gap-2 font-body text-sm text-zyk-bg-end/85 transition-colors hover:text-zyk-bg-end"
+          className="group inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-slate-900/60 px-4 py-2 font-body text-sm font-medium text-slate-200 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-zyk-accent/60 hover:bg-slate-900 hover:text-white hover:shadow-md"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-zyk-bg-end/10 transition-colors group-hover:bg-zyk-bg-end/20">
-            <Icon size={18} stroke={1.75} />
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-zyk-accent transition-colors group-hover:bg-zyk-accent/20 group-hover:text-zyk-secondary">
+            <Icon size={16} stroke={2} />
           </span>
-          <span>{display}</span>
+          <span className="tracking-wide">{display}</span>
         </a>
       </li>
     ))}

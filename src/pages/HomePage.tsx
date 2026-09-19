@@ -19,7 +19,7 @@ interface HomePageProps {
  * without being entangled with its neighbors.
  */
 export const HomePage: React.FC<HomePageProps> = ({ revealed }) => (
-  <main className="bg-linear-to-b from-[#FAE2C6] to-[#fef5eb]">
+  <main className="bg-linear-to-b from-zyk-bg-start to-zyk-bg-end">
     <Hero revealed={revealed} />
     <ProjectsSection />
     <GallerySection />

@@ -30,14 +30,14 @@ export const Placeholder: React.FC<PlaceholderProps> = ({
     style={{ aspectRatio: aspect }}
     className={
       "flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed " +
-      "border-zyk-brown/30 bg-zyk-secondary/20 p-4 text-center" +
+      "border-zyk-accent/30 bg-zyk-primary/10 p-4 text-center" +
       (className ? ` ${className}` : "")
     }
   >
-    <span className="rounded-full bg-zyk-brown/10 px-3 py-1 font-display text-xs uppercase tracking-widest text-zyk-brown/60">
+    <span className="rounded-full bg-white/5 px-3 py-1 font-display text-xs uppercase tracking-widest text-zyk-heading/50">
       Placeholder
     </span>
-    <span className="max-w-[85%] font-body text-sm leading-snug text-zyk-brown/70">
+    <span className="max-w-[85%] font-body text-sm leading-snug text-zyk-heading/60">
       {label}
     </span>
   </div>

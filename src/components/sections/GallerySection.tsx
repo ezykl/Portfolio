@@ -296,7 +296,7 @@ export const GallerySection: React.FC = () => {
         <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
           Design Gallery
         </h2>
-        <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
+        <p className="mt-4 font-body text-lg leading-relaxed text-zyk-heading/70">
           A curated collection of campaign, print, apparel, interface, and
           illustration work. Select a category or open any project to view the
           full showcase.
@@ -320,10 +320,10 @@ export const GallerySection: React.FC = () => {
               type="button"
               aria-pressed={active}
               onClick={() => setFilter(option)}
-              className={`rounded-full px-4 py-2 font-display text-xs transition-colors sm:text-sm ${
+              className={`rounded-full px-4 py-2 font-display text-xs font-semibold transition-all duration-200 sm:text-sm ${
                 active
-                  ? "bg-zyk-brown text-zyk-bg-end"
-                  : "bg-zyk-secondary/35 text-zyk-heading hover:bg-zyk-secondary/60"
+                  ? "bg-zyk-accent text-slate-950 shadow-md shadow-zyk-accent/25"
+                  : "border border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
               }`}
             >
               {option}
@@ -354,12 +354,12 @@ export const GallerySection: React.FC = () => {
                   type="button"
                   onClick={() => setSelectedItem(galleryItem)}
                   aria-label={`View ${galleryItem.title}`}
-                  className="group relative block w-full overflow-hidden rounded-2xl bg-zyk-brown/15 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent"
+                  className="group relative block w-full overflow-hidden rounded-2xl bg-white/5 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-zyk-accent"
                 >
                   {/* Clean corner badge */}
                   {badge && (
-                    <span className="absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 rounded-full border border-zyk-bg-end/30 bg-zyk-brown/90 px-2.5 py-0.5 font-display text-[0.62rem] tracking-wider uppercase text-zyk-bg-end shadow-md backdrop-blur-md transition duration-300 group-hover:opacity-0">
-                      <span className="h-1.5 w-1.5 rounded-full bg-zyk-secondary animate-pulse" />
+                    <span className="absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-zyk-bg-start/90 px-2.5 py-0.5 font-display text-[0.62rem] tracking-wider uppercase text-zyk-heading shadow-md backdrop-blur-md transition duration-300 group-hover:opacity-0">
+                      <span className="h-1.5 w-1.5 rounded-full bg-zyk-accent animate-pulse" />
                       {badge}
                     </span>
                   )}
@@ -369,13 +369,13 @@ export const GallerySection: React.FC = () => {
                   galleryItem.previewImages ? (
                     <div
                       style={{ display: "flex", flexDirection: "row", width: "100%" }}
-                      className="flex w-full flex-row items-stretch gap-1.5 bg-zyk-brown/15 p-1.5"
+                      className="flex w-full flex-row items-stretch gap-1.5 bg-white/5 p-1.5"
                     >
                       {galleryItem.previewImages.map((src, idx) => (
                         <div
                           key={`${src}-${idx}`}
                           style={{ flex: "1 1 0%", minWidth: 0, aspectRatio: "9/19" }}
-                          className="relative flex-1 min-w-0 overflow-hidden rounded-xl bg-zyk-brown/10 shadow-sm"
+                          className="relative flex-1 min-w-0 overflow-hidden rounded-xl bg-white/5 shadow-sm"
                         >
                           <img
                             src={src}
@@ -391,13 +391,13 @@ export const GallerySection: React.FC = () => {
                     galleryItem.previewImages ? (
                     <div
                       style={{ display: "flex", flexDirection: "row", width: "100%" }}
-                      className="flex w-full flex-row items-stretch gap-1.5 bg-zyk-brown/15 p-1.5"
+                      className="flex w-full flex-row items-stretch gap-1.5 bg-white/5 p-1.5"
                     >
                       {galleryItem.previewImages.map((src, idx) => (
                         <div
                           key={`${src}-${idx}`}
                           style={{ flex: "1 1 0%", minWidth: 0, aspectRatio: "3/4" }}
-                          className="relative flex-1 min-w-0 overflow-hidden rounded-xl bg-zyk-brown/10 shadow-sm"
+                          className="relative flex-1 min-w-0 overflow-hidden rounded-xl bg-white/5 shadow-sm"
                         >
                           <img
                             src={src}
@@ -413,12 +413,12 @@ export const GallerySection: React.FC = () => {
                     galleryItem.previewImages ? (
                     <div
                       style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", aspectRatio: "1/1", width: "100%" }}
-                      className="grid aspect-square w-full grid-cols-2 grid-rows-2 gap-1.5 bg-zyk-brown/15 p-1.5"
+                      className="grid aspect-square w-full grid-cols-2 grid-rows-2 gap-1.5 bg-white/5 p-1.5"
                     >
                       {galleryItem.previewImages.map((src, idx) => (
                         <div
                           key={`${src}-${idx}`}
-                          className="relative h-full w-full overflow-hidden rounded-xl bg-zyk-brown/10 shadow-sm"
+                          className="relative h-full w-full overflow-hidden rounded-xl bg-white/5 shadow-sm"
                         >
                           <img
                             src={src}
@@ -443,16 +443,16 @@ export const GallerySection: React.FC = () => {
                   {/* Dark overlay following portfolio theme for high contrast text readability */}
                   <span
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-[#140a05]/95 via-[#140a05]/75 to-[#140a05]/20 p-4 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 sm:p-5"
+                    className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-slate-950/95 via-slate-950/75 to-transparent p-4 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 sm:p-5"
                   >
                     <span className="inline-flex items-center gap-1.5 translate-y-2 font-display text-[0.65rem] uppercase tracking-[0.2em] text-zyk-secondary font-semibold transition duration-300 group-hover:translate-y-0">
                       <span className="h-1.5 w-1.5 rounded-full bg-zyk-accent" />
                       {galleryItem.category}
                     </span>
-                    <span className="mt-1 block translate-y-2 font-display text-base sm:text-lg font-bold leading-snug text-zyk-bg-end drop-shadow-sm transition delay-[20ms] duration-300 group-hover:translate-y-0 line-clamp-2">
+                    <span className="mt-1 block translate-y-2 font-display text-base sm:text-lg font-bold leading-snug text-white drop-shadow-sm transition delay-[20ms] duration-300 group-hover:translate-y-0 line-clamp-2">
                       {galleryItem.title}
                     </span>
-                    <span className="mt-2.5 inline-flex w-fit items-center gap-1.5 translate-y-2 rounded-full border border-zyk-secondary/40 bg-zyk-brown/90 px-3 py-1 font-display text-[0.7rem] font-medium text-zyk-bg-end shadow-md backdrop-blur-sm transition delay-[40ms] duration-300 group-hover:translate-y-0 group-hover:border-zyk-secondary">
+                    <span className="mt-2.5 inline-flex w-fit items-center gap-1.5 translate-y-2 rounded-full border border-zyk-accent/40 bg-slate-900/90 px-3 py-1 font-display text-[0.7rem] font-medium text-white shadow-md backdrop-blur-sm transition delay-[40ms] duration-300 group-hover:translate-y-0 group-hover:border-zyk-accent group-hover:bg-slate-900">
                       <span>
                         {(galleryItem.videos?.length ?? 0) > 0
                           ? "Watch Video & Gallery"
@@ -464,7 +464,7 @@ export const GallerySection: React.FC = () => {
                       </span>
                       <span
                         aria-hidden="true"
-                        className="text-zyk-secondary font-bold"
+                        className="text-zyk-accent font-bold"
                       >
                         →
                       </span>

@@ -36,12 +36,12 @@ type Status = "idle" | "submitting" | "success" | "error";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const fieldBase =
-  "w-full rounded-xl border border-transparent bg-zyk-bg-end/95 px-4 py-3 font-body " +
-  "text-zyk-heading placeholder-zyk-brown/40 shadow-sm transition-colors " +
-  "focus:border-zyk-primary focus:outline-none focus:ring-2 focus:ring-zyk-primary/40";
+  "w-full rounded-xl border border-white/15 bg-slate-900/70 px-4 py-3 font-body " +
+  "text-white placeholder-slate-400/60 shadow-inner transition-colors " +
+  "focus:border-zyk-accent focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-zyk-accent/40";
 
 const labelBase =
-  "mb-1.5 block font-display text-xs uppercase tracking-widest text-zyk-bg-end/90";
+  "mb-1.5 block font-display text-xs uppercase tracking-widest text-slate-300 font-semibold";
 
 export const ContactForm: React.FC = () => {
   const [form, setForm] = useState<FormState>(EMPTY);
@@ -106,7 +106,7 @@ export const ContactForm: React.FC = () => {
     return (
       <div className="mx-auto max-w-lg rounded-2xl bg-zyk-bg-end/95 p-8 text-center text-zyk-heading shadow-lg">
         <p className="font-display text-2xl">Message sent! 🎉</p>
-        <p className="mt-2 font-body text-zyk-brown/80">
+        <p className="mt-2 font-body text-zyk-heading/70">
           Thanks for reaching out — I&apos;ll get back to you soon.
         </p>
         <button

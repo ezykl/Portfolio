@@ -103,11 +103,11 @@ export const NavBar: React.FC = () => {
       className="fixed inset-x-0 top-0 z-100 transition-colors duration-300"
       style={{
         backgroundColor: atTop
-          ? "rgba(242, 191, 131, 0)"
-          : "rgba(242, 191, 131, 1)",
+          ? "rgba(37, 46, 61, 0)"
+          : "rgba(37, 46, 61, 0.95)",
         boxShadow: atTop
           ? "0 4px 20px rgba(0,0,0,0)"
-          : "0 4px 20px rgba(0,0,0,0.08)",
+          : "0 4px 20px rgba(0,0,0,0.3)",
       }}
     >
       <div className="mx-auto flex max-w-350 items-center justify-between px-6 py-4 md:px-10">
@@ -138,7 +138,7 @@ export const NavBar: React.FC = () => {
                 {isActive && (
                   <motion.span
                     layoutId="nav-active-underline"
-                    className="absolute -bottom-1.5 left-0 right-0 h-0.5 rounded-full bg-zyk-text-primary"
+                    className="absolute -bottom-1.5 left-0 right-0 h-0.5 rounded-full bg-zyk-accent"
                     transition={{ type: "spring", stiffness: 400, damping: 32 }}
                   />
                 )}

@@ -51,13 +51,13 @@ export const WelcomeOverlay: React.FC<WelcomeOverlayProps> = ({
             exit={{ opacity: 0, y: -16, scale: 0.96 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
             style={{
-              color: "#3a2b22",
-              textShadow: "0 2px 12px rgba(255,255,255,0.6)",
-              background: "rgba(255, 250, 240, 0.6)",
+              color: "#e2e8f0",
+              textShadow: "0 2px 12px rgba(0,0,0,0.4)",
+              background: "rgba(17, 24, 39, 0.75)",
               padding: "1.1rem 1.35rem",
               borderRadius: "1.5rem",
               backdropFilter: "blur(8px)",
-              boxShadow: "0 18px 40px rgba(74, 46, 28, 0.13)",
+              boxShadow: "0 18px 40px rgba(0, 0, 0, 0.35)",
               maxWidth: "min(92vw, 32rem)",
               textAlign: "center",
             }}
@@ -65,7 +65,7 @@ export const WelcomeOverlay: React.FC<WelcomeOverlayProps> = ({
             <p className="font-display text-2xl sm:text-3xl">
               Start an exploration?
             </p>
-            <p className="mt-2 font-body text-sm leading-relaxed text-zyk-brown/80 sm:text-base">
+            <p className="mt-2 font-body text-sm leading-relaxed text-zyk-heading/70 sm:text-base">
               A few hidden memories are tucked around the portfolio. Find them
               and the room slowly comes alive.
             </p>
@@ -80,7 +80,7 @@ export const WelcomeOverlay: React.FC<WelcomeOverlayProps> = ({
               <button
                 type="button"
                 onClick={onSkip}
-                className="rounded-full bg-zyk-secondary px-4 py-2 font-display text-sm text-zyk-heading shadow-md transition-transform hover:-translate-y-0.5"
+                className="rounded-full bg-zyk-secondary px-4 py-2 font-display text-sm font-bold text-slate-950 shadow-md transition-transform hover:-translate-y-0.5"
               >
                 Skip
               </button>

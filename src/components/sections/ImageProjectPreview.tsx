@@ -96,13 +96,13 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
       animate={{ opacity: 1 }}
       transition={{ duration: reduce ? 0 : 0.2 }}
     >
-      <header className="shrink-0 border-b border-zyk-bg-end/10 bg-zyk-brown/95 px-4 py-3 text-zyk-bg-end backdrop-blur-sm sm:px-6 sm:py-4">
+      <header className="shrink-0 border-b border-zyk-heading/10 bg-zyk-brown/95 px-4 py-3 text-zyk-heading backdrop-blur-sm sm:px-6 sm:py-4">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <div>
             <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-secondary">
               {eyebrow}
             </p>
-            <h2 id={titleId} className="font-display text-xl sm:text-2xl">
+            <h2 id={titleId} className="font-display text-xl font-bold text-white sm:text-2xl">
               {title}
             </h2>
           </div>
@@ -112,7 +112,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                 href={externalLink.href}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-10 items-center gap-2 rounded-full border border-zyk-bg-end/20 px-3 font-display text-xs transition-colors hover:bg-zyk-bg-end/10 sm:px-4"
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 font-display text-xs text-white transition-all hover:border-zyk-accent/60 hover:bg-white/20 sm:px-4"
               >
                 <span>{externalLink.label}</span>
                 <IconExternalLink size={16} />
@@ -122,7 +122,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
               type="button"
               onClick={onClose}
               aria-label={`Close ${title} preview`}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-zyk-bg-end/20 transition-colors hover:bg-zyk-bg-end/10"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-all hover:border-white/40 hover:bg-white/20"
             >
               <IconX size={20} />
             </button>
@@ -135,7 +135,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
           className={
             caseStudy
               ? "bg-zyk-bg-end text-zyk-heading"
-              : "bg-linear-to-b from-zyk-bg-end to-zyk-secondary/15 px-3 py-8 text-zyk-heading sm:px-6 sm:py-12"
+              : "bg-linear-to-b from-zyk-bg-end to-zyk-primary/10 px-3 py-8 text-zyk-heading sm:px-6 sm:py-12"
           }
           initial={reduce ? false : { opacity: 0, scale: 0.97, y: 18 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -152,28 +152,28 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                     <p className="font-display text-xs uppercase tracking-[0.22em] text-zyk-accent">
                       {caseStudy.eyebrow}
                     </p>
-                    <h3 className="mt-3 max-w-3xl font-display text-4xl leading-tight sm:text-6xl">
+                    <h3 className="mt-3 max-w-3xl font-display text-4xl font-bold text-white leading-tight sm:text-6xl">
                       {title}
                     </h3>
-                    <p className="mt-6 max-w-2xl font-body text-base leading-relaxed text-zyk-brown/75 sm:text-lg">
+                    <p className="mt-6 max-w-2xl font-body text-base leading-relaxed text-slate-300 sm:text-lg">
                       {caseStudy.summary}
                     </p>
-                    <p className="mt-5 border-l-2 border-zyk-primary pl-4 font-body text-sm leading-relaxed text-zyk-brown/70">
+                    <p className="mt-5 border-l-2 border-zyk-accent pl-4 font-body text-sm leading-relaxed text-zyk-heading/60">
                       <span className="font-semibold text-zyk-heading">
                         My role:
                       </span>{" "}
                       {caseStudy.role}
                     </p>
                     {caseStudy.note && (
-                      <p className="mt-6 max-w-2xl rounded-2xl border border-zyk-brown/10 bg-zyk-secondary/20 px-4 py-3 font-body text-xs leading-relaxed text-zyk-brown/70 sm:text-sm">
+                      <p className="mt-6 max-w-2xl rounded-2xl border border-zyk-accent/10 bg-zyk-primary/10 px-4 py-3 font-body text-xs leading-relaxed text-zyk-heading/60 sm:text-sm">
                         {caseStudy.note}
                       </p>
                     )}
                   </div>
-                  <dl className="grid grid-cols-2 gap-x-6 gap-y-5 rounded-3xl bg-white/75 p-6 shadow-sm">
+                  <dl className="grid grid-cols-2 gap-x-6 gap-y-5 rounded-3xl bg-white/5 p-6 shadow-sm">
                     {caseStudy.facts.map((fact) => (
                       <div key={fact.label}>
-                        <dt className="font-display text-[0.65rem] uppercase tracking-[0.18em] text-zyk-brown/45">
+                        <dt className="font-display text-[0.65rem] uppercase tracking-[0.18em] text-zyk-heading/40">
                           {fact.label}
                         </dt>
                         <dd className="mt-1 font-body text-sm font-semibold text-zyk-heading">
@@ -190,7 +190,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                   key={section.title}
                   className={`px-5 py-14 sm:px-8 sm:py-20 ${
                     sectionIndex % 2 === 0
-                      ? "bg-zyk-secondary/20"
+                      ? "bg-zyk-primary/10"
                       : "bg-zyk-bg-end"
                   }`}
                 >
@@ -199,10 +199,10 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                       <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent">
                         {section.eyebrow}
                       </p>
-                      <h4 className="mt-2 font-display text-3xl sm:text-4xl">
+                      <h4 className="mt-2 font-display text-3xl font-bold text-white sm:text-4xl">
                         {section.title}
                       </h4>
-                      <p className="mt-3 font-body text-sm leading-relaxed text-zyk-brown/70 sm:text-base">
+                      <p className="mt-3 font-body text-sm leading-relaxed text-slate-300 sm:text-base">
                         {section.description}
                       </p>
                     </div>
@@ -217,7 +217,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                             alt={`${imageAlt}: ${section.title} screen ${imageIndex + 1}`}
                             loading={sectionIndex === 0 ? "eager" : "lazy"}
                             decoding="async"
-                            className="h-auto max-h-[82vh] w-auto max-w-full rounded-[2rem] object-contain shadow-[0_20px_55px_rgba(140,84,56,0.14)]"
+                            className="h-auto max-h-[82vh] w-auto max-w-full rounded-[2rem] object-contain shadow-[0_20px_55px_rgba(0,0,0,0.3)]"
                           />
                         </figure>
                       ))}
@@ -227,8 +227,8 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
               ))}
 
               {externalLink && (
-                <section className="bg-zyk-brown px-5 py-16 text-center text-zyk-bg-end sm:px-8 sm:py-20">
-                  <p className="font-body text-sm text-zyk-bg-end/65">
+                <section className="bg-zyk-brown px-5 py-16 text-center text-zyk-heading sm:px-8 sm:py-20">
+                  <p className="font-body text-sm text-zyk-heading/55">
                     Explore the implementation and project structure.
                   </p>
                   <a
@@ -251,28 +251,28 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                     <p className="font-display text-xs uppercase tracking-[0.22em] text-zyk-accent">
                       {context.eyebrow}
                     </p>
-                    <h3 className="mt-3 max-w-3xl font-display text-4xl leading-tight sm:text-5xl">
+                    <h3 className="mt-3 max-w-3xl font-display text-4xl font-bold text-white leading-tight sm:text-5xl">
                       {title}
                     </h3>
-                    <p className="mt-5 max-w-2xl font-body text-base leading-relaxed text-zyk-brown/75 sm:text-lg">
+                    <p className="mt-5 max-w-2xl font-body text-base leading-relaxed text-slate-300 sm:text-lg">
                       {context.summary}
                     </p>
-                    <p className="mt-5 border-l-2 border-zyk-primary pl-4 font-body text-sm leading-relaxed text-zyk-brown/70">
+                    <p className="mt-5 border-l-2 border-zyk-accent pl-4 font-body text-sm leading-relaxed text-zyk-heading/60">
                       <span className="font-semibold text-zyk-heading">
                         My role:
                       </span>{" "}
                       {context.role}
                     </p>
                     {context.note && (
-                      <p className="mt-6 max-w-2xl rounded-2xl border border-zyk-brown/10 bg-zyk-secondary/25 px-4 py-3 font-body text-xs leading-relaxed text-zyk-brown/70 sm:text-sm">
+                      <p className="mt-6 max-w-2xl rounded-2xl border border-zyk-accent/10 bg-zyk-primary/10 px-4 py-3 font-body text-xs leading-relaxed text-zyk-heading/60 sm:text-sm">
                         {context.note}
                       </p>
                     )}
                   </div>
-                  <dl className="grid grid-cols-2 gap-x-5 gap-y-5 rounded-3xl bg-white/80 p-5 shadow-sm sm:p-6">
+                  <dl className="grid grid-cols-2 gap-x-5 gap-y-5 rounded-3xl bg-white/5 p-5 shadow-sm sm:p-6">
                     {context.facts.map((fact) => (
                       <div key={fact.label}>
-                        <dt className="font-display text-[0.65rem] uppercase tracking-[0.16em] text-zyk-brown/45">
+                        <dt className="font-display text-[0.65rem] uppercase tracking-[0.16em] text-zyk-heading/40">
                           {fact.label}
                         </dt>
                         <dd className="mt-1 font-body text-sm font-semibold text-zyk-heading">
@@ -291,7 +291,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                       {context.imageHeading}
                     </h4>
                     {context.imageDescription && (
-                      <p className="mt-2 font-body text-sm leading-relaxed text-zyk-brown/70 sm:text-base">
+                      <p className="mt-2 font-body text-sm leading-relaxed text-zyk-heading/60 sm:text-base">
                         {context.imageDescription}
                       </p>
                     )}
@@ -335,7 +335,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                         {context.videoHeading}
                       </h4>
                       {context.videoDescription && (
-                        <p className="mt-2 font-body text-sm leading-relaxed text-zyk-brown/70 sm:text-base">
+                        <p className="mt-2 font-body text-sm leading-relaxed text-zyk-heading/60 sm:text-base">
                           {context.videoDescription}
                         </p>
                       )}
@@ -345,7 +345,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                     {videos.map((src, index) => (
                       <figure
                         key={src}
-                        className="mx-auto flex w-full max-w-sm justify-center overflow-hidden rounded-2xl border border-zyk-brown/10 bg-white p-2 shadow-sm sm:rounded-3xl"
+                        className="mx-auto flex w-full max-w-sm justify-center overflow-hidden rounded-2xl border border-zyk-accent/10 bg-zyk-bg-end p-2 shadow-sm sm:rounded-3xl"
                       >
                         <video
                           src={src}
@@ -353,7 +353,7 @@ export const ImageProjectPreview: React.FC<ImageProjectPreviewProps> = ({
                           controls
                           playsInline
                           preload="metadata"
-                          className="aspect-[9/16] w-full rounded-xl bg-white object-contain sm:rounded-2xl"
+                          className="aspect-[9/16] w-full rounded-xl bg-zyk-bg-end object-contain sm:rounded-2xl"
                         />
                       </figure>
                     ))}

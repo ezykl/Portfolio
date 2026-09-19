@@ -87,7 +87,7 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
       animate={{ opacity: 1 }}
       transition={{ duration: reduce ? 0 : 0.2 }}
     >
-      <header className="shrink-0 border-b border-zyk-bg-end/10 bg-zyk-brown/95 px-3 py-3 text-zyk-bg-end backdrop-blur-sm sm:px-6 sm:py-4">
+      <header className="shrink-0 border-b border-zyk-heading/10 bg-zyk-brown/95 px-3 py-3 text-zyk-heading backdrop-blur-sm sm:px-6 sm:py-4">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <div>
             <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-secondary">
@@ -95,7 +95,7 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
             </p>
             <h2
               id="school-paper-title"
-              className="font-display text-xl sm:text-2xl"
+              className="font-display text-xl font-bold text-white sm:text-2xl"
             >
               School Paper Magazine
             </h2>
@@ -104,7 +104,7 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
             <a
               href="/assets/school-paper/school-paper.pdf"
               download
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-zyk-bg-end/20 px-3 font-display text-xs transition-colors hover:bg-zyk-bg-end/10 sm:px-4"
+              className="inline-flex h-10 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 font-display text-xs text-white transition-all hover:border-zyk-accent/60 hover:bg-white/20 sm:px-4"
             >
               <IconDownload size={17} />
               <span className="hidden sm:inline">Download PDF</span>
@@ -113,7 +113,7 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
               type="button"
               onClick={onClose}
               aria-label="Close magazine"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-zyk-bg-end/20 transition-colors hover:bg-zyk-bg-end/10"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-all hover:border-white/40 hover:bg-white/20"
             >
               <IconX size={20} />
             </button>
@@ -121,7 +121,7 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
         </div>
       </header>
 
-      <div className="min-h-0 flex-1 overflow-hidden bg-linear-to-b from-zyk-bg-end to-zyk-secondary/15 px-3 py-3 sm:px-6 sm:py-4">
+      <div className="min-h-0 flex-1 overflow-hidden bg-linear-to-b from-zyk-bg-end to-zyk-primary/10 px-3 py-3 sm:px-6 sm:py-4">
         <motion.div
           className="flex h-full min-h-0 w-full cursor-grab items-center justify-center active:cursor-grabbing"
           initial={reduce ? false : { opacity: 0, scale: 0.9, y: 18 }}
@@ -171,29 +171,29 @@ export const SchoolPaperFlipbook: React.FC<SchoolPaperFlipbookProps> = ({
         </motion.div>
       </div>
 
-      <footer className="shrink-0 border-t border-zyk-brown/10 bg-zyk-secondary/15 px-3 pb-3 pt-3 sm:px-6 sm:pb-5">
+      <footer className="shrink-0 border-t border-zyk-accent/10 bg-zyk-primary/10 px-3 pb-3 pt-3 sm:px-6 sm:pb-5">
         <div className="mx-auto flex w-full max-w-2xl flex-wrap items-center justify-center gap-3 sm:justify-between">
           <button
             type="button"
             onClick={() => bookRef.current?.pageFlip().flipPrev()}
             disabled={page === 0}
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-zyk-brown/10 px-4 font-display text-sm transition-colors hover:bg-zyk-brown/20 disabled:cursor-not-allowed disabled:opacity-35"
+            className="inline-flex h-11 items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 font-display text-sm font-semibold text-white transition-all hover:border-zyk-accent/60 hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-30"
           >
             <IconChevronLeft size={19} /> Previous
           </button>
-          <p className="font-body text-sm text-zyk-brown/75">
+          <p className="font-body text-sm text-slate-300 font-medium">
             {page + 1} / {PAGE_COUNT}
           </p>
           <button
             type="button"
             onClick={() => bookRef.current?.pageFlip().flipNext()}
             disabled={page === PAGE_COUNT - 1}
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-zyk-brown/10 px-4 font-display text-sm transition-colors hover:bg-zyk-brown/20 disabled:cursor-not-allowed disabled:opacity-35"
+            className="inline-flex h-11 items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 font-display text-sm font-semibold text-white transition-all hover:border-zyk-accent/60 hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-30"
           >
             Next <IconChevronRight size={19} />
           </button>
         </div>
-        <p className="mt-3 text-center font-body text-xs text-zyk-brown/55">
+        <p className="mt-3 text-center font-body text-xs text-zyk-heading/45">
           Drag or swipe left and right to turn the pages. Press Esc to close.
         </p>
       </footer>

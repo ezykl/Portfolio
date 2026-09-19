@@ -20,8 +20,8 @@ interface PillButtonProps {
 }
 
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-zyk-primary text-white",
-  secondary: "bg-zyk-secondary text-zyk-heading",
+  primary: "bg-zyk-primary text-white hover:bg-indigo-500 font-semibold shadow-indigo-500/25",
+  secondary: "bg-zyk-secondary text-slate-950 font-bold hover:bg-cyan-300 shadow-cyan-500/25",
 };
 
 export const PillButton: React.FC<PillButtonProps> = ({

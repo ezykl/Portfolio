@@ -115,7 +115,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
       // layout box; with overflow-hidden still on, that offset content gets
       // clipped instead of shown. ZykCoding's own reveal clipping is handled
       // locally by its own wrapper div below, so this doesn't affect it.
-      className="relative flex flex-col items-center justify-start pt-24 md:pt-16 bg-[#252E3D] overflow-hidden"
+      className="relative flex flex-col items-center justify-start pt-24 md:pt-16 bg-zyk-bg-start overflow-hidden"
       style={{ scrollMarginTop: "var(--nav-height, 5rem)" }}
     >
       {/* Decorative background pattern — sits behind all hero content. */}
@@ -142,7 +142,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
           className="flex w-full flex-col items-center text-center mt-4 -mb-6 sm:mt-8 sm:-mb-10 md:mt-10 md:-mb-12"
         >
           <h1
-            className="font-display leading-tight text-zyk-heading"
+            className="font-display leading-tight text-zyk-heading font-bold"
             style={{ fontSize: "clamp(3rem, 2rem + 4vw, 6rem)" }}
           >
             Hi, I&apos;m Zyk.
