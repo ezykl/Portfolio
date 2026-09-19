@@ -73,11 +73,11 @@ export const useReveal = () => {
 };
 
 const ABOUT_BLURB =
-  "Hi, I’m Ezekiel Villadolid, a Graphic Designer and UI/UX Designer creating clear, purposeful, and engaging visuals across digital and print. I enjoy turning ideas into thoughtful designs that communicate effectively, look great, and create meaningful experiences.";
+  "Hi, I’m Ezekiel Villadolid, a Full-Stack Developer and Mobile App Developer crafting fast, modern, and thoughtfully architected web and mobile applications. I combine clean code with design sensibility to build seamless digital experiences.";
 
 const ABOUT_FACTS = [
-  "Digital & Print Design",
-  "UI/UX & Prototyping",
+  "Full-Stack Development",
+  "Mobile App Development",
   "Open to roles & freelance",
 ];
 
