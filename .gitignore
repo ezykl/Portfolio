@@ -2,6 +2,10 @@
 node_modules/
 
 # Build output
+node_modules
+dist
+dist-ssr
+*.local
 dist/
 dist-ssr/
 *.local

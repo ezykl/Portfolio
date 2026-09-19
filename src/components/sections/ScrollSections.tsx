@@ -2,7 +2,6 @@ import React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ContactForm } from "../Contact/ContactForm";
 import { ContactLinks } from "../Contact/ContactLinks";
-import { Placeholder } from "../ui/Placeholder";
 import { TechIcon, type TechIconName } from "../ui/techIcons";
 
 // Maps our human-readable tech labels to vendored tech-logo icon names. Labels
@@ -19,6 +18,10 @@ const TECH_ICON_MAP: Partial<Record<string, TechIconName>> = {
   Node: "nodejs",
   HTML: "html5",
   CSS: "css3",
+  "Adobe Illustrator": "adobeillustrator",
+  Photoshop: "photoshop",
+  InDesign: "indesign",
+  Canva: "canva",
 };
 
 /** A tag pill with an optional tech-stack-icons logo in front of the label. */
@@ -32,6 +35,19 @@ const TechChip: React.FC<{ label: string; className?: string }> = ({
       className={`inline-flex items-center gap-1.5 font-body font-medium ${className}`}
     >
       {icon && <TechIcon name={icon} className="h-4 w-4 shrink-0" />}
+      {label}
+    </span>
+  );
+};
+
+/** Large featured chip for Design Tools — enlarged logo, same warm theme. */
+const DesignToolChip: React.FC<{ label: string }> = ({ label }) => {
+  const icon = TECH_ICON_MAP[label];
+  return (
+    <span className="inline-flex items-center gap-2.5 rounded-2xl border border-zyk-accent/10 bg-white/5 px-5 py-3 font-body text-sm font-medium text-zyk-heading shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md md:text-base">
+      {icon && (
+        <TechIcon name={icon} className="h-8 w-8 shrink-0 md:h-10 md:w-10" />
+      )}
       {label}
     </span>
   );
@@ -56,124 +72,13 @@ export const useReveal = () => {
   };
 };
 
-interface DesignPiece {
-  title: string;
-  blurb: string;
-  tags: string[];
-  art: string;
-}
-
-const DESIGN_PIECES: DesignPiece[] = [
-  {
-    title: "UI / UX Thinking",
-    blurb:
-      "Figma flows, interface systems, and screen-level storytelling that feel like part of the same world as the portfolio itself.",
-    tags: ["Figma", "UX", "Interaction"],
-    art: "Warm illustrated wireframe board with hand-drawn UI notes pinned to a wooden wall",
-  },
-  {
-    title: "Illustration & Motion",
-    blurb:
-      "Character-led scenes, cozy compositions, and light motion ideas that bring a handcrafted feel to digital work.",
-    tags: ["Illustration", "Motion", "Storybook"],
-    art: "Cozy poster-style illustration of a small desk scene with layered paper textures and soft lighting",
-  },
-  {
-    title: "Brand & Visual Direction",
-    blurb:
-      "Visual systems that balance playfulness, clarity, and warmth — designed to feel like a place you want to step into.",
-    tags: ["Brand", "Visual", "Identity"],
-    art: "Handcrafted moodboard collage with paper scraps, color swatches, and a tiny painted frame",
-  },
-];
-
-const TagChip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <span className="rounded-full bg-zyk-secondary/40 px-3 py-1 font-body text-xs font-medium text-zyk-heading">
-    {children}
-  </span>
-);
-
-const DesignCard: React.FC<{ piece: DesignPiece; reduce: boolean }> = ({
-  piece,
-  reduce,
-}) => (
-  <motion.article
-    variants={{
-      hidden: reduce ? { opacity: 1 } : { opacity: 0, y: 20 },
-      show: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5, ease: "easeOut" },
-      },
-    }}
-    className="flex flex-col overflow-hidden rounded-3xl border border-zyk-brown/10 bg-zyk-bg-end/80 p-4 shadow-md transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-  >
-    <Placeholder label={piece.art} aspect="4 / 3" />
-    <h3 className="mt-4 font-display text-2xl text-zyk-heading">
-      {piece.title}
-    </h3>
-    <p className="mt-2 flex-1 font-body text-sm leading-relaxed text-zyk-brown/80">
-      {piece.blurb}
-    </p>
-    <div className="mt-4 flex flex-wrap gap-2">
-      {piece.tags.map((tag) => (
-        <TagChip key={tag}>{tag}</TagChip>
-      ))}
-    </div>
-  </motion.article>
-);
-
-export const DesignsSection: React.FC = () => {
-  const reveal = useReveal();
-  const reduce = useReducedMotion() ?? false;
-
-  return (
-    <section
-      id="designs"
-      style={{ scrollMarginTop: "76px" }}
-      className="mx-auto max-w-6xl px-6 py-24"
-    >
-      <motion.div {...reveal} className="max-w-3xl">
-        <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
-          Things I&apos;ve drawn
-        </p>
-        <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
-          Design Collection
-        </h2>
-        <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
-          A cozy collection of visual work — UX thinking, illustration, and
-          playful direction that all belong to the same handmade world.
-        </p>
-      </motion.div>
-
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.15 }}
-        variants={{
-          hidden: {},
-          show: { transition: { staggerChildren: reduce ? 0 : 0.12 } },
-        }}
-        className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3"
-      >
-        {DESIGN_PIECES.map((piece) => (
-          <DesignCard key={piece.title} piece={piece} reduce={reduce} />
-        ))}
-      </motion.div>
-    </section>
-  );
-};
-
-// ▶ EDIT ME: 2-4 sentences on who you are beyond the résumé — background,
-// personality, what drives you. Keep it personal and cozy, not corporate.
 const ABOUT_BLURB =
-  "[Personal bio placeholder — a couple of sentences about who you are outside of the work: your background, what you're curious about, and what makes you, you.]";
+  "Hi, I’m Ezekiel Villadolid, a Graphic Designer and UI/UX Designer creating clear, purposeful, and engaging visuals across digital and print. I enjoy turning ideas into thoughtful designs that communicate effectively, look great, and create meaningful experiences.";
 
-// ▶ EDIT ME: quick scannable facts — where you're based, hobbies, fun details.
 const ABOUT_FACTS = [
-  "[Based in ...]",
-  "[A hobby you love]",
-  "[Something playful about you]",
+  "Digital & Print Design",
+  "UI/UX & Prototyping",
+  "Open to roles & freelance",
 ];
 
 interface ExperienceEntry {
@@ -187,6 +92,14 @@ interface ExperienceEntry {
 
 const WORK_EXPERIENCE: ExperienceEntry[] = [
   {
+    period: "2024 — 2025",
+    role: "Graphics Artist",
+    org: "Upwork / Freelance",
+    blurb:
+      "Created digital marketing materials while managing client communication, revisions, deadlines, and design quality.",
+    highlights: ["Digital Design", "Client Collaboration", "Quality Control"],
+  },
+  {
     period: "Aug 2021 — Sep 2023",
     role: "Graphics Artist",
     org: "Island Artz Printing and Services",
@@ -197,27 +110,6 @@ const WORK_EXPERIENCE: ExperienceEntry[] = [
       "Product Mockups",
       "Prepress",
       "Production Coordination",
-    ],
-  },
-  {
-    period: "2024 — 2025",
-    role: "Graphics Artist",
-    org: "Upwork / Freelance",
-    blurb:
-      "Created digital marketing materials while managing client communication, revisions, deadlines, and design quality.",
-    highlights: ["Digital Design", "Client Collaboration", "Quality Control"],
-  },
-  {
-    period: "Feb — Apr 2026",
-    role: "Data Annotator Intern",
-    org: "Innodata Knowledge Services, Inc.",
-    blurb:
-      "Annotated image and video datasets, validated structured outputs, and performed quality checks for reliable AI data workflows.",
-    highlights: [
-      "Bounding Boxes",
-      "Skeleton Labeling",
-      "Dataset QA",
-      "Prompt Engineering",
     ],
   },
 ];
@@ -250,82 +142,32 @@ interface ToolCategory {
   tools: string[];
 }
 
-// Development experience is primarily supported by academic/software projects.
-const PROJECT_TOOLKIT: ToolCategory[] = [
-  {
-    label: "Frontend & Mobile",
-    tools: [
-      "React",
-      "Next.js",
-      "React Native",
-      "Expo",
-      "Expo Router",
-      "HTML",
-      "CSS",
-      "Tailwind CSS",
-      "NativeWind",
-      "Bootstrap",
-      "Material UI",
-      "shadcn/ui",
-    ],
-  },
-  {
-    label: "Backend & APIs",
-    tools: ["Node.js", "Flask", ".NET", "REST APIs", "Third-party APIs"],
-  },
-  {
-    label: "Database & Cloud",
-    tools: [
-      "MySQL",
-      "Firebase",
-      "Firestore",
-      "Firebase Authentication",
-      "Firebase Storage",
-    ],
-  },
-  {
-    label: "AI & Machine Learning",
-    tools: [
-      "Python",
-      "TensorFlow",
-      "Keras",
-      "MobileNetV2",
-      "Transfer Learning",
-      "Image Classification",
-    ],
-  },
+const CREATIVE_TOOLKIT: ToolCategory[] = [
   {
     label: "Design Tools",
     tools: ["Figma", "Adobe Illustrator", "Photoshop", "InDesign", "Canva"],
   },
   {
-    label: "Development Tools",
+    label: "UI/UX Skills",
+    tools: ["Wireframing", "Prototyping", "Mobile UI Design"],
+  },
+  {
+    label: "Print & Production",
     tools: [
-      "Git",
-      "GitHub",
-      "VS Code",
-      "npm",
-      "Vercel",
-      "Google Colab",
-      "Claude Code",
-      "GitHub Copilot",
+      "Print-ready Artwork",
+      "Prepress",
+      "Product Mockups",
+      "Signage",
+      "Apparel Graphics",
     ],
   },
   {
-    label: "Languages",
-    tools: ["JavaScript", "TypeScript", "Python", "Java", "C#", "C"],
-  },
-  {
-    label: "Integrations",
+    label: "Creative Services",
     tools: [
-      "PayPal",
-      "MapLibre",
-      "MapTiler",
-      "OpenCage",
-      "Face++",
-      "OCR Space",
-      "Frankfurter API",
-      "TMDB API",
+      "Branding",
+      "Marketing Materials",
+      "Digital Content",
+      "Client Revisions",
     ],
   },
 ];
@@ -350,26 +192,45 @@ export const JourneySection: React.FC = () => {
       className="mx-auto max-w-6xl px-6 py-24"
     >
       {/* About Me */}
-      <motion.div {...reveal} className="max-w-3xl">
-        <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
-          Who I am
-        </p>
-        <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
-          About Me
-        </h2>
-        <p className="mt-4 font-body text-lg leading-relaxed text-zyk-brown/80">
-          {ABOUT_BLURB}
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {ABOUT_FACTS.map((fact) => (
-            <span
-              key={fact}
-              className="rounded-full bg-zyk-secondary/35 px-3 py-1 font-body text-xs font-medium text-zyk-heading"
-            >
-              {fact}
-            </span>
-          ))}
+      <motion.div
+        {...reveal}
+        className="grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(260px,0.72fr)] md:items-center lg:gap-16"
+      >
+        <div className="max-w-3xl">
+          <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
+            Who I am
+          </p>
+          <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
+            About Me
+          </h2>
+          <p className="mt-4 font-body text-lg leading-relaxed text-zyk-heading/70">
+            {ABOUT_BLURB}
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {ABOUT_FACTS.map((fact) => (
+              <span
+                key={fact}
+                className="rounded-full bg-zyk-primary/15 px-3 py-1 font-body text-xs font-medium text-zyk-heading"
+              >
+                {fact}
+              </span>
+            ))}
+          </div>
         </div>
+
+        <figure className="relative mx-auto w-full max-w-sm">
+          <div
+            aria-hidden
+            className="absolute inset-x-[4%] bottom-[3%] top-[18%] rotate-2 rounded-[2rem] bg-zyk-primary/15"
+          />
+          <img
+            src="/assets/me-longhair.png"
+            alt="Portrait of Zyk"
+            loading="lazy"
+            decoding="async"
+            className="relative h-auto w-full object-contain drop-shadow-[0_20px_28px_rgba(0,0,0,0.35)]"
+          />
+        </figure>
       </motion.div>
 
       {/* Experience: a line crossing left→right (top→bottom on mobile) with a
@@ -403,13 +264,13 @@ export const JourneySection: React.FC = () => {
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            style={{ transformOrigin: "left" }}
-            className="absolute left-0 right-0 top-2 hidden h-0.5 bg-zyk-brown/20 md:block"
+            style={{ transformOrigin: "right" }}
+            className="absolute left-0 right-0 top-2 hidden h-0.5 bg-zyk-accent/20 md:block"
           />
           {/* Vertical connector (mobile). */}
           <div
             aria-hidden
-            className="absolute bottom-0 left-2 top-2 w-0.5 bg-zyk-brown/20 md:hidden"
+            className="absolute bottom-0 left-2 top-2 w-0.5 bg-zyk-accent/20 md:hidden"
           />
 
           <motion.ol
@@ -420,7 +281,7 @@ export const JourneySection: React.FC = () => {
               hidden: {},
               show: { transition: { staggerChildren: reduce ? 0 : 0.15 } },
             }}
-            className="grid gap-10 md:grid-cols-3 md:gap-6"
+            className="grid gap-10 md:grid-cols-2 md:gap-8"
           >
             {WORK_EXPERIENCE.map((entry) => (
               <motion.li
@@ -429,7 +290,7 @@ export const JourneySection: React.FC = () => {
                 className="relative flex gap-4 md:flex-col md:items-center md:gap-0 md:text-center"
               >
                 {/* Dot on the line */}
-                <span className="relative z-10 mt-1 h-4 w-4 shrink-0 rounded-full bg-zyk-primary ring-4 ring-zyk-bg-end md:mt-0" />
+                <span className="relative z-10 mt-1 h-4 w-4 shrink-0 rounded-full bg-zyk-accent ring-4 ring-zyk-bg-end md:mt-0" />
 
                 <div className="md:mt-6">
                   <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent">
@@ -438,10 +299,10 @@ export const JourneySection: React.FC = () => {
                   <p className="mt-1 font-display text-lg text-zyk-heading">
                     {entry.role}
                   </p>
-                  <p className="font-body text-sm font-medium text-zyk-brown/60">
+                  <p className="font-body text-sm font-medium text-zyk-heading/50">
                     {entry.org}
                   </p>
-                  <p className="mt-2 font-body text-sm leading-relaxed text-zyk-brown/80">
+                  <p className="mt-2 font-body text-sm leading-relaxed text-zyk-heading/65">
                     {entry.blurb}
                   </p>
                   <div className="mt-3 flex flex-wrap gap-1.5 md:justify-center">
@@ -449,7 +310,7 @@ export const JourneySection: React.FC = () => {
                       <TechChip
                         key={highlight}
                         label={highlight}
-                        className="rounded-full bg-zyk-secondary/35 px-2.5 py-1 text-xs text-zyk-heading"
+                        className="rounded-full bg-zyk-primary/15 px-2.5 py-1 text-xs text-zyk-heading"
                       />
                     ))}
                   </div>
@@ -480,7 +341,7 @@ export const JourneySection: React.FC = () => {
             <motion.article
               key={`${entry.role}-${entry.org}`}
               variants={item}
-              className="rounded-[1.5rem] border border-zyk-brown/10 bg-zyk-bg-end/70 p-6 shadow-sm"
+              className="rounded-[1.5rem] border border-zyk-accent/10 bg-white/5 p-6 shadow-sm"
             >
               <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent">
                 {entry.period}
@@ -488,10 +349,10 @@ export const JourneySection: React.FC = () => {
               <h5 className="mt-1 font-display text-lg text-zyk-heading">
                 {entry.role}
               </h5>
-              <p className="font-body text-sm font-medium text-zyk-brown/60">
+              <p className="font-body text-sm font-medium text-zyk-heading/50">
                 {entry.org}
               </p>
-              <p className="mt-3 font-body text-sm leading-relaxed text-zyk-brown/80">
+              <p className="mt-3 font-body text-sm leading-relaxed text-zyk-heading/65">
                 {entry.blurb}
               </p>
               <div className="mt-4 flex flex-wrap gap-1.5">
@@ -508,35 +369,45 @@ export const JourneySection: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Project-based development experience and categorized toolkit. */}
+      {/* Design-focused tools and capabilities. */}
       <motion.div
         {...reveal}
-        className="mt-16 rounded-[2rem] border border-zyk-brown/10 bg-zyk-bg-end/80 p-6 shadow-sm md:p-8"
+        className="mt-16 rounded-[2rem] border border-zyk-accent/10 bg-white/5 p-6 shadow-sm md:p-8"
       >
         <p className="text-center font-display text-sm uppercase tracking-[0.2em] text-zyk-accent">
-          Software Project Experience
+          Creative Toolkit
         </p>
         <h4 className="mt-2 text-center font-display text-2xl text-zyk-heading">
-          Full-Stack Developer &amp; UI/UX Designer
+          Tools &amp; Capabilities
         </h4>
-        <p className="mx-auto mt-2 max-w-3xl text-center font-body text-sm leading-relaxed text-zyk-brown/75">
-          Built academic software projects including Rent2Reuse, covering mobile
-          development, authentication, databases, REST APIs, real-time features,
-          maps, payments, image processing, testing, and ML-assisted image
-          classification.
+        <p className="mx-auto mt-2 max-w-3xl text-center font-body text-sm leading-relaxed text-zyk-heading/60">
+          A focused set of tools and practical skills used across digital
+          design, UI/UX, branding, and print production.
         </p>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {PROJECT_TOOLKIT.map((category) => (
-            <div key={category.label}>
+        {/* Featured Design Tools — enlarged, centered. */}
+        <div className="mx-auto mt-8 max-w-3xl text-center">
+          <h5 className="font-display text-base tracking-wide text-zyk-heading md:text-lg">
+            {CREATIVE_TOOLKIT[0].label}
+          </h5>
+          <div className="mt-4 flex flex-wrap justify-center gap-3 md:gap-4">
+            {CREATIVE_TOOLKIT[0].tools.map((tool) => (
+              <DesignToolChip key={tool} label={tool} />
+            ))}
+          </div>
+        </div>
+        {/* Remaining skills — centered below the featured row. */}
+        <div className="mx-auto mt-8 grid max-w-4xl gap-6 sm:grid-cols-3">
+          {CREATIVE_TOOLKIT.slice(1).map((category) => (
+            <div key={category.label} className="text-center">
               <h5 className="font-display text-sm text-zyk-heading">
                 {category.label}
               </h5>
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div className="mt-2 flex flex-wrap justify-center gap-1.5">
                 {category.tools.map((tool) => (
                   <TechChip
                     key={tool}
                     label={tool}
-                    className="rounded-full bg-white/70 px-2.5 py-1 text-xs text-zyk-brown/80 shadow-sm"
+                    className="rounded-full bg-white/5 px-2.5 py-1 text-xs text-zyk-heading/70 shadow-sm"
                   />
                 ))}
               </div>
@@ -557,7 +428,7 @@ export const ContactSection: React.FC = () => {
     <footer
       id="contact"
       style={{ scrollMarginTop: "5rem" }}
-      className="relative mt-12 overflow-hidden bg-zyk-brown px-6 py-20 text-center text-zyk-bg-end"
+      className="relative mt-12 overflow-hidden bg-zyk-brown px-6 py-20 text-center text-zyk-heading"
     >
       {/* bg-pattern.svg overlaid and recoloured to a soft cream via CSS mask
           (the source SVG is solid black — masking lets us tint it without
@@ -565,22 +436,14 @@ export const ContactSection: React.FC = () => {
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.12]"
-        style={{
-          backgroundColor: "#FEF5EB",
-          WebkitMaskImage: "url(/assets/ui/bg-pattern.svg)",
-          maskImage: "url(/assets/ui/bg-pattern.svg)",
-          WebkitMaskRepeat: "repeat",
-          maskRepeat: "repeat",
-          WebkitMaskSize: "300px",
-          maskSize: "300px",
-        }}
+       
       />
 
       <motion.div {...reveal} className="relative z-10 mx-auto max-w-2xl">
-        <h2 className="font-display text-4xl md:text-5xl">
+        <h2 className="font-display text-4xl font-bold text-white md:text-5xl">
           Let&apos;s work together.
         </h2>
-        <p className="mx-auto mt-3 max-w-md font-body text-lg text-zyk-bg-end/80">
+        <p className="mx-auto mt-3 max-w-md font-body text-lg text-slate-300">
           Open to roles and freelance. If the diorama made you smile, let&apos;s
           talk.
         </p>
@@ -590,7 +453,7 @@ export const ContactSection: React.FC = () => {
 
         {/* Or reach me directly */}
         <div className="mt-10">
-          <p className="mb-4 font-display text-xs uppercase tracking-[0.24em] text-zyk-bg-end/70">
+          <p className="mb-4 font-display text-xs uppercase tracking-[0.24em] text-zyk-accent font-semibold">
             Or find me here
           </p>
           <ContactLinks />
@@ -598,13 +461,13 @@ export const ContactSection: React.FC = () => {
       </motion.div>
 
       {/* Closing footer bar */}
-      <div className="relative z-10 mx-auto mt-16 flex max-w-5xl flex-col items-center gap-2 border-t border-zyk-bg-end/15 pt-6 font-body text-sm text-zyk-bg-end/70 sm:flex-row sm:justify-between">
-        <p className="font-display tracking-wide">Zyk</p>
-        <p>
-          &copy; {year} Ezekiel Villadolid · Built with React, Tailwind &amp; a
-          lot of coffee ☕
+      <div className="relative z-10 mx-auto mt-16 flex max-w-5xl flex-col items-center gap-2 border-t border-white/10 pt-6 font-body text-sm text-slate-400 sm:flex-row sm:justify-between">
+        <p className="font-display font-semibold tracking-wide text-slate-200">Zyk</p>
+        <p className="text-slate-400">
+          &copy; {year} Ezekiel Villadolid · Designed and built with care and a
+          little coffee ☕
         </p>
-        <a href="#home" className="transition-colors hover:text-zyk-bg-end">
+        <a href="#home" className="font-display text-sm font-medium text-zyk-accent transition-colors hover:text-white">
           Back to top ↑
         </a>
       </div>

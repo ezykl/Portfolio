@@ -18,6 +18,17 @@ import { SceneEngine, type Scene, type SceneLayer } from "../../engine";
  */
 export const zykCodingItems: SceneLayer[] = [
   // Image – Table (base layer)
+
+  {
+    id: "zyk-background",
+    src: "/assets/me/blob.png",
+    type: "image",
+    left: 0,
+    top: -34,
+    width: 140,
+    height: 160,
+    opacity: 0.3,
+  },
   {
     id: "zyk-table",
     src: "/assets/me/Table.png",
@@ -45,9 +56,8 @@ export const zykCodingItems: SceneLayer[] = [
     },
   },
 
-
-
-  {    // Desk music player: click to play/pause music and toggle music notes.
+  {
+    // Desk music player: click to play/pause music and toggle music notes.
     id: "zyk-music",
     src: "/assets/me/soundbox.png",
     type: "image",
@@ -63,8 +73,6 @@ export const zykCodingItems: SceneLayer[] = [
       tooltip: "Music is playing",
     },
   },
-
-
 
   {
     id: "zyk-laptop",
@@ -159,7 +167,7 @@ export const zykCodingItems: SceneLayer[] = [
     tooltip: "That's me — click to say hi",
     popup: {
       title: "Hey, I'm Zyk! 👋",
-      body: "Welcome to my little corner of the web. I'm a software developer and graphic artist who loves building warm, playful, handcrafted experiences — like this one. Poke around the room, scroll through the world, and feel free to reach out.",
+      body: "Welcome to my creative corner. I'm a graphic designer and UI/UX designer who enjoys turning ideas into clear, playful, and thoughtfully crafted visual experiences. Explore my work, look around the studio, and feel free to reach out.",
     },
     videoAttrs: {
       autoPlay: true,

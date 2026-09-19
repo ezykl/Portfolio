@@ -45,7 +45,7 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
           indeterminate aren't default Tailwind utilities. */}
       <style>{keyframes}</style>
 
-      <div className="w-[min(420px,90vw)] rounded-[28px] border-2 border-[#BC693A] bg-linear-to-b from-[#FBF1E7] to-[#F6E7D6] px-8 pb-7 pt-9 text-center shadow-[0_18px_40px_rgba(90,58,38,0.28),inset_0_1px_0_rgba(255,255,255,0.7)]">
+      <div className="w-[min(420px,90vw)] rounded-[28px] border-2 border-zyk-accent/30 bg-linear-to-b from-[#131b2e] to-[#0f1729] px-8 pb-7 pt-9 text-center shadow-[0_18px_40px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.05)]">
         <video
           src={"/assets/me/Coffe.webm"}
           autoPlay
@@ -57,10 +57,10 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
         />
 
         <h1 className="mb-5 font-display text-lg text-zyk-heading">
-          Setting up your cozy space
+          Initializing workspace
         </h1>
 
-        <div className="mb-2 flex items-baseline justify-between text-[0.85rem] font-bold uppercase tracking-wider text-[#A9795E]">
+        <div className="mb-2 flex items-baseline justify-between text-[0.85rem] font-bold uppercase tracking-wider text-zyk-accent/70">
           <span className="opacity-90">Loading</span>
           <span className="font-display tabular-nums text-zyk-accent">
             {hasProgress ? `${pct}%` : "…"}
@@ -68,9 +68,9 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
         </div>
 
         {/* Progress track */}
-        <div className="relative h-[22px] w-full overflow-hidden rounded-full border-2 border-[rgba(90,58,38,0.3)] bg-[#E7CCB4] shadow-[inset_0_2px_5px_rgba(90,58,38,0.35)]">
+        <div className="relative h-[22px] w-full overflow-hidden rounded-full border-2 border-zyk-accent/20 bg-[#0d1321] shadow-[inset_0_2px_5px_rgba(0,0,0,0.5)]">
           <div
-            className="relative h-full overflow-hidden rounded-full bg-linear-to-b from-[#ffcf85] via-zyk-accent to-[#c9791f] shadow-[0_0_12px_rgba(201,161,90,0.45),inset_0_1px_0_rgba(255,255,255,0.35)]"
+            className="relative h-full overflow-hidden rounded-full bg-linear-to-b from-[#818cf8] via-zyk-primary to-[#4338ca] shadow-[0_0_12px_rgba(99,102,241,0.45),inset_0_1px_0_rgba(255,255,255,0.15)]"
             style={{
               width: hasProgress ? `${raw}%` : "40%",
               animation: hasProgress
@@ -79,14 +79,14 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
               transition: "none", // width is eased frame-by-frame in App's rAF loop
             }}
           >
-            <div className="absolute left-0 top-0 h-full w-2/5 bg-linear-to-r from-transparent via-[rgba(201,161,90,0.75)] to-transparent [animation:cozy-shimmer_1.6s_ease-in-out_infinite]" />
+            <div className="absolute left-0 top-0 h-full w-2/5 bg-linear-to-r from-transparent via-[rgba(129,140,248,0.55)] to-transparent [animation:cozy-shimmer_1.6s_ease-in-out_infinite]" />
           </div>
         </div>
 
         {/* key={message} remounts the node on each change so it fades in. */}
         <p
           key={message}
-          className="mx-auto mt-4 min-h-[1.2em] max-w-[28ch] text-[0.85rem] italic text-[rgba(90,58,38,0.7)] [animation:cozy-fade_0.45s_ease-out]"
+          className="mx-auto mt-4 min-h-[1.2em] max-w-[28ch] text-[0.85rem] italic text-zyk-heading/50 [animation:cozy-fade_0.45s_ease-out]"
         >
           {message}
         </p>

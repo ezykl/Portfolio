@@ -1,31 +1,28 @@
 @import "tailwindcss";
 
 /*
-  §2b Visual Design System — Tailwind v4 reads theme tokens from CSS (@theme),
-  NOT from tailwind.config.js. Namespaced under `zyk` so the tokens read clearly
-  and never collide with Tailwind defaults.
+  Visual Design System — Dev-dark theme.
+  Tailwind v4 reads theme tokens from CSS (@theme). Namespaced under `zyk` so
+  the tokens read clearly and never collide with Tailwind defaults.
 
   Each `--color-zyk-*` generates the matching bg-/text-/border-/from-/to-/ring-
   utilities (e.g. bg-zyk-primary, text-zyk-heading, from-zyk-bg-start).
   Each `--font-*` generates a font-* utility (font-display, font-body).
-  Shared across DOM sections and any new scene-layer assets so the whole site
-  reads as one world.
 */
 @theme {
-  --color-zyk-bg-start: #f2bf83; /* background gradient top */
-  --color-zyk-bg-end: #fef5eb; /* background gradient bottom */
-  --color-zyk-heading: #8c5438; /* primary headline text */
-  --color-zyk-accent: #e4892a; /* subheading / tagline text */
-  --color-zyk-primary: #ff9866; /* button 1 fill (white label) */
-  --color-zyk-secondary: #ffd16e; /* button 2 fill (dark #8C5438 label) */
-  --color-zyk-brown: #8c5438; /* torn-paper mountains, footer band */
+  --color-zyk-bg-start: #252E3D; /* background gradient top — blue-gray dark */
+  --color-zyk-bg-end: #111827; /* background gradient bottom — charcoal */
+  --color-zyk-heading: #e2e8f0; /* primary headline text — cool white */
+  --color-zyk-accent: #38bdf8; /* subheading / tagline — electric sky blue */
+  --color-zyk-primary: #6366f1; /* button 1 fill — indigo */
+  --color-zyk-secondary: #22d3ee; /* button 2 fill — cyan */
+  --color-zyk-brown: #1e293b; /* footer band, card surfaces — slate-dark */
 
-  /* Display face — bold, rounded, playful; pairs with the AllScene illustrations. */
-  --font-display: "Lilita One", cursive;
-  /* Body face (§2b default: Poppins). Also override --font-sans so unstyled copy
-     and the `font-sans` utility both use it. */
-  --font-body: "Poppins", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  /* Display face — monospace, developer-centric. */
+  --font-display: "JetBrains Mono", ui-monospace, monospace;
+  /* Body face — clean, modern sans. Also overrides --font-sans. */
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 html,
@@ -33,7 +30,7 @@ body,
 #root {
   margin: 0;
   min-height: 100%;
-  /* §2b bg-gradient-start (#F2BF83) → bg-gradient-end (#FEF5EB) */
+  /* bg-gradient-start (#0a0f1a) → bg-gradient-end (#111827) */
   /* background: linear-gradient(to bottom, #f2bf83, #fef5eb); */
 }
 

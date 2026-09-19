@@ -122,13 +122,13 @@ export const MinigameHost: React.FC = () => {
       style={{ pointerEvents: open ? "auto" : "none" }}
       aria-hidden={!open}
       onClick={close}
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-zyk-brown/40 px-4 py-8 backdrop-blur-sm"
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 px-4 py-8 backdrop-blur-sm"
     >
       <div
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-4xl rounded-[2rem] border border-zyk-brown/10 bg-zyk-bg-end p-5 shadow-2xl sm:p-6"
+        className="relative w-full max-w-4xl rounded-[2rem] border border-zyk-accent/10 bg-zyk-bg-end p-5 shadow-2xl sm:p-6"
       >
         {/* Header */}
         <div className="mb-4 flex items-start justify-between gap-4">
@@ -139,7 +139,7 @@ export const MinigameHost: React.FC = () => {
             <h3 className="mt-1 font-display text-2xl text-zyk-heading sm:text-3xl">
               Find the {target?.name}!
             </h3>
-            <p className="mt-1 h-5 font-body text-sm text-zyk-brown/70">
+            <p className="mt-1 h-5 font-body text-sm text-zyk-heading/60">
               {hint ?? "Click around the room to find it."}
             </p>
           </div>
@@ -147,7 +147,7 @@ export const MinigameHost: React.FC = () => {
             type="button"
             onClick={close}
             aria-label="Close"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-zyk-brown/60 transition-colors hover:bg-zyk-brown/10 hover:text-zyk-heading"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-zyk-heading/50 transition-colors hover:bg-white/10 hover:text-zyk-heading"
           >
             <IconX size={20} />
           </button>
@@ -214,7 +214,7 @@ export const MinigameHost: React.FC = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25 }}
-                className="absolute inset-0 z-[70] flex flex-col items-center justify-center rounded-[20px] bg-zyk-brown/55 px-6 text-center backdrop-blur-sm"
+                className="absolute inset-0 z-[70] flex flex-col items-center justify-center rounded-[20px] bg-black/55 px-6 text-center backdrop-blur-sm"
               >
                 <motion.div
                   initial={{ scale: 0.9, y: 10 }}
@@ -223,7 +223,7 @@ export const MinigameHost: React.FC = () => {
                   className="w-full max-w-sm rounded-[1.5rem] bg-zyk-bg-end p-6 shadow-xl"
                 >
                   {target && (
-                    <div className="mx-auto mb-3 flex h-24 w-24 items-center justify-center rounded-2xl bg-zyk-secondary/25 p-2">
+                    <div className="mx-auto mb-3 flex h-24 w-24 items-center justify-center rounded-2xl bg-zyk-primary/15 p-2">
                       <img
                         src={target.img}
                         alt={target.name}
@@ -234,7 +234,7 @@ export const MinigameHost: React.FC = () => {
                   <p className="font-display text-3xl text-zyk-heading">
                     You found it! 🎉
                   </p>
-                  <p className="mt-2 font-body text-zyk-brown/80">
+                  <p className="mt-2 font-body text-zyk-heading/70">
                     Nice eye — that was the {target?.name}.
                   </p>
                   <div className="mt-5 flex flex-wrap justify-center gap-3">
@@ -248,7 +248,7 @@ export const MinigameHost: React.FC = () => {
                     <button
                       type="button"
                       onClick={close}
-                      className="rounded-full bg-zyk-secondary px-6 py-2.5 font-display text-sm text-zyk-heading shadow-md transition-transform hover:-translate-y-0.5"
+                      className="rounded-full bg-zyk-secondary px-6 py-2.5 font-display text-sm font-bold text-slate-950 shadow-md transition-transform hover:-translate-y-0.5"
                     >
                       Close
                     </button>

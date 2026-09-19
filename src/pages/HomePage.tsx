@@ -1,8 +1,8 @@
 import React from "react";
 import { Hero } from "../components/Hero/Hero";
 import { ProjectsSection } from "../components/sections/ProjectsSection";
+import { GallerySection } from "../components/sections/GallerySection";
 import {
-  DesignsSection,
   JourneySection,
   ContactSection,
 } from "../components/sections/ScrollSections";
@@ -19,10 +19,10 @@ interface HomePageProps {
  * without being entangled with its neighbors.
  */
 export const HomePage: React.FC<HomePageProps> = ({ revealed }) => (
-  <main className="bg-linear-to-b from-[#f2bf83] to-[#fef5eb]">
+  <main className="bg-linear-to-b from-zyk-bg-start to-zyk-bg-end">
     <Hero revealed={revealed} />
     <ProjectsSection />
-    <DesignsSection />
+    <GallerySection />
     <JourneySection />
     <ContactSection />
   </main>

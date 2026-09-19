@@ -59,14 +59,15 @@ export const Tooltip: React.FC<TooltipProps> = ({
             transform: "translate(-50%, -100%)",
             pointerEvents: "none",
             zIndex: 9999,
-            background: "rgba(140, 84, 56, 0.96)", // zyk brown
-            color: "#fff",
-            padding: "6px 12px",
+            background: "rgba(15, 23, 42, 0.94)",
+            color: "#f8fafc",
+            border: "1px solid rgba(56, 189, 248, 0.35)",
+            padding: "6px 14px",
             borderRadius: "9999px",
             fontSize: "12px",
-            fontWeight: 500,
-            fontFamily: '"Poppins", ui-sans-serif, system-ui, sans-serif',
-            boxShadow: "0 6px 18px rgba(0, 0, 0, 0.18)",
+            fontWeight: 600,
+            fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(56, 189, 248, 0.2)",
             whiteSpace: "nowrap",
           }}
         >

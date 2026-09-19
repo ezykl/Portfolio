@@ -50,7 +50,7 @@ export const PopupHost: React.FC = () => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           onClick={() => setContent(null)}
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-zyk-brown/30 px-6 backdrop-blur-sm"
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 px-6 backdrop-blur-sm"
         >
           <motion.div
             role="dialog"
@@ -60,13 +60,13 @@ export const PopupHost: React.FC = () => {
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md rounded-[2rem] border border-zyk-brown/10 bg-zyk-bg-end p-8 shadow-2xl"
+            className="relative w-full max-w-md rounded-[2rem] border border-zyk-accent/10 bg-zyk-bg-end p-8 shadow-2xl"
           >
             <button
               type="button"
               onClick={() => setContent(null)}
               aria-label="Close"
-              className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-zyk-brown/60 transition-colors hover:bg-zyk-brown/10 hover:text-zyk-heading"
+              className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-zyk-heading/50 transition-colors hover:bg-white/10 hover:text-zyk-heading"
             >
               <IconX size={20} />
             </button>
@@ -77,7 +77,7 @@ export const PopupHost: React.FC = () => {
               </h3>
             )}
             <p
-              className={`font-body leading-relaxed text-zyk-brown/80 ${content.title ? "mt-3" : "pr-8"}`}
+              className={`font-body leading-relaxed text-zyk-heading/70 ${content.title ? "mt-3" : "pr-8"}`}
             >
               {content.body}
             </p>
