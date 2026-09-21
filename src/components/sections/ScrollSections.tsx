@@ -22,6 +22,8 @@ const TECH_ICON_MAP: Partial<Record<string, TechIconName>> = {
   Photoshop: "photoshop",
   InDesign: "indesign",
   Canva: "canva",
+  Express: "nodejs",
+  Firebase: "vitejs",
 };
 
 /** A tag pill with an optional tech-stack-icons logo in front of the label. */
@@ -169,6 +171,25 @@ const CREATIVE_TOOLKIT: ToolCategory[] = [
       "Digital Content",
       "Client Revisions",
     ],
+  },
+];
+
+const DEV_TOOLKIT: ToolCategory[] = [
+  {
+    label: "Frontend",
+    tools: ["React", "TypeScript", "Tailwind", "Framer Motion", "HTML", "CSS"],
+  },
+  {
+    label: "Backend & Runtime",
+    tools: ["Node", "Express", "REST APIs", "Firebase"],
+  },
+  {
+    label: "Mobile",
+    tools: ["React Native", "Expo"],
+  },
+  {
+    label: "Tools & Workflow",
+    tools: ["Git", "Vite", "VS Code", "Figma"],
   },
 ];
 
@@ -368,6 +389,53 @@ export const JourneySection: React.FC = () => {
           ))}
         </motion.div>
       </div>
+
+      {/* Developer toolkit — tech stack for web & mobile development. */}
+      <motion.div
+        {...reveal}
+        className="mt-16 rounded-[2rem] border border-zyk-accent/10 bg-white/5 p-6 shadow-sm md:p-8"
+      >
+        <p className="text-center font-display text-sm uppercase tracking-[0.2em] text-zyk-accent">
+          Developer Toolkit
+        </p>
+        <h4 className="mt-2 text-center font-display text-2xl text-zyk-heading">
+          Tech Stack
+        </h4>
+        <p className="mx-auto mt-2 max-w-3xl text-center font-body text-sm leading-relaxed text-zyk-heading/60">
+          The core technologies and frameworks I use to build modern web and
+          mobile applications.
+        </p>
+        {/* Featured Frontend tools — enlarged, centered. */}
+        <div className="mx-auto mt-8 max-w-3xl text-center">
+          <h5 className="font-display text-base tracking-wide text-zyk-heading md:text-lg">
+            {DEV_TOOLKIT[0].label}
+          </h5>
+          <div className="mt-4 flex flex-wrap justify-center gap-3 md:gap-4">
+            {DEV_TOOLKIT[0].tools.map((tool) => (
+              <DesignToolChip key={tool} label={tool} />
+            ))}
+          </div>
+        </div>
+        {/* Remaining dev skills */}
+        <div className="mx-auto mt-8 grid max-w-4xl gap-6 sm:grid-cols-3">
+          {DEV_TOOLKIT.slice(1).map((category) => (
+            <div key={category.label} className="text-center">
+              <h5 className="font-display text-sm text-zyk-heading">
+                {category.label}
+              </h5>
+              <div className="mt-2 flex flex-wrap justify-center gap-1.5">
+                {category.tools.map((tool) => (
+                  <TechChip
+                    key={tool}
+                    label={tool}
+                    className="rounded-full bg-white/5 px-2.5 py-1 text-xs text-zyk-heading/70 shadow-sm"
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
 
       {/* Design-focused tools and capabilities. */}
       <motion.div

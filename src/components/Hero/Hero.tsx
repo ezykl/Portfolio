@@ -184,6 +184,9 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
             <PillButton variant="secondary" href="#contact">
               Get in Touch
             </PillButton>
+            <PillButton variant="secondary" href="/assets/resume.pdf" download>
+              Download CV ↓
+            </PillButton>
           </motion.div>
         </div>
 

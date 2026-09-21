@@ -47,7 +47,7 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
 
       <div className="w-[min(420px,90vw)] rounded-[28px] border-2 border-zyk-accent/30 bg-linear-to-b from-[#131b2e] to-[#0f1729] px-8 pb-7 pt-9 text-center shadow-[0_18px_40px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.05)]">
         <video
-          src={"/assets/me/Coffe.webm"}
+          src={"/assets/me/Coffee.webm"}
           autoPlay
           loop
           muted

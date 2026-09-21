@@ -108,7 +108,7 @@ export const zykCodingItems: SceneLayer[] = [
     // Cold by default (still PNG, no steam); clicking toggles to the hot webm
     // with animated steam and back again.
     id: "zyk-coffee",
-    src: "/assets/me/Coffe.png",
+    src: "/assets/me/Coffee.png",
     type: "image",
     left: 27,
     top: 30,
@@ -117,14 +117,14 @@ export const zykCodingItems: SceneLayer[] = [
     behaviors: ["hoverGlow", "tooltip", "toggle", "clickSound"],
     tooltip: "The coffee isn't hot yet.",
     toggle: {
-      src: "/assets/me/Coffe.webm",
+      src: "/assets/me/Coffee.webm",
       type: "video",
       tooltip: "Coffee is already hot.",
       videoAttrs: {
         autoPlay: true,
         loop: true,
         muted: true,
-        poster: "/assets/me/Coffe.png",
+        poster: "/assets/me/Coffee.png",
       },
     },
   },

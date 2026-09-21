@@ -1,19 +1,25 @@
 import React, { useState } from "react";
+import emailjs from "@emailjs/browser";
 import { PillButton } from "../ui/PillButton";
 
 /**
- * Contact form for an SMTP-backed email send. The frontend collects the fields
- * and POSTs JSON to CONTACT_ENDPOINT; wire that endpoint up to your SMTP mailer
- * (e.g. an API route using nodemailer) — it should read the same field names.
+ * Contact form powered by EmailJS — sends email directly from the browser
+ * without needing a backend API route.
  *
- * Payload shape:
- *   { name: string; email: string; subject: string; message: string }
- * Plus a hidden `company` honeypot — if it's non-empty, treat the submission as
- * spam and silently drop it server-side.
+ * ▶ EDIT ME: Replace the three constants below with your real EmailJS
+ *   credentials from https://dashboard.emailjs.com
+ *
+ * Payload shape sent to the EmailJS template:
+ *   { from_name, from_email, subject, message }
+ * Plus a hidden `company` honeypot — if it's non-empty, treat the submission
+ * as spam and silently drop it.
  */
 
-// Change to wherever your mail-sending endpoint lives.
-const CONTACT_ENDPOINT = "/api/contact";
+// ▶ EDIT ME: Replace these with your real EmailJS credentials.
+// Get them from https://dashboard.emailjs.com
+const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
 
 interface FormState {
   name: string;
@@ -83,22 +89,24 @@ export const ContactForm: React.FC = () => {
     setStatus("submitting");
     setError(null);
     try {
-      const res = await fetch(CONTACT_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name.trim(),
-          email: form.email.trim(),
-          subject: form.subject.trim(),
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: form.name.trim(),
+          from_email: form.email.trim(),
+          subject: form.subject.trim() || "Portfolio Contact",
           message: form.message.trim(),
-        }),
-      });
-      if (!res.ok) throw new Error(`Request failed (${res.status})`);
+        },
+        { publicKey: EMAILJS_PUBLIC_KEY },
+      );
       setStatus("success");
       setForm(EMPTY);
     } catch {
       setStatus("error");
-      setError("Something went wrong sending your message. Please try again.");
+      setError(
+        "Something went wrong sending your message. Please try again, or email me directly.",
+      );
     }
   };
 
@@ -207,7 +215,15 @@ export const ContactForm: React.FC = () => {
       </div>
 
       {status === "error" && error && (
-        <p className="mt-4 font-body text-sm text-zyk-secondary">{error}</p>
+        <div className="mt-4">
+          <p className="font-body text-sm text-red-400">{error}</p>
+          <a
+            href="mailto:zyk.creatives@gmail.com"
+            className="mt-1 inline-block font-display text-xs text-zyk-accent underline-offset-4 hover:underline"
+          >
+            Or email me directly →
+          </a>
+        </div>
       )}
 
       <div className="mt-6 flex justify-center">
@@ -222,3 +238,4 @@ export const ContactForm: React.FC = () => {
     </form>
   );
 };
+

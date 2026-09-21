@@ -15,6 +15,8 @@ interface PillButtonProps {
   /** Button type when rendered as a <button> (ignored when `href` is set). */
   type?: "button" | "submit";
   disabled?: boolean;
+  /** When true (or a filename string), the anchor triggers a download. */
+  download?: boolean | string;
   children: React.ReactNode;
   className?: string;
 }
@@ -30,6 +32,7 @@ export const PillButton: React.FC<PillButtonProps> = ({
   onClick,
   type = "button",
   disabled = false,
+  download,
   children,
   className = "",
 }) => {
@@ -42,7 +45,18 @@ export const PillButton: React.FC<PillButtonProps> = ({
 
   if (href) {
     return (
-      <a href={href} onClick={onClick} className={classes}>
+      <a
+        href={href}
+        onClick={onClick}
+        className={classes}
+        {...(download
+          ? {
+              download: download === true ? "" : download,
+              target: "_blank",
+              rel: "noopener noreferrer",
+            }
+          : {})}
+      >
         {children}
       </a>
     );
@@ -53,3 +67,4 @@ export const PillButton: React.FC<PillButtonProps> = ({
     </button>
   );
 };
+
