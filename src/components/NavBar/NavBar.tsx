@@ -125,9 +125,9 @@ export const NavBar: React.FC = () => {
           href="#home"
           onClick={handleClick("#home")}
           aria-label="Back to top"
-          className="flex h-11 w-11 items-center justify-center transition-transform hover:scale-105"
+          className="flex items-center justify-center transition-transform hover:scale-105"
         >
-          <img src={logoSrc} alt="Logo" className="h-11 w-11 object-contain" />
+          <img src={logoSrc} alt="Zyk" className="h-9 w-auto object-contain" />
         </a>
 
         {/* Hamburger toggle — visible only on mobile */}
@@ -210,6 +210,14 @@ export const NavBar: React.FC = () => {
             }
             className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-zyk-bg-end/[0.98] backdrop-blur-xl md:hidden"
           >
+            <motion.div
+              initial={reduce ? false : { opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.25 }}
+              className="mb-2"
+            >
+              <img src={logoSrc} alt="Zyk" className="h-12 w-auto object-contain" />
+            </motion.div>
             {LINKS.map((link, i) => {
               const isActive = active === link.href.slice(1);
               return (

@@ -530,7 +530,10 @@ export const ContactSection: React.FC = () => {
 
       {/* Closing footer bar */}
       <div className="relative z-10 mx-auto mt-16 flex max-w-5xl flex-col items-center gap-2 border-t border-white/10 pt-6 font-body text-sm text-slate-400 sm:flex-row sm:justify-between">
-        <p className="font-display font-semibold tracking-wide text-slate-200">Zyk</p>
+        <div className="flex items-center gap-2.5">
+          <img src="/assets/logo.svg" alt="Zyk" className="h-5 w-auto object-contain opacity-90" />
+          <p className="font-display font-semibold tracking-wide text-slate-200">Zyk</p>
+        </div>
         <p className="text-slate-400">
           &copy; {year} Ezekiel Villadolid · Designed and built with care and a
           little coffee ☕
