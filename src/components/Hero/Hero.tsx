@@ -118,7 +118,14 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
       className="relative flex flex-col items-center justify-start pt-24 md:pt-16 bg-linear-to-b from-[#f2bf83] to-[#fef5eb]"
       style={{ scrollMarginTop: "var(--nav-height, 5rem)" }}
     >
-      <div className="flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
+      {/* Decorative background pattern — sits behind all hero content. */}
+      <img
+        src="/assets/ui/hero-pattern.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-14 z-0 h-full w-full object-cover opacity-60 scale-80"
+      />
+      <div className="relative z-10 flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
         {/* H1 entrance: invisible while loading, pops in once revealed, holds,
             then slides up to its resting position. */}
         <motion.div
