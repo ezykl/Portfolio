@@ -504,7 +504,6 @@ export const ContactSection: React.FC = () => {
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.12]"
-       
       />
 
       <motion.div {...reveal} className="relative z-10 mx-auto max-w-2xl">
@@ -531,14 +530,20 @@ export const ContactSection: React.FC = () => {
       {/* Closing footer bar */}
       <div className="relative z-10 mx-auto mt-16 flex max-w-5xl flex-col items-center gap-2 border-t border-white/10 pt-6 font-body text-sm text-slate-400 sm:flex-row sm:justify-between">
         <div className="flex items-center gap-2.5">
-          <img src="/assets/logo.svg" alt="Zyk" className="h-5 w-auto object-contain opacity-90" />
-          <p className="font-display font-semibold tracking-wide text-slate-200">Zyk</p>
+          <img
+            src="/assets/logo.svg"
+            alt="Zyk"
+            className="h-5 w-auto object-contain opacity-90"
+          />
         </div>
         <p className="text-slate-400">
           &copy; {year} Ezekiel Villadolid · Designed and built with care and a
           little coffee ☕
         </p>
-        <a href="#home" className="font-display text-sm font-medium text-zyk-accent transition-colors hover:text-white">
+        <a
+          href="#home"
+          className="font-display text-sm font-medium text-zyk-accent transition-colors hover:text-white"
+        >
           Back to top ↑
         </a>
       </div>
