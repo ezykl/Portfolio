@@ -578,7 +578,7 @@ export const ContactForm: React.FC = () => {
                       required
                       value={form.name}
                       onChange={setField("name")}
-                      placeholder="Alex Chen"
+                      placeholder="Your name"
                       className={fieldBase}
                     />
                   </div>
@@ -595,7 +595,7 @@ export const ContactForm: React.FC = () => {
                       required
                       value={form.email}
                       onChange={setField("email")}
-                      placeholder="alex@domain.dev"
+                      placeholder="your-email@example.com"
                       className={fieldBase}
                     />
                   </div>
