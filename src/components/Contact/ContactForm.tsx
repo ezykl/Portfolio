@@ -58,6 +58,18 @@ const fieldBase =
 const labelBase =
   "mb-1.5 flex items-center gap-2 font-display text-[11px] uppercase tracking-widest text-slate-400";
 
+/** Format a Date for the terminal timestamp line */
+const formatTimestamp = (d: Date) =>
+  d.toLocaleString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
+
 export const ContactForm: React.FC = () => {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [status, setStatus] = useState<Status>("idle");
@@ -68,8 +80,16 @@ export const ContactForm: React.FC = () => {
     email: string;
     subject: string;
     message: string;
-  }>({ name: "", email: "", subject: "", message: "" });
+    sentAt: string; // human-readable timestamp
+  }>({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+    sentAt: "",
+  });
 
+  // Used only to detect the honeypot timing — NOT as sole spam gate
   const mountTimeRef = useRef<number>(Date.now());
 
   const setField =
@@ -100,13 +120,15 @@ export const ContactForm: React.FC = () => {
     e.preventDefault();
     if (status === "submitting") return;
 
-    const elapsedMs = Date.now() - mountTimeRef.current;
-    if (form.company || elapsedMs < 1500) {
+    // Honeypot only — timing check removed (was causing silent fake-success
+    // when component remounted or user submitted quickly after hot-reload).
+    if (form.company) {
       setSubmittedData({
         name: form.name || "visitor",
         email: form.email,
         subject: form.subject,
         message: form.message,
+        sentAt: formatTimestamp(new Date()),
       });
       setStatus("success");
       setForm(EMPTY_FORM);
@@ -147,7 +169,10 @@ export const ContactForm: React.FC = () => {
         "",
       ) ?? form.subject;
 
+    const sentAt = formatTimestamp(new Date());
+
     try {
+      // 1. Notification email to portfolio owner
       await emailjs.send(
         serviceId,
         notificationTemplateId,
@@ -159,10 +184,12 @@ export const ContactForm: React.FC = () => {
           reply_to: form.email.trim(),
           from_name: form.name.trim(),
           from_email: form.email.trim(),
+          sent_at: sentAt,
         },
         { publicKey },
       );
 
+      // 2. Auto-confirmation receipt to visitor
       if (confirmationTemplateId) {
         try {
           await emailjs.send(
@@ -173,11 +200,16 @@ export const ContactForm: React.FC = () => {
               to_email: form.email.trim(),
               subject: purposeLabel,
               message: form.message.trim(),
+              sent_at: sentAt,
             },
             { publicKey },
           );
-        } catch (err) {
-          console.warn("Auto-confirmation failed:", err);
+        } catch (confirmErr: unknown) {
+          // Log full error so we can diagnose template/config issues
+          console.error(
+            "[ContactForm] Auto-confirmation send failed:",
+            confirmErr,
+          );
         }
       }
 
@@ -186,14 +218,19 @@ export const ContactForm: React.FC = () => {
         email: form.email.trim(),
         subject: purposeLabel,
         message: form.message.trim(),
+        sentAt,
       });
       setStatus("success");
       setForm(EMPTY_FORM);
       mountTimeRef.current = Date.now();
-    } catch (err) {
-      console.error("EmailJS error:", err);
+    } catch (err: unknown) {
+      console.error("[ContactForm] Notification send failed:", err);
       setStatus("error");
-      setError("Failed to dispatch — check network connection and try again.");
+      setError(
+        err instanceof Error
+          ? `Dispatch failed: ${err.message}`
+          : "Failed to dispatch — check network connection and try again.",
+      );
       setErrorCount((c) => c + 1);
     }
   };
@@ -394,6 +431,14 @@ export const ContactForm: React.FC = () => {
                   <span className="text-sky-300">status</span>
                   <span className="text-slate-500">:</span>{" "}
                   <span className="text-yellow-400">&quot;received&quot;</span>
+                  <span className="text-slate-500">,</span>
+                  <br />
+                  &nbsp;&nbsp;
+                  <span className="text-sky-300">sentAt</span>
+                  <span className="text-slate-500">:</span>{" "}
+                  <span className="text-purple-400">
+                    &quot;{submittedData.sentAt}&quot;
+                  </span>
                   <br />
                   <span className="text-slate-500">{"}"}</span>
                 </motion.div>
@@ -443,6 +488,15 @@ export const ContactForm: React.FC = () => {
                       receipt dispatched to{" "}
                       <span className="text-slate-300">
                         {submittedData.email}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-purple-400">⏱</span>
+                    <span>
+                      sent at{" "}
+                      <span className="text-slate-300">
+                        {submittedData.sentAt}
                       </span>
                     </span>
                   </div>
