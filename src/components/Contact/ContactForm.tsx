@@ -352,7 +352,6 @@ export const ContactForm: React.FC = () => {
                   className="font-body text-xl font-bold tracking-tight text-slate-50"
                 >
                   Got your message{" "}
-                  <svg
                     width="18"
                     height="18"
                     viewBox="0 0 24 24"
