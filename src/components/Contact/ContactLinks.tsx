@@ -63,12 +63,12 @@ export const ContactLinks: React.FC = () => (
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}
           aria-label={label}
-          className="group inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-slate-900/60 px-4 py-2 font-body text-sm font-medium text-slate-200 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-zyk-accent/60 hover:bg-slate-900 hover:text-white hover:shadow-md"
+          className="group inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-slate-900/60 px-2 py-2 font-body text-sm font-medium text-slate-200 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-zyk-accent/60 hover:bg-slate-900 hover:text-white hover:shadow-md"
         >
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-zyk-accent transition-colors group-hover:bg-zyk-accent/20 group-hover:text-zyk-secondary">
             <Icon size={16} stroke={2} />
           </span>
-          <span className="tracking-wide">{display}</span>
+          <span className="tracking-wide pr-2">{display}</span>
         </a>
       </li>
     ))}

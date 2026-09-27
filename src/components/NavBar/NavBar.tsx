@@ -141,7 +141,7 @@ export const NavBar: React.FC = () => {
           <motion.span
             animate={
               mobileOpen
-                ? { rotate: 45, y: 6, backgroundColor: "#38bdf8" }
+                ? { rotate: 45, y: 8, backgroundColor: "#38bdf8" }
                 : { rotate: 0, y: 0, backgroundColor: "#e2e8f0" }
             }
             transition={{ duration: 0.25 }}
@@ -159,7 +159,7 @@ export const NavBar: React.FC = () => {
           <motion.span
             animate={
               mobileOpen
-                ? { rotate: -45, y: -6, backgroundColor: "#38bdf8" }
+                ? { rotate: -45, y: -8, backgroundColor: "#38bdf8" }
                 : { rotate: 0, y: 0, backgroundColor: "#e2e8f0" }
             }
             transition={{ duration: 0.25 }}

@@ -119,17 +119,18 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
       // layout box; with overflow-hidden still on, that offset content gets
       // clipped instead of shown. ZykCoding's own reveal clipping is handled
       // locally by its own wrapper div below, so this doesn't affect it.
-      className="relative flex flex-col items-center justify-start pt-24 md:pt-16 bg-zyk-bg-start overflow-hidden"
-      style={{ scrollMarginTop: "var(--nav-height, 5rem)" }}
+      className="relative flex flex-col items-center justify-start pt-24 md:pt-16 overflow-hidden"
+      style={{
+        backgroundColor: "#020617",
+        backgroundImage: [
+          "radial-gradient(circle at 10% 0%, rgba(99,102,241,0.20), transparent 42%)",
+          "radial-gradient(circle at 90% 100%, rgba(34,211,238,0.16), transparent 48%)",
+          "repeating-linear-gradient(0deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
+          "repeating-linear-gradient(90deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
+        ].join(", "),
+        scrollMarginTop: "var(--nav-height, 5rem)",
+      }}
     >
-      {/* Decorative background pattern — sits behind all hero content. */}
-      <img
-        src="/assets/ui/hero-pattern.png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 -top-14 z-0 h-full w-full object-cover opacity-10 scale-80"
-      />
-
       <div className="relative z-10 flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
         {/* H1 entrance: invisible while loading, pops in once revealed, holds,
             then slides up to its resting position. */}
@@ -184,9 +185,9 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
             <PillButton variant="secondary" href="#contact">
               Get in Touch
             </PillButton>
-            <PillButton variant="secondary" href="/assets/resume.pdf" download>
+            {/* <PillButton variant="secondary" href="/assets/resume.pdf" download>
               Download CV ↓
-            </PillButton>
+            </PillButton> */}
           </motion.div>
         </div>
 
@@ -197,7 +198,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
             The inner motion.div is what actually moves (translateY + opacity),
             clipped by this box's `overflow-hidden`, so it reads as rising up
             into view against a backdrop that's already fully in place. */}
-        <div className="relative z-0 mx-auto w-full max-w-270 mr-10 mt-10 overflow-hidden ">
+        <div className="relative z-0 mx-auto w-full max-w-270 mr-10 overflow-hidden ">
           <motion.div
             initial={reduce ? { opacity: 0 } : { y: "100%", opacity: 0 }}
             animate={
