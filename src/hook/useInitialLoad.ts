@@ -1,6 +1,4 @@
 import React from "react";
-import { outsideSceneItems } from "../components/OutsideScene/OutsideScene";
-import { roomSceneItems } from "../components/RoomScene/RoomScene";
 import { zykCodingItems } from "../components/ZykCoding/ZykCoding";
 import type { SceneLayer } from "../engine";
 
@@ -13,10 +11,9 @@ import type { SceneLayer } from "../engine";
  * so going back to an already-visited page never replays the loading screen —
  * only a real page reload (fresh session) does.
  *
- * Future per-page assets that aren't needed at boot (e.g. a Projects page's
- * case-study media) should NOT be added here; load them lazily with their own
- * lightweight progress UI inside that page instead, so the initial gate stays
- * as fast as possible.
+ * Only ZykCoding (the hero scene) assets are preloaded here. OutsideScene and
+ * RoomScene assets are deferred — they load naturally when the minigame modal
+ * mounts, keeping the initial boot gate as fast as possible.
  */
 
 /** Collects every still-image URL a scene shows at boot: scene images plus
@@ -34,18 +31,16 @@ function collectImageUrls(items: SceneLayer[]): string[] {
   return urls;
 }
 
-/** Everything that must be ready before the first reveal. */
+/** Everything that must be ready before the first reveal — hero scene only. */
 const PRELOAD_IMAGES = Array.from(
   new Set([
-    ...collectImageUrls(outsideSceneItems),
-    ...collectImageUrls(roomSceneItems),
     ...collectImageUrls(zykCodingItems),
   ]),
 );
 
 // The loading screen is shown for at least this long so the progress bar is
 // actually visible even when every asset is cached and loads in milliseconds.
-const MIN_LOAD_MS = 4000;
+const MIN_LOAD_MS = 2500;
 // Absolute safety cap: if an asset stalls on a slow network, finish anyway so
 // the app can never hang on the loading screen forever.
 const MAX_LOAD_MS = 15000;
