@@ -33,7 +33,8 @@ export const roomSceneItems: SceneLayer[] = [
     top: 23,
     width: 10,
     height: 12,
-    behaviors: ["clickGlow"],
+    behaviors: ["clickGlow", "tooltip", "huntItem"],
+    tooltip: "A frisbee!",
   },
   // Frisbee
   {
