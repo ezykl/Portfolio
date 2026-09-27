@@ -352,20 +352,6 @@ export const ContactForm: React.FC = () => {
                   className="font-body text-xl font-bold tracking-tight text-slate-50"
                 >
                   Got your message{" "}
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    className="mb-0.5 inline-block"
-                  >
-                    <path
-                      d="M20 6L9 17l-5-5"
-                      stroke="#4ade80"
-                      strokeWidth="2.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
                 </motion.h3>
                 <motion.p
                   initial={{ opacity: 0 }}
