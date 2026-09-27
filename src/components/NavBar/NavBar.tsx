@@ -112,9 +112,7 @@ export const NavBar: React.FC = () => {
       transition={{ delay: 2, duration: 0.5, ease: "easeOut" }}
       className="fixed inset-x-0 top-0 z-100 transition-colors duration-300"
       style={{
-        backgroundColor: atTop
-          ? "rgba(37, 46, 61, 0)"
-          : "rgba(37, 46, 61, 0.95)",
+        backgroundColor: atTop ? "rgba(37, 46, 61, 0)" : "rgba(37, 46, 61, 1)",
         boxShadow: atTop
           ? "0 4px 20px rgba(0,0,0,0)"
           : "0 4px 20px rgba(0,0,0,0.3)",
@@ -149,9 +147,7 @@ export const NavBar: React.FC = () => {
           />
           <motion.span
             animate={
-              mobileOpen
-                ? { opacity: 0, scaleX: 0 }
-                : { opacity: 1, scaleX: 1 }
+              mobileOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }
             }
             transition={{ duration: 0.2 }}
             className="block h-0.5 w-6 rounded-full bg-zyk-heading"
@@ -216,7 +212,11 @@ export const NavBar: React.FC = () => {
               transition={{ duration: 0.25 }}
               className="mb-2"
             >
-              <img src={logoSrc} alt="Zyk" className="h-12 w-auto object-contain" />
+              <img
+                src={logoSrc}
+                alt="Zyk"
+                className="h-12 w-auto object-contain"
+              />
             </motion.div>
             {LINKS.map((link, i) => {
               const isActive = active === link.href.slice(1);
@@ -251,4 +251,3 @@ export const NavBar: React.FC = () => {
     </motion.nav>
   );
 };
-

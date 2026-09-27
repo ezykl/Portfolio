@@ -7,9 +7,70 @@ import {
   OPEN_MINIGAME_EVENT,
   SceneGlowProvider,
   type LayerClickDetail,
+  type SceneLayer,
 } from "../../engine";
-import { OutsideScene } from "../OutsideScene/OutsideScene";
-import { RoomScene } from "../RoomScene/RoomScene";
+import { OutsideScene, outsideSceneItems } from "../OutsideScene/OutsideScene";
+import { RoomScene, roomSceneItems } from "../RoomScene/RoomScene";
+
+/* ── Asset preloader for minigame scenes ─────────────────────────────────── */
+
+/** Collects every image URL from scene layers (images + video posters). */
+function collectImageUrls(items: SceneLayer[]): string[] {
+  const urls: string[] = [];
+  for (const item of items) {
+    if (item.type === "image") urls.push(item.src);
+    else if (item.type === "video") {
+      const poster = item.videoAttrs?.poster;
+      if (poster) urls.push(poster);
+    }
+  }
+  return urls;
+}
+
+const MINIGAME_IMAGES = Array.from(
+  new Set([
+    ...collectImageUrls(outsideSceneItems),
+    ...collectImageUrls(roomSceneItems),
+    "/assets/ui/16x9_border.png",
+  ]),
+);
+
+/** Preloads all minigame scene images once, returns true when ready. */
+function useMinigameAssets(shouldLoad: boolean): boolean {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (!shouldLoad || ready) return;
+
+    let cancelled = false;
+    const total = MINIGAME_IMAGES.length;
+    let loaded = 0;
+
+    const check = () => {
+      loaded += 1;
+      if (!cancelled && loaded >= total) setReady(true);
+    };
+
+    for (const url of MINIGAME_IMAGES) {
+      const img = new Image();
+      img.onload = check;
+      img.onerror = check; // don't hang on a broken URL
+      img.src = url;
+    }
+
+    // Safety cap: never block the minigame forever on a slow connection.
+    const timer = window.setTimeout(() => {
+      if (!cancelled) setReady(true);
+    }, 10_000);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [shouldLoad, ready]);
+
+  return ready;
+}
 
 /**
  * The AllScene "find the object" mini-game (opened by the notebook's
@@ -53,6 +114,10 @@ export const MinigameHost: React.FC = () => {
   // Mount the modal (and its scenes) lazily on first open, then keep it mounted.
   const [everOpened, setEverOpened] = useState(false);
   const [open, setOpen] = useState(false);
+
+  // Preload all scene images before showing the diorama so assets don't
+  // visibly pop in one by one. Starts loading on first open.
+  const assetsReady = useMinigameAssets(everOpened);
   const [target, setTarget] = useState<Findable | null>(null);
   const [won, setWon] = useState(false);
   const [hint, setHint] = useState<string | null>(null);
@@ -155,6 +220,30 @@ export const MinigameHost: React.FC = () => {
 
         {/* Diorama (Outside + Room in the wooden frame) */}
         <div className="relative mx-auto w-full" style={{ aspectRatio: "16 / 9" }}>
+          {/* Loading overlay — shown until all scene images are ready */}
+          <AnimatePresence>
+            {!assetsReady && (
+              <motion.div
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35 }}
+                className="absolute inset-0 z-[80] flex flex-col items-center justify-center rounded-[20px] bg-zyk-bg-end"
+              >
+                {/* Spinner */}
+                <div
+                  className="mb-4 h-10 w-10 rounded-full border-[3px] border-zyk-accent/20"
+                  style={{
+                    borderTopColor: "#6366f1",
+                    animation: "spin 0.8s linear infinite",
+                  }}
+                />
+                <p className="font-display text-sm tracking-wider text-zyk-heading/60">
+                  Loading scenes…
+                </p>
+                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+              </motion.div>
+            )}
+          </AnimatePresence>
           <div
             style={{
               position: "absolute",
