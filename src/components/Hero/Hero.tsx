@@ -42,23 +42,21 @@ const textVariants = {
 };
 
 const topBlobVariants = {
-  hidden: { x: "72vw", y: "-20px", opacity: 0 },
-  pop: { x: "72vw", y: "-20px", opacity: 0.18 },
+  hidden: { x: "90vw", opacity: 0 },
+  pop: { x: "90vw", opacity: 1 },
   settled: {
-    x: "-4vw",
-    y: "-30px",
-    opacity: 0.22,
+    x: "10vw",
+    opacity: 1,
     transition: { duration: 1.4, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
 const bottomBlobVariants = {
-  hidden: { x: "-72vw", y: "20px", opacity: 0 },
-  pop: { x: "-72vw", y: "20px", opacity: 0.16 },
+  hidden: { x: "10vw", opacity: 0 },
+  pop: { x: "10vw", opacity: 1 },
   settled: {
-    x: "4vw",
-    y: "20px",
-    opacity: 0.18,
+    x: "90vw",
+    opacity: 1,
     transition: { duration: 1.4, ease: [0.16, 1, 0.3, 1] },
   },
 };
@@ -158,27 +156,45 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
           Reversed start on reveal (Top at Right, Bottom at Left matching loading screen),
           animating smoothly into final corner placements (Top-Left & Bottom-Right)
           as 'Hi, I'm Zyk' settles. */}
+      {/* Background Animated Gradient Blobs:
+          Replicates the exact size, radius, and color profile of the LoadingScreen.
+          Starts at reversed positions on reveal (Top at 90vw, Bottom at 10vw),
+          animating smoothly into final placements (Top at 10vw, Bottom at 90vw)
+          as 'Hi, I'm Zyk' settles. */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <motion.div
-          variants={topBlobVariants}
-          initial="hidden"
-          animate={reduce ? "settled" : phase}
-          className="absolute -top-16 left-0 h-[min(480px,50vw)] w-[min(480px,50vw)] rounded-full blur-[85px]"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(99,102,241,0.24) 0%, rgba(139,92,246,0.12) 50%, transparent 72%)",
-          }}
-        />
-        <motion.div
-          variants={bottomBlobVariants}
-          initial="hidden"
-          animate={reduce ? "settled" : phase}
-          className="absolute -bottom-16 right-0 h-[min(500px,52vw)] w-[min(500px,52vw)] rounded-full blur-[85px]"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(34,211,238,0.20) 0%, rgba(56,189,248,0.10) 50%, transparent 72%)",
-          }}
-        />
+        {/* Top Blob (Indigo/Violet) */}
+        <div className="absolute top-0 left-0 pointer-events-none">
+          <motion.div
+            variants={topBlobVariants}
+            initial="hidden"
+            animate={reduce ? "settled" : phase}
+          >
+            <div
+              className="-translate-x-1/2 -translate-y-1/2 h-[84vw] w-[84vw] rounded-full pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(circle, rgba(99,102,241,0.20) 0%, transparent 100%)",
+              }}
+            />
+          </motion.div>
+        </div>
+
+        {/* Bottom Blob (Cyan/Teal) */}
+        <div className="absolute bottom-0 left-0 pointer-events-none">
+          <motion.div
+            variants={bottomBlobVariants}
+            initial="hidden"
+            animate={reduce ? "settled" : phase}
+          >
+            <div
+              className="-translate-x-1/2 translate-y-1/2 h-[96vw] w-[96vw] rounded-full pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(circle, rgba(34,211,238,0.16) 0%, transparent 100%)",
+              }}
+            />
+          </motion.div>
+        </div>
       </div>
 
       <div className="relative z-10 flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
