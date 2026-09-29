@@ -62,8 +62,8 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
       style={{
         backgroundColor: "#020617",
         backgroundImage: [
-          "radial-gradient(circle at 10% 0%, rgba(99,102,241,0.20), transparent 42%)",
-          "radial-gradient(circle at 90% 100%, rgba(34,211,238,0.16), transparent 48%)",
+          "radial-gradient(circle at 90% 0%, rgba(99,102,241,0.20), transparent 42%)",
+          "radial-gradient(circle at 10% 100%, rgba(34,211,238,0.16), transparent 48%)",
           "repeating-linear-gradient(0deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
           "repeating-linear-gradient(90deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
         ].join(", "),
