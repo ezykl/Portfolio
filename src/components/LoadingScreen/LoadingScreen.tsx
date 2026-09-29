@@ -63,17 +63,37 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
-      className="fixed inset-0 z-9999 flex items-center justify-center pointer-events-none"
-      style={{
-        backgroundColor: "#020617",
-        backgroundImage: [
-          "radial-gradient(circle at 90% 0%, rgba(99,102,241,0.20), transparent 42%)",
-          "radial-gradient(circle at 10% 100%, rgba(34,211,238,0.16), transparent 48%)",
-          "repeating-linear-gradient(0deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
-          "repeating-linear-gradient(90deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
-        ].join(", "),
-      }}
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-[#020617] pointer-events-none"
     >
+      {/* Background blobs with organic breathing / heartbeat pulse */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        animate={{ opacity: [0.7, 1, 0.7] }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        style={{
+          backgroundImage: [
+            "radial-gradient(circle at 90% 0%, rgba(99,102,241,0.20), transparent 42%)",
+            "radial-gradient(circle at 10% 100%, rgba(34,211,238,0.16), transparent 48%)",
+          ].join(", "),
+        }}
+      />
+
+      {/* Engineering grid overlay */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage: [
+            "repeating-linear-gradient(0deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
+            "repeating-linear-gradient(90deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
+          ].join(", "),
+        }}
+      />
       <style>{keyframes}</style>
 
       {/* Terminal window card */}
