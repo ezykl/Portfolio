@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 /**
  * Terminal-window-styled loading screen. Shares the site's design language
@@ -58,7 +59,11 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
   }, []);
 
   return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center"
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6, ease: "easeInOut" }}
+      className="fixed inset-0 z-9999 flex items-center justify-center pointer-events-none"
       style={{
         backgroundColor: "#020617",
         backgroundImage: [
@@ -177,7 +182,7 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
           </p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

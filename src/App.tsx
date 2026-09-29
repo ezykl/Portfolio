@@ -1,4 +1,5 @@
 import React from "react";
+import { AnimatePresence } from "framer-motion";
 import { LoadingScreen } from "./components/LoadingScreen/LoadingScreen";
 import { HomePage } from "./pages/HomePage";
 import { NavBar } from "./components/NavBar/NavBar";
@@ -25,7 +26,9 @@ function App() {
       <HomePage revealed={!isLoading} />
 
       {/* Cozy loading overlay sits on top (fixed, z-index 9999) until ready. */}
-      {isLoading && <LoadingScreen progress={progress} />}
+      <AnimatePresence>
+        {isLoading && <LoadingScreen progress={progress} />}
+      </AnimatePresence>
     </>
   );
 }

@@ -47,7 +47,7 @@ const textVariants = {
 };
 
 const topBlobVariants = {
-  hidden: { x: "90vw", opacity: 0 },
+  hidden: { x: "90vw", opacity: 1 },
   pop: { x: "90vw", opacity: 1 },
   settled: {
     x: "10vw",
@@ -57,7 +57,7 @@ const topBlobVariants = {
 };
 
 const bottomBlobVariants = {
-  hidden: { x: "10vw", opacity: 0 },
+  hidden: { x: "10vw", opacity: 1 },
   pop: { x: "10vw", opacity: 1 },
   settled: {
     x: "90vw",
@@ -188,15 +188,15 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
           </motion.div>
         </div>
 
-        {/* Bottom Blob (Cyan/Teal) */}
-        <div className="absolute bottom-0 left-0 pointer-events-none">
+        {/* Bottom Blob (Cyan/Teal) - anchored at screen bottom fold (100vh) matching LoadingScreen */}
+        <div className="absolute top-[100vh] left-0 pointer-events-none">
           <motion.div
             variants={bottomBlobVariants}
             initial="hidden"
             animate={reduce ? "settled" : phase}
           >
             <div
-              className="-translate-x-1/2 translate-y-1/2 h-[120vw] w-[120vw] max-h-[1500px] max-w-[1500px] blur-[40px] pointer-events-none"
+              className="-translate-x-1/2 -translate-y-1/2 h-[120vw] w-[120vw] max-h-[1500px] max-w-[1500px] blur-[40px] pointer-events-none"
               style={{
                 background:
                   "radial-gradient(circle at center, rgba(34,211,238,0.16) 0%, rgba(34,211,238,0.11) 20%, rgba(34,211,238,0.05) 38%, rgba(34,211,238,0.015) 52%, rgba(34,211,238,0.004) 62%, transparent 70%)",
