@@ -1,5 +1,5 @@
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ZykCoding } from "../ZykCoding/ZykCoding";
 import { PillButton } from "../ui/PillButton";
 import { PopupHost } from "../Popup/PopupHost";
@@ -38,6 +38,28 @@ const textVariants = {
     scale: 1,
     y: 0,
     transition: { duration: 1, ease: "easeOut" },
+  },
+};
+
+const topBlobVariants = {
+  hidden: { x: "25vw", y: "-8vh", opacity: 0 },
+  pop: { x: "18vw", y: "-6vh", opacity: 0.15 },
+  settled: {
+    x: "-12vw",
+    y: "-2vh",
+    opacity: 0.28,
+    transition: { duration: 1.2, ease: "easeOut" },
+  },
+};
+
+const bottomBlobVariants = {
+  hidden: { x: "-25vw", y: "15vh", opacity: 0 },
+  pop: { x: "-18vw", y: "12vh", opacity: 0.12 },
+  settled: {
+    x: "15vw",
+    y: "8vh",
+    opacity: 0.24,
+    transition: { duration: 1.2, ease: "easeOut" },
   },
 };
 
@@ -80,10 +102,17 @@ const buttonVariants = {
  * popup/message on ZykCoding.
  */
 export const Hero: React.FC<HeroProps> = ({ revealed }) => {
+  const sectionRef = React.useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const [phase, setPhase] = React.useState<TextPhase>("hidden");
   const [detailsVisible, setDetailsVisible] = React.useState(false);
   const [typewriterActive, setTypewriterActive] = React.useState(false);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const textParallaxY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 70]);
 
   React.useEffect(() => {
     if (!revealed) {
@@ -113,83 +142,106 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
 
   return (
     <section
+      ref={sectionRef}
       id="home"
-      // NOTE: `overflow-hidden` removed here — the text block's `hidden`/`pop`
-      // states sit at `y: 24vh`, which is past the section's un-transformed
-      // layout box; with overflow-hidden still on, that offset content gets
-      // clipped instead of shown. ZykCoding's own reveal clipping is handled
-      // locally by its own wrapper div below, so this doesn't affect it.
       className="relative flex flex-col items-center justify-start pt-24 md:pt-16 overflow-hidden"
       style={{
         backgroundColor: "#020617",
         backgroundImage: [
-          "radial-gradient(circle at 10% 0%, rgba(99,102,241,0.20), transparent 42%)",
-          "radial-gradient(circle at 90% 100%, rgba(34,211,238,0.16), transparent 48%)",
           "repeating-linear-gradient(0deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
           "repeating-linear-gradient(90deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
         ].join(", "),
         scrollMarginTop: "var(--nav-height, 5rem)",
       }}
     >
-      <div className="relative z-10 flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
-        {/* H1 entrance: invisible while loading, pops in once revealed, holds,
-            then slides up to its resting position. */}
+      {/* Background Animated Gradient Blobs:
+          Top blob translates Right → Left when 'Hi, I'm Zyk' animates to top.
+          Bottom blob translates Left → Right synchronously in reverse. */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <motion.div
-          variants={textVariants}
+          variants={topBlobVariants}
           initial="hidden"
-          animate={phase}
-          onAnimationComplete={(definition) => {
-            if (definition === "settled") {
-              setDetailsVisible(true);
-              setTypewriterActive(true);
-            }
+          animate={reduce ? "settled" : phase}
+          className="absolute -top-24 right-1/4 h-[550px] w-[550px] rounded-full blur-[100px]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(99,102,241,0.32) 0%, rgba(139,92,246,0.18) 45%, transparent 70%)",
           }}
-          className="flex w-full flex-col items-center text-center mt-4 -mb-6 sm:mt-8 sm:-mb-10 md:mt-10 md:-mb-12"
-        >
-          <h1
-            className="font-display leading-tight text-zyk-heading font-bold"
-            style={{ fontSize: "clamp(3rem, 2rem + 4vw, 6rem)" }}
-          >
-            Hi, I&apos;m Zyk.
-          </h1>
-        </motion.div>
+        />
+        <motion.div
+          variants={bottomBlobVariants}
+          initial="hidden"
+          animate={reduce ? "settled" : phase}
+          className="absolute bottom-12 left-1/4 h-[600px] w-[600px] rounded-full blur-[110px]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(34,211,238,0.26) 0%, rgba(56,189,248,0.14) 45%, transparent 70%)",
+          }}
+        />
+      </div>
 
-        {/* After the H1 reaches its fixed position, pop in the role first and
-            the buttons just after it. */}
-        <div className="flex w-full flex-col items-center text-center mt-6 sm:mt-10 md:mt-12">
-          <motion.p
-            variants={detailItemVariants}
-            initial="hidden"
-            animate={detailsVisible ? "visible" : "hidden"}
-            className="mt-3 font-medium text-zyk-accent"
-            style={{ fontSize: "clamp(1.125rem, 1rem + 0.6vw, 1.5rem)" }}
-          >
-            {reduce ? (
-              "Full-Stack Developer"
-            ) : (
-              <>
-                {role}
-                <span className="ml-0.5 inline-block h-[1em] w-0.5 translate-y-0.5 bg-zyk-accent animate-pulse" />
-              </>
-            )}
-          </motion.p>
+      <div className="relative z-10 flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
+        {/* Parallax wrapper giving text a subtle organic scroll delay relative to ZykCoding */}
+        <motion.div
+          style={{ y: textParallaxY }}
+          className="flex w-full flex-col items-center text-center"
+        >
+          {/* H1 entrance: invisible while loading, pops in once revealed, holds,
+              then slides up to its resting position. */}
           <motion.div
-            variants={buttonVariants}
+            variants={textVariants}
             initial="hidden"
-            animate={detailsVisible ? "visible" : "hidden"}
-            className="mt-6 flex flex-wrap items-center justify-center gap-4 md:justify-start"
+            animate={phase}
+            onAnimationComplete={(definition) => {
+              if (definition === "settled") {
+                setDetailsVisible(true);
+                setTypewriterActive(true);
+              }
+            }}
+            className="flex w-full flex-col items-center text-center mt-4 -mb-6 sm:mt-8 sm:-mb-10 md:mt-10 md:-mb-12"
           >
-            <PillButton variant="primary" href="#projects">
-              View My Work
-            </PillButton>
-            <PillButton variant="secondary" href="#contact">
-              Get in Touch
-            </PillButton>
-            {/* <PillButton variant="secondary" href="/assets/resume.pdf" download>
-              Download CV ↓
-            </PillButton> */}
+            <h1
+              className="font-display leading-tight text-zyk-heading font-bold"
+              style={{ fontSize: "clamp(3rem, 2rem + 4vw, 6rem)" }}
+            >
+              Hi, I&apos;m Zyk.
+            </h1>
           </motion.div>
-        </div>
+
+          {/* After the H1 reaches its fixed position, pop in the role first and
+              the buttons just after it. */}
+          <div className="flex w-full flex-col items-center text-center mt-6 sm:mt-10 md:mt-12">
+            <motion.p
+              variants={detailItemVariants}
+              initial="hidden"
+              animate={detailsVisible ? "visible" : "hidden"}
+              className="mt-3 font-medium text-zyk-accent"
+              style={{ fontSize: "clamp(1.125rem, 1rem + 0.6vw, 1.5rem)" }}
+            >
+              {reduce ? (
+                "Full-Stack Developer"
+              ) : (
+                <>
+                  {role}
+                  <span className="ml-0.5 inline-block h-[1em] w-0.5 translate-y-0.5 bg-zyk-accent animate-pulse" />
+                </>
+              )}
+            </motion.p>
+            <motion.div
+              variants={buttonVariants}
+              initial="hidden"
+              animate={detailsVisible ? "visible" : "hidden"}
+              className="mt-6 flex flex-wrap items-center justify-center gap-4"
+            >
+              <PillButton variant="primary" href="#projects">
+                View My Work
+              </PillButton>
+              <PillButton variant="secondary" href="#contact">
+                Get in Touch
+              </PillButton>
+            </motion.div>
+          </div>
+        </motion.div>
 
         {/* ZykCoding workspace. This outer box is a plain, unanimated element
             sized by ZykCoding's own natural layout height — its rendered size
