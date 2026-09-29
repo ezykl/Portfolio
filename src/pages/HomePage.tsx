@@ -19,7 +19,15 @@ interface HomePageProps {
  * without being entangled with its neighbors.
  */
 export const HomePage: React.FC<HomePageProps> = ({ revealed }) => (
-  <main className="bg-linear-to-b from-zyk-bg-start to-zyk-bg-end">
+  <main
+    className="relative min-h-screen bg-[#020617] text-zyk-heading selection:bg-zyk-primary/30 selection:text-white"
+    style={{
+      backgroundImage: [
+        "repeating-linear-gradient(0deg, rgba(148,163,184,0.03) 0px, rgba(148,163,184,0.03) 1px, transparent 1px, transparent 24px)",
+        "repeating-linear-gradient(90deg, rgba(148,163,184,0.03) 0px, rgba(148,163,184,0.03) 1px, transparent 1px, transparent 24px)",
+      ].join(", "),
+    }}
+  >
     <Hero revealed={revealed} />
     <ProjectsSection />
     <GallerySection />

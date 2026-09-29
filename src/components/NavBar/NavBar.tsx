@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import {
   motion,
   AnimatePresence,
@@ -16,8 +17,8 @@ interface NavLink {
 const LINKS: NavLink[] = [
   { label: "Home", href: "#home" },
   { label: "Work", href: "#projects" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "About", href: "#journey" },
+  { label: "Creative Lab", href: "#gallery" },
+  { label: "Journey", href: "#journey" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -29,11 +30,37 @@ export const NavBar: React.FC = () => {
   const [atTop, setAtTop] = React.useState(true);
   const [active, setActive] = React.useState<string>("home");
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false);
   const navRef = React.useRef<HTMLElement | null>(null);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setAtTop(latest < TOP_THRESHOLD);
   });
+
+  // Close mobile drawer on desktop breakpoint resize
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && mobileOpen) {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [mobileOpen]);
+
+  // Close mobile drawer on Escape key
+  React.useEffect(() => {
+    if (!mobileOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobileOpen]);
 
   // Scroll-spy: highlight the link whose section currently crosses the middle
   // of the viewport. The -50%/-50% rootMargin collapses the root to a center
@@ -86,168 +113,189 @@ export const NavBar: React.FC = () => {
 
   const handleClick =
     (href: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      // Unlock mobile body overflow immediately
+      document.body.style.overflow = "";
+      setMobileOpen(false);
+
       const target = document.querySelector(href);
       if (!target) return;
-      e.preventDefault();
-      // Use the same measured offset as desktop sticky sections. Calculating
-      // the destination directly avoids scrollIntoView's anchor positioning
-      // and the sticky constraint both applying an offset during the same
-      // smooth scroll, which makes the pinned project column visibly jump.
-      const navHeight = navRef.current?.getBoundingClientRect().height ?? 0;
-      const top = Math.max(
-        0,
-        target.getBoundingClientRect().top + window.scrollY - navHeight,
-      );
-      window.scrollTo({
-        top,
-        behavior: reduce ? "auto" : "smooth",
-      });
+
+      // Small delay on mobile ensures the drawer unmounts and viewport unfreezes before scrolling
+      setTimeout(() => {
+        const navHeight = navRef.current?.getBoundingClientRect().height ?? 64;
+        const top = Math.max(
+          0,
+          target.getBoundingClientRect().top + window.scrollY - navHeight,
+        );
+        window.scrollTo({
+          top,
+          behavior: reduce ? "auto" : "smooth",
+        });
+      }, 50);
     };
 
   return (
-    <motion.nav
-      ref={navRef}
-      initial={reduce ? false : { y: -24, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 2, duration: 0.5, ease: "easeOut" }}
-      className="fixed inset-x-0 top-0 z-100 transition-colors duration-300"
-      style={{
-        backgroundColor: atTop ? "rgba(37, 46, 61, 0)" : "rgba(37, 46, 61, 1)",
-        boxShadow: atTop
-          ? "0 4px 20px rgba(0,0,0,0)"
-          : "0 4px 20px rgba(0,0,0,0.3)",
-      }}
-    >
-      <div className="mx-auto flex max-w-350 items-center justify-between px-6 py-4 md:px-10">
-        <a
-          href="#home"
-          onClick={handleClick("#home")}
-          aria-label="Back to top"
-          className="flex items-center justify-center transition-transform hover:scale-105"
-        >
-          <img src={logoSrc} alt="Zyk" className="h-9 w-auto object-contain" />
-        </a>
-
-        {/* Hamburger toggle — visible only on mobile */}
-        <button
-          type="button"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileOpen}
-          onClick={() => setMobileOpen((o) => !o)}
-          className="relative z-50 flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
-        >
-          <motion.span
-            animate={
-              mobileOpen
-                ? { rotate: 45, y: 8, backgroundColor: "#38bdf8" }
-                : { rotate: 0, y: 0, backgroundColor: "#e2e8f0" }
-            }
-            transition={{ duration: 0.25 }}
-            className="block h-0.5 w-6 rounded-full bg-zyk-heading"
-          />
-          <motion.span
-            animate={
-              mobileOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }
-            }
-            transition={{ duration: 0.2 }}
-            className="block h-0.5 w-6 rounded-full bg-zyk-heading"
-          />
-          <motion.span
-            animate={
-              mobileOpen
-                ? { rotate: -45, y: -8, backgroundColor: "#38bdf8" }
-                : { rotate: 0, y: 0, backgroundColor: "#e2e8f0" }
-            }
-            transition={{ duration: 0.25 }}
-            className="block h-0.5 w-6 rounded-full bg-zyk-heading"
-          />
-        </button>
-
-        {/* Desktop nav links — hidden on mobile */}
-        <ul className="hidden items-center gap-5 font-display text-sm tracking-wide text-zyk-heading md:flex md:gap-8 md:text-base">
-          {LINKS.map((link) => {
-            const isActive = active === link.href.slice(1);
-            return (
-              <li key={link.href} className="relative">
-                <a
-                  href={link.href}
-                  onClick={handleClick(link.href)}
-                  aria-current={isActive ? "page" : undefined}
-                  className={`uppercase transition-colors ${
-                    isActive ? "text-zyk-accent" : "hover:text-zyk-accent"
-                  }`}
-                >
-                  {link.label}
-                </a>
-                {isActive && (
-                  <motion.span
-                    layoutId="nav-active-underline"
-                    className="absolute -bottom-1.5 left-0 right-0 h-0.5 rounded-full bg-zyk-accent"
-                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                  />
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-
-      {/* Mobile fullscreen drawer */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={reduce ? { opacity: 0 } : { opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, x: "100%" }}
-            transition={
-              reduce
-                ? { duration: 0.15 }
-                : { type: "spring", stiffness: 300, damping: 30 }
-            }
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-zyk-bg-end/[0.98] backdrop-blur-xl md:hidden"
+    <>
+      <motion.nav
+        ref={navRef}
+        initial={reduce ? false : { y: -24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.8, duration: 0.4, ease: "easeOut" }}
+        className="fixed inset-x-0 top-0 z-100 transition-colors duration-300"
+        style={{
+          backgroundColor:
+            atTop && !mobileOpen ? "rgba(2, 6, 23, 0)" : "rgba(2, 6, 23, 0.95)",
+          backdropFilter: atTop && !mobileOpen ? "none" : "blur(12px)",
+          WebkitBackdropFilter: atTop && !mobileOpen ? "none" : "blur(12px)",
+          borderBottom:
+            atTop && !mobileOpen
+              ? "1px solid rgba(255, 255, 255, 0)"
+              : "1px solid rgba(255, 255, 255, 0.08)",
+          boxShadow:
+            atTop && !mobileOpen
+              ? "none"
+              : "0 10px 30px -10px rgba(0, 0, 0, 0.5)",
+        }}
+      >
+        <div className="mx-auto flex max-w-350 items-center justify-between px-6 py-4 md:px-10">
+          <a
+            href="#home"
+            onClick={handleClick("#home")}
+            aria-label="Back to top"
+            className="flex items-center justify-center transition-transform hover:scale-105"
           >
-            <motion.div
-              initial={reduce ? false : { opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.25 }}
-              className="mb-2"
-            >
-              <img
-                src={logoSrc}
-                alt="Zyk"
-                className="h-12 w-auto object-contain"
-              />
-            </motion.div>
-            {LINKS.map((link, i) => {
+            <img src={logoSrc} alt="Zyk" className="h-9 w-auto object-contain" />
+          </a>
+
+          {/* Desktop Nav Links — clean, elegant typography */}
+          <ul className="hidden items-center gap-6 font-display text-sm tracking-wide md:flex md:gap-8 md:text-base">
+            {LINKS.map((link) => {
               const isActive = active === link.href.slice(1);
               return (
-                <motion.a
-                  key={link.href}
-                  href={link.href}
-                  initial={reduce ? false : { opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: reduce ? 0 : 0.05 + i * 0.06,
-                    duration: 0.3,
-                    ease: "easeOut",
-                  }}
-                  onClick={(e) => {
-                    handleClick(link.href)(e);
-                    setMobileOpen(false);
-                  }}
-                  className={`font-display text-2xl uppercase tracking-wider transition-colors ${
-                    isActive
-                      ? "text-zyk-accent"
-                      : "text-zyk-heading hover:text-zyk-accent"
-                  }`}
-                >
-                  {link.label}
-                </motion.a>
+                <li key={link.href} className="relative py-1">
+                  <a
+                    href={link.href}
+                    onClick={handleClick(link.href)}
+                    aria-current={isActive ? "page" : undefined}
+                    className={`uppercase transition-colors duration-200 ${
+                      isActive
+                        ? "text-zyk-accent font-semibold"
+                        : "text-slate-300 hover:text-white"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active-underline"
+                      className="absolute -bottom-0.5 left-0 right-0 h-0.5 rounded-full bg-zyk-accent shadow-[0_0_8px_rgba(56,189,248,0.6)]"
+                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                    />
+                  )}
+                </li>
               );
             })}
-          </motion.div>
+          </ul>
+
+          {/* Hamburger toggle — visible only on mobile with generous touch target.
+              The button stays rock-solid in place while its lines cleanly morph into an 'X'. */}
+          <button
+            type="button"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((o) => !o)}
+            className="relative z-50 flex h-11 w-11 flex-col items-center justify-center gap-1.5 md:hidden"
+          >
+            <motion.span
+              animate={
+                mobileOpen
+                  ? { rotate: 45, y: 8, backgroundColor: "#38bdf8" }
+                  : { rotate: 0, y: 0, backgroundColor: "#e2e8f0" }
+              }
+              transition={{ duration: 0.25 }}
+              className="block h-0.5 w-6 rounded-full bg-zyk-heading"
+            />
+            <motion.span
+              animate={
+                mobileOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }
+              }
+              transition={{ duration: 0.2 }}
+              className="block h-0.5 w-6 rounded-full bg-zyk-heading"
+            />
+            <motion.span
+              animate={
+                mobileOpen
+                  ? { rotate: -45, y: -8, backgroundColor: "#38bdf8" }
+                  : { rotate: 0, y: 0, backgroundColor: "#e2e8f0" }
+              }
+              transition={{ duration: 0.25 }}
+              className="block h-0.5 w-6 rounded-full bg-zyk-heading"
+            />
+          </button>
+        </div>
+      </motion.nav>
+
+      {/* Mobile fullscreen drawer rendered via React Portal directly into document.body.
+          Sits at z-90 directly behind the static navbar (z-100).
+          - No duplicate logo (so the real logo never animates or jumps).
+          - No duplicate close button (the burger button itself morphs into the close 'X').
+          - No padding or content shifting. */}
+      {mounted &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {mobileOpen && (
+              <motion.div
+                initial={reduce ? { opacity: 0 } : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={reduce ? { opacity: 0 } : { opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="fixed inset-0 z-90 flex flex-col justify-between bg-[#020617]/98 backdrop-blur-2xl md:hidden overflow-y-auto pt-20 pb-8 px-6"
+                style={{
+                  backgroundImage: [
+                    "repeating-linear-gradient(0deg, rgba(148,163,184,0.04) 0px, rgba(148,163,184,0.04) 1px, transparent 1px, transparent 24px)",
+                    "repeating-linear-gradient(90deg, rgba(148,163,184,0.04) 0px, rgba(148,163,184,0.04) 1px, transparent 1px, transparent 24px)",
+                  ].join(", "),
+                }}
+              >
+                {/* Nav Links */}
+                <div className="flex flex-1 flex-col items-center justify-center gap-7 py-8">
+                  {LINKS.map((link, i) => {
+                    const isActive = active === link.href.slice(1);
+                    return (
+                      <motion.a
+                        key={link.href}
+                        href={link.href}
+                        initial={reduce ? false : { opacity: 0, y: 14 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          delay: reduce ? 0 : 0.04 + i * 0.04,
+                          duration: 0.25,
+                          ease: "easeOut",
+                        }}
+                        onClick={handleClick(link.href)}
+                        className={`font-display text-2xl uppercase tracking-wider transition-colors ${
+                          isActive
+                            ? "text-zyk-accent font-semibold drop-shadow-[0_0_12px_rgba(56,189,248,0.5)]"
+                            : "text-slate-300 hover:text-white"
+                        }`}
+                      >
+                        {link.label}
+                      </motion.a>
+                    );
+                  })}
+                </div>
+
+                {/* Subtle minimalist bottom branding */}
+                <div className="flex w-full items-center justify-center pt-4 text-xs font-mono tracking-widest text-slate-500">
+                  ZYK // PORTFOLIO
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
-    </motion.nav>
+    </>
   );
 };

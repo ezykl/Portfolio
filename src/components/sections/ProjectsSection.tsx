@@ -67,32 +67,12 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
-    title: "School Paper Magazine",
-    blurb:
-      "A twelve-page editorial publication designed around the client's content, audience, and communication needs, presented here as an interactive digital magazine.",
-    contribution:
-      "I created the publication's visual design and page layouts. The written and editorial content was supplied by the client.",
-    tags: ["Editorial Design", "Publication Layout", "Client Work"],
-    art: "School Paper Magazine cover",
-    cover: "/assets/school-paper/page-1.png",
-    previewPages: [
-      "/assets/school-paper/page-4.png",
-      "/assets/school-paper/page-3.png",
-      "/assets/school-paper/page-2.png",
-    ],
-    flipbook: true,
-    tools: [
-      { label: "Adobe InDesign", icon: "indesign", usage: "Primary" },
-      { label: "Adobe Photoshop", icon: "photoshop", usage: "Supporting" },
-    ],
-  },
-  {
     title: "Rent2Reuse",
     blurb:
-      "A peer-to-peer mobile marketplace designed to help people rent and lend underused items within their community.",
+      "A peer-to-peer mobile marketplace designed to help people rent and lend underused items within their community, fostering circular economies and sustainable sharing.",
     contribution:
-      "I worked as the Full-Stack Developer and UI/UX Designer, shaping the mobile experience and implementing the product.",
-    tags: ["Mobile UI/UX", "Product Design", "Marketplace"],
+      "Full-Stack Developer and UI/UX Designer — conceptualized the UX flow in Figma and implemented the mobile application frontend with REST API integrations.",
+    tags: ["React Native", "Expo", "Node.js", "Figma", "Marketplace"],
     art: "Rent2Reuse mobile marketplace interface",
     cover: "/assets/rent2reuse/1.png",
     previewPages: [
@@ -118,7 +98,11 @@ const PROJECTS: Project[] = [
       label: "View on GitHub",
       href: "https://github.com/ezykl/rent2reuse",
     },
-    tools: [{ label: "Figma", icon: "figma", usage: "Primary" }],
+    tools: [
+      { label: "Figma", icon: "figma", usage: "Primary" },
+      { label: "React", icon: "react", usage: "Primary" },
+      { label: "TypeScript", icon: "typescript", usage: "Primary" },
+    ],
     caseStudy: {
       eyebrow: "Mobile marketplace · UI/UX case study",
       summary:
@@ -126,10 +110,10 @@ const PROJECTS: Project[] = [
       role: "Full-Stack Developer and UI/UX Designer",
       note: "Selected screen sample: this presentation shows only part of the interface, but each design represents an actual frame from the Rent2Reuse application.",
       facts: [
-        { label: "Platform", value: "Mobile application" },
+        { label: "Platform", value: "Mobile application (React Native / Expo)" },
         { label: "Design tool", value: "Figma" },
-        { label: "Product type", value: "Peer-to-peer marketplace" },
-        { label: "Primary focus", value: "Rental and lending flows" },
+        { label: "Architecture", value: "REST API & Mobile Client" },
+        { label: "Primary focus", value: "Rental, lending, and item discovery flows" },
       ],
       sections: [
         {
@@ -156,7 +140,7 @@ const PROJECTS: Project[] = [
         },
         {
           eyebrow: "03 · Rental details",
-          title: "Decisions presented one step at a time",
+          title: "Decisions presented one step at time",
           description:
             "Time, payment, and date selection screens break important rental decisions into direct, readable steps.",
           images: [
@@ -169,55 +153,32 @@ const PROJECTS: Project[] = [
     },
   },
   {
-    title: "Vintage Poster Restoration",
+    title: "Interactive Scene Engine & Portfolio",
     blurb:
-      "Restored more than 1,000 vintage poster images into clean, high-quality digital formats while maintaining a consistent output across a fast-paced production workflow.",
+      "A custom 2.5D interactive developer portfolio and diorama engine featuring multi-layer spatial rendering, transparent-pixel hit testing, audio-reactive interactions, and an embedded minigame modal.",
     contribution:
-      "Graphics Artist / Photoshop Editor — background removal, perspective correction, blemish repair, generative reconstruction, quality checking, and organized delivery of 100+ images per day.",
-    tags: ["Image Restoration", "Photo Retouching", "Production Workflow"],
-    art: "Vintage poster restoration before-and-after comparison",
-    cover: "/assets/image-restoration/1.png",
-    previewPages: ["/assets/image-restoration/2.png"],
-    imagePreview: true,
-    stackedCover: true,
-    comparisonCover: true,
-    roundedCover: true,
-    galleryImages: [
-      "/assets/image-restoration/1.png",
-      "/assets/image-restoration/2.png",
-    ],
-    galleryVideos: [
-      "/assets/image-restoration/restore.mp4",
-      "/assets/image-restoration/restore2.mp4",
-    ],
-    tools: [{ label: "Adobe Photoshop", icon: "photoshop", usage: "Primary" }],
-    previewContext: {
-      eyebrow: "Completed commission · Upwork client",
-      summary:
-        "A high-volume restoration project completed for an international client, transforming damaged vintage poster scans into clean, high-quality digital assets.",
-      role: "Graphics Artist / Photoshop Editor",
-      note: "Selected samples from the completed commission are shown here. The remaining client work is not included in this portfolio.",
-      facts: [
-        { label: "Client", value: "International · Upwork" },
-        { label: "Scope", value: "1,000+ poster images" },
-        { label: "Daily delivery", value: "100+ images" },
-        { label: "Primary tool", value: "Adobe Photoshop" },
-      ],
-      imageHeading: "Selected before-and-after samples",
-      imageDescription:
-        "The examples show background cleanup, perspective correction, blemish removal, and reconstruction of missing areas.",
-      videoHeading: "Restoration process",
-      videoDescription:
-        "Portrait process recordings provide a closer look at the Photoshop editing workflow behind the selected restorations.",
+      "Architect and Developer — designed the behavioral event bus, custom scene engine, alpha test hit pipeline, asset preload gate, and responsive layouts.",
+    tags: ["React 19", "TypeScript", "Tailwind CSS v4", "Framer Motion", "Vite"],
+    art: "Interactive portfolio diorama and scene engine preview",
+    cover: "/assets/og-preview.png",
+    externalLink: {
+      label: "View on GitHub",
+      href: "https://github.com/ezykl",
     },
+    tools: [
+      { label: "React", icon: "react", usage: "Primary" },
+      { label: "TypeScript", icon: "typescript", usage: "Primary" },
+      { label: "Tailwind", icon: "tailwindcss", usage: "Primary" },
+      { label: "Vite", icon: "vitejs", usage: "Supporting" },
+    ],
   },
 ];
 
 const SECTION_INTRO = {
-  eyebrow: "Design in practice",
+  eyebrow: "// 01. FEATURED WORK",
   title: "Featured Projects",
   blurb:
-    "A focused selection spanning editorial design, mobile UI/UX, and digital image restoration.",
+    "Production-grade mobile and web applications built with modern frameworks, thoughtful architecture, and obsessive attention to detail.",
 };
 
 const TagChip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -426,6 +387,129 @@ const ProjectsStaticList: React.FC<{
     </div>
   </>
 );
+interface OtherProject {
+  title: string;
+  blurb: string;
+  tags: string[];
+  github?: string;
+  external?: string;
+}
+
+const OTHER_PROJECTS: OtherProject[] = [
+  {
+    title: "Subscription Manager UI & Flow",
+    blurb:
+      "Cross-platform personal finance mobile concept for tracking recurring services, payment schedules, and monthly spending insights.",
+    tags: ["React Native", "Figma", "TypeScript", "Tailwind CSS"],
+    github: "https://github.com/ezykl",
+  },
+  {
+    title: "RESTful Task & Operations API",
+    blurb:
+      "Backend microservice implementing JWT authentication, role-based access control, relational database schema, and test-driven endpoints.",
+    tags: ["Node.js", "Express", "REST APIs", "MySQL"],
+    github: "https://github.com/ezykl",
+  },
+  {
+    title: "Dataset Quality & Annotation Tooling",
+    blurb:
+      "Automation scripts and inspection utilities for image/video dataset validation, discrepancy logging, and quality assurance auditing.",
+    tags: ["Python", "Data QA", "CLI", "Automation"],
+    github: "https://github.com/ezykl",
+  },
+  {
+    title: "GDSC Student Tech Event Platform",
+    blurb:
+      "Event portal for university student developer communities featuring workshop schedules, participant check-ins, and hackathon showcases.",
+    tags: ["React", "Next.js", "Firebase", "TypeScript"],
+    github: "https://github.com/ezykl",
+  },
+];
+
+const OtherProjectsGrid: React.FC = () => (
+  <div className="mt-28 border-t border-slate-800/80 pt-20">
+    <div className="max-w-2xl">
+      <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent font-semibold">
+        // 02. OTHER BUILDS
+      </p>
+      <h3 className="mt-2 font-display text-3xl font-bold text-white md:text-4xl">
+        Noteworthy Projects
+      </h3>
+      <p className="mt-3 font-body text-base leading-relaxed text-slate-300">
+        A curated selection of applications, backend services, tooling, and developer experiments.
+      </p>
+    </div>
+
+    <div className="mt-10 grid gap-6 sm:grid-cols-2">
+      {OTHER_PROJECTS.map((project) => (
+        <article
+          key={project.title}
+          className="group relative flex flex-col justify-between rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-zyk-accent/40 hover:shadow-[0_0_25px_rgba(56,189,248,0.12)]"
+        >
+          <div>
+            <div className="flex items-center justify-between">
+              {/* Folder / Terminal Icon */}
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-zyk-accent/20 bg-zyk-accent/10 text-zyk-accent">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+              </div>
+
+              {/* Action Links */}
+              <div className="flex items-center gap-3 text-slate-400">
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${project.title} on GitHub`}
+                    className="transition-colors hover:text-zyk-accent"
+                  >
+                    <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                  </a>
+                )}
+                {project.external && (
+                  <a
+                    href={project.external}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${project.title} live demo`}
+                    className="transition-colors hover:text-zyk-accent"
+                  >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <h4 className="mt-5 font-display text-xl font-bold text-white transition-colors group-hover:text-zyk-accent">
+              {project.title}
+            </h4>
+
+            <p className="mt-2.5 font-body text-sm leading-relaxed text-slate-300">
+              {project.blurb}
+            </p>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2 pt-2">
+            {project.tags.map((tag) => (
+              <span
+                key={tag}
+                className="font-display text-[0.7rem] font-medium text-slate-400"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+);
 
 export const ProjectsSection: React.FC = () => {
   const reduce = useReducedMotion() ?? false;
@@ -552,6 +636,10 @@ export const ProjectsSection: React.FC = () => {
           </div>
         </>
       )}
+
+      {/* Other Noteworthy Projects / Builds Grid */}
+      <OtherProjectsGrid />
+
       <SchoolPaperFlipbook
         open={flipbookOpen}
         onClose={() => setFlipbookOpen(false)}

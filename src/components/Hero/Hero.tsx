@@ -1,5 +1,13 @@
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useMotionTemplate,
+  animate,
+} from "framer-motion";
 import { ZykCoding } from "../ZykCoding/ZykCoding";
 import { PillButton } from "../ui/PillButton";
 import { PopupHost } from "../Popup/PopupHost";
@@ -80,10 +88,54 @@ const buttonVariants = {
  * popup/message on ZykCoding.
  */
 export const Hero: React.FC<HeroProps> = ({ revealed }) => {
+  const sectionRef = React.useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const [phase, setPhase] = React.useState<TextPhase>("hidden");
   const [detailsVisible, setDetailsVisible] = React.useState(false);
   const [typewriterActive, setTypewriterActive] = React.useState(false);
+
+  // Scroll parallax: maps actual page scroll pixels (0 to 500px) directly
+  // to a noticeable vertical float for the intro text.
+  // • Positive number (e.g. 150): text floats downward / delays behind scroll
+  // • Negative number (e.g. -150): text exits upward faster
+  // • 0: disabled (scrolls 1:1 with normal page scroll)
+  const { scrollY } = useScroll();
+  const textParallaxY = useTransform(scrollY, [0, 500], [0, reduce ? 0 : 220]);
+
+  // Background Blobs Reverse Placement X sliding animation:
+  // Starts at LoadingScreen placement: Top at 90% (right), Bottom at 10% (left).
+  // When Hero is revealed ("when Hi I'm Zyk shows"), smoothly glides across the X axis
+  // to the final settled placement: Top at 10% (left), Bottom at 90% (right).
+  // Zero heartbeat beating pulse in Hero section as requested.
+  const topBlobX = useMotionValue(90);
+  const bottomBlobX = useMotionValue(10);
+
+  React.useEffect(() => {
+    if (!revealed) {
+      topBlobX.set(90);
+      bottomBlobX.set(10);
+      return;
+    }
+    if (reduce) {
+      topBlobX.set(10);
+      bottomBlobX.set(90);
+      return;
+    }
+    const animTop = animate(topBlobX, 10, {
+      duration: 1.8,
+      ease: [0.16, 1, 0.3, 1],
+    });
+    const animBottom = animate(bottomBlobX, 90, {
+      duration: 1.8,
+      ease: [0.16, 1, 0.3, 1],
+    });
+    return () => {
+      animTop.stop();
+      animBottom.stop();
+    };
+  }, [revealed, reduce, topBlobX, bottomBlobX]);
+
+  const blobBackground = useMotionTemplate`radial-gradient(circle at ${topBlobX}% 0%, rgba(99,102,241,0.20), transparent 42%), radial-gradient(circle at ${bottomBlobX}% 100%, rgba(34,211,238,0.16), transparent 48%)`;
 
   React.useEffect(() => {
     if (!revealed) {
@@ -113,83 +165,99 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
 
   return (
     <section
+      ref={sectionRef}
       id="home"
-      // NOTE: `overflow-hidden` removed here — the text block's `hidden`/`pop`
-      // states sit at `y: 24vh`, which is past the section's un-transformed
-      // layout box; with overflow-hidden still on, that offset content gets
-      // clipped instead of shown. ZykCoding's own reveal clipping is handled
-      // locally by its own wrapper div below, so this doesn't affect it.
       className="relative flex flex-col items-center justify-start pt-24 md:pt-16 overflow-hidden"
       style={{
         backgroundColor: "#020617",
         backgroundImage: [
-          "radial-gradient(circle at 10% 0%, rgba(99,102,241,0.20), transparent 42%)",
-          "radial-gradient(circle at 90% 100%, rgba(34,211,238,0.16), transparent 48%)",
           "repeating-linear-gradient(0deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
           "repeating-linear-gradient(90deg, rgba(148,163,184,0.05) 0px, rgba(148,163,184,0.05) 1px, transparent 1px, transparent 24px)",
         ].join(", "),
         scrollMarginTop: "var(--nav-height, 5rem)",
       }}
     >
-      <div className="relative z-10 flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
-        {/* H1 entrance: invisible while loading, pops in once revealed, holds,
-            then slides up to its resting position. */}
+      {/* Background Animated Gradient Blobs:
+          Exact 1:1 match with LoadingScreen properties (colors, spread percentages, zero-blur).
+          Spans the full Hero section (inset-0 w-full h-full) so the bottom blob seamlessly
+          covers the lower part and ZykCoding without any cut-off line when scrolling.
+          Reverse placement X animation: starts at 90% (top) / 10% (bottom) and glides smoothly
+          to 10% (top) / 90% (bottom) as Hero reveals. Steady opacity (no beating). */}
+      <div
+        className="pointer-events-none absolute inset-0 w-full h-full overflow-hidden"
+        aria-hidden="true"
+      >
         <motion.div
-          variants={textVariants}
-          initial="hidden"
-          animate={phase}
-          onAnimationComplete={(definition) => {
-            if (definition === "settled") {
-              setDetailsVisible(true);
-              setTypewriterActive(true);
-            }
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: blobBackground,
           }}
-          className="flex w-full flex-col items-center text-center mt-4 -mb-6 sm:mt-8 sm:-mb-10 md:mt-10 md:-mb-12"
-        >
-          <h1
-            className="font-display leading-tight text-zyk-heading font-bold"
-            style={{ fontSize: "clamp(3rem, 2rem + 4vw, 6rem)" }}
-          >
-            Hi, I&apos;m Zyk.
-          </h1>
-        </motion.div>
+        />
+      </div>
 
-        {/* After the H1 reaches its fixed position, pop in the role first and
-            the buttons just after it. */}
-        <div className="flex w-full flex-col items-center text-center mt-6 sm:mt-10 md:mt-12">
-          <motion.p
-            variants={detailItemVariants}
-            initial="hidden"
-            animate={detailsVisible ? "visible" : "hidden"}
-            className="mt-3 font-medium text-zyk-accent"
-            style={{ fontSize: "clamp(1.125rem, 1rem + 0.6vw, 1.5rem)" }}
-          >
-            {reduce ? (
-              "Full-Stack Developer"
-            ) : (
-              <>
-                {role}
-                <span className="ml-0.5 inline-block h-[1em] w-0.5 translate-y-0.5 bg-zyk-accent animate-pulse" />
-              </>
-            )}
-          </motion.p>
+      <div className="relative z-10 flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
+        {/* Parallax wrapper giving text a subtle organic scroll delay relative to ZykCoding */}
+        <motion.div
+          style={{ y: textParallaxY }}
+          className="flex w-full flex-col items-center text-center"
+        >
+          {/* H1 entrance: invisible while loading, pops in once revealed, holds,
+              then slides up to its resting position. */}
           <motion.div
-            variants={buttonVariants}
+            variants={textVariants}
             initial="hidden"
-            animate={detailsVisible ? "visible" : "hidden"}
-            className="mt-6 flex flex-wrap items-center justify-center gap-4 md:justify-start"
+            animate={phase}
+            onAnimationComplete={(definition) => {
+              if (definition === "settled") {
+                setDetailsVisible(true);
+                setTypewriterActive(true);
+              }
+            }}
+            className="flex w-full flex-col items-center text-center mt-4 -mb-6 sm:mt-8 sm:-mb-10 md:mt-10 md:-mb-12"
           >
-            <PillButton variant="primary" href="#projects">
-              View My Work
-            </PillButton>
-            <PillButton variant="secondary" href="#contact">
-              Get in Touch
-            </PillButton>
-            {/* <PillButton variant="secondary" href="/assets/resume.pdf" download>
-              Download CV ↓
-            </PillButton> */}
+            <h1
+              className="font-display leading-tight text-zyk-heading font-bold"
+              style={{ fontSize: "clamp(3rem, 2rem + 4vw, 6rem)" }}
+            >
+              Hi, I&apos;m Zyk.
+            </h1>
           </motion.div>
-        </div>
+
+          {/* After the H1 reaches its fixed position, pop in the role first and
+              the buttons just after it. */}
+          <div className="flex w-full flex-col items-center text-center mt-6 sm:mt-10 md:mt-12">
+            <motion.p
+              variants={detailItemVariants}
+              initial="hidden"
+              animate={detailsVisible ? "visible" : "hidden"}
+              className="mt-3 font-medium text-zyk-accent"
+              style={{ fontSize: "clamp(1.125rem, 1rem + 0.6vw, 1.5rem)" }}
+            >
+              {reduce ? (
+                "Full-Stack Developer"
+              ) : (
+                <>
+                  {role}
+                  <span className="ml-0.5 inline-block h-[1em] w-0.5 translate-y-0.5 bg-zyk-accent animate-pulse" />
+                </>
+              )}
+            </motion.p>
+            <motion.div
+              variants={buttonVariants}
+              initial="hidden"
+              animate={detailsVisible ? "visible" : "hidden"}
+              className="mt-6 flex flex-wrap items-center justify-center gap-4"
+            >
+              <PillButton variant="primary" href="#projects">
+                View My Work
+              </PillButton>
+              <PillButton variant="secondary" href="#contact">
+                Get in Touch
+              </PillButton>
+            </motion.div>
+          </div>
+        </motion.div>
 
         {/* ZykCoding workspace. This outer box is a plain, unanimated element
             sized by ZykCoding's own natural layout height — its rendered size

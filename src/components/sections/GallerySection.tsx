@@ -4,6 +4,7 @@ import {
   ImageProjectPreview,
   type ImagePreviewContext,
 } from "./ImageProjectPreview";
+import { SchoolPaperFlipbook } from "./SchoolPaperFlipbook";
 
 type GalleryCategory =
   | "Marketing & Social"
@@ -265,12 +266,47 @@ const getBadgeLabel = (item: GalleryItem): string | null => {
   return null;
 };
 
+const RESTORATION_PROJECT: GalleryItem = {
+  title: "Vintage Poster Restoration",
+  category: "Print Design",
+  cover: "/assets/image-restoration/1.png",
+  images: [
+    "/assets/image-restoration/1.png",
+    "/assets/image-restoration/2.png",
+  ],
+  videos: [
+    "/assets/image-restoration/restore.mp4",
+    "/assets/image-restoration/restore2.mp4",
+  ],
+  badgeText: "1,000+ Restorations",
+  context: {
+    eyebrow: "Completed commission · Upwork client",
+    summary:
+      "A high-volume restoration project completed for an international client, transforming damaged vintage poster scans into clean, high-quality digital assets.",
+    role: "Graphics Artist / Photoshop Editor",
+    note: "Selected samples from the completed commission are shown here. The remaining client work is not included in this portfolio.",
+    facts: [
+      { label: "Client", value: "International · Upwork" },
+      { label: "Scope", value: "1,000+ poster images" },
+      { label: "Daily delivery", value: "100+ images" },
+      { label: "Primary tool", value: "Adobe Photoshop" },
+    ],
+    imageHeading: "Selected before-and-after samples",
+    imageDescription:
+      "The examples show background cleanup, perspective correction, blemish removal, and reconstruction of missing areas.",
+    videoHeading: "Restoration process",
+    videoDescription:
+      "Portrait process recordings provide a closer look at the Photoshop editing workflow behind the selected restorations.",
+  },
+};
+
 export const GallerySection: React.FC = () => {
   const reduce = useReducedMotion() ?? false;
   const [filter, setFilter] = React.useState<(typeof FILTERS)[number]>("All");
   const [selectedItem, setSelectedItem] = React.useState<GalleryItem | null>(
     null,
   );
+  const [flipbookOpen, setFlipbookOpen] = React.useState(false);
 
   const visibleItems =
     filter === "All"
@@ -290,47 +326,159 @@ export const GallerySection: React.FC = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="max-w-3xl"
       >
-        <p className="font-display text-sm uppercase tracking-widest text-zyk-accent">
-          A closer look
+        <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent font-semibold">
+          // 03. CREATIVE &amp; VISUAL LAB
         </p>
-        <h2 className="mt-2 font-display text-4xl text-zyk-heading md:text-5xl">
-          Design Gallery
+        <h2 className="mt-2 font-display text-4xl font-bold text-white md:text-5xl">
+          Creative &amp; Visual Lab
         </h2>
-        <p className="mt-4 font-body text-lg leading-relaxed text-zyk-heading/70">
-          A curated collection of campaign, print, apparel, interface, and
-          illustration work. Select a category or open any project to view the
-          full showcase.
+        <p className="mt-4 font-body text-lg leading-relaxed text-slate-300">
+          A dedicated space for visual communication, client restorations, editorial layouts, UI/UX explorations, and digital artwork.
         </p>
       </motion.div>
 
-      {/* Filter tabs */}
-      <motion.div
-        initial={reduce ? false : { opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.5, delay: reduce ? 0 : 0.1 }}
-        className="mt-8 flex flex-wrap gap-2"
-        aria-label="Filter design gallery"
-      >
-        {FILTERS.map((option) => {
-          const active = option === filter;
-          return (
+      {/* Featured Spotlights: Preserved School Paper Magazine + Vintage Poster Restoration */}
+      <div className="mt-12 grid gap-6 md:grid-cols-2">
+        {/* Spotlight 1: School Paper Magazine */}
+        <article className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-md transition-all duration-300 hover:border-zyk-accent/40 hover:shadow-[0_0_30px_rgba(56,189,248,0.12)]">
+          <div>
+            <div className="relative aspect-16/10 w-full overflow-hidden rounded-xl bg-slate-950/50">
+              <img
+                src="/assets/school-paper/page-1.png"
+                alt="School Paper Magazine cover"
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
+              />
+              <span className="absolute top-3 right-3 rounded-full border border-white/10 bg-slate-950/80 px-2.5 py-0.5 font-display text-[0.65rem] uppercase tracking-wider text-zyk-accent backdrop-blur-md">
+                12-Page Flipbook
+              </span>
+            </div>
+            <p className="mt-4 font-display text-xs uppercase tracking-[0.2em] text-zyk-accent font-semibold">
+              Editorial &amp; Publication
+            </p>
+            <h3 className="mt-1 font-display text-2xl font-bold text-white">
+              School Paper Magazine
+            </h3>
+            <p className="mt-2 font-body text-sm leading-relaxed text-slate-300">
+              A twelve-page publication designed around the client&apos;s audience and editorial needs, presented here as an interactive digital magazine.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 font-display text-[0.7rem] text-slate-300">
+                Adobe InDesign
+              </span>
+              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 font-display text-[0.7rem] text-slate-300">
+                Adobe Photoshop
+              </span>
+              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 font-display text-[0.7rem] text-slate-300">
+                Editorial Design
+              </span>
+            </div>
+          </div>
+          <div className="mt-6 pt-4 border-t border-white/10">
             <button
-              key={option}
               type="button"
-              aria-pressed={active}
-              onClick={() => setFilter(option)}
-              className={`rounded-full px-4 py-2 font-display text-xs font-semibold transition-all duration-200 sm:text-sm ${
-                active
-                  ? "bg-zyk-accent text-slate-950 shadow-md shadow-zyk-accent/25"
-                  : "border border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
-              }`}
+              onClick={() => setFlipbookOpen(true)}
+              className="inline-flex items-center gap-2 rounded-full bg-zyk-primary px-5 py-2.5 font-display text-xs font-semibold text-white shadow-md shadow-indigo-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-indigo-500/30"
             >
-              {option}
+              <span>Open Interactive Flipbook</span>
+              <span aria-hidden="true">&rarr;</span>
             </button>
-          );
-        })}
-      </motion.div>
+          </div>
+        </article>
+
+        {/* Spotlight 2: Vintage Poster Restoration */}
+        <article className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-md transition-all duration-300 hover:border-zyk-accent/40 hover:shadow-[0_0_30px_rgba(56,189,248,0.12)]">
+          <div>
+            <div className="relative aspect-16/10 w-full overflow-hidden rounded-xl bg-slate-950/50">
+              <img
+                src="/assets/image-restoration/1.png"
+                alt="Vintage Poster Restoration comparison"
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
+              />
+              <span className="absolute top-3 right-3 rounded-full border border-white/10 bg-slate-950/80 px-2.5 py-0.5 font-display text-[0.65rem] uppercase tracking-wider text-zyk-accent backdrop-blur-md">
+                1,000+ Restorations · Upwork
+              </span>
+            </div>
+            <p className="mt-4 font-display text-xs uppercase tracking-[0.2em] text-zyk-accent font-semibold">
+              Client Commission · Photo Retouching
+            </p>
+            <h3 className="mt-1 font-display text-2xl font-bold text-white">
+              Vintage Poster Restoration
+            </h3>
+            <p className="mt-2 font-body text-sm leading-relaxed text-slate-300">
+              High-volume digital restoration of damaged vintage posters into pristine print-ready assets, with before-and-after samples and workflow process recordings.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 font-display text-[0.7rem] text-slate-300">
+                Adobe Photoshop
+              </span>
+              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 font-display text-[0.7rem] text-slate-300">
+                Photo Retouching
+              </span>
+              <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 font-display text-[0.7rem] text-slate-300">
+                Generative Repair
+              </span>
+            </div>
+          </div>
+          <div className="mt-6 pt-4 border-t border-white/10">
+            <button
+              type="button"
+              onClick={() => setSelectedItem(RESTORATION_PROJECT)}
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2.5 font-display text-xs font-semibold text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:border-zyk-accent hover:text-zyk-accent"
+            >
+              <span>View Restoration Case Study</span>
+              <span aria-hidden="true">&rarr;</span>
+            </button>
+          </div>
+        </article>
+      </div>
+
+      {/* Visual Design Archive & Filter Section */}
+      <div className="mt-24 border-t border-slate-800/80 pt-16">
+        <div className="max-w-2xl">
+          <p className="font-display text-xs uppercase tracking-[0.2em] text-zyk-accent font-semibold">
+            // ARCHIVE &amp; MEDIA
+          </p>
+          <h3 className="mt-2 font-display text-3xl font-bold text-white">
+            Visual Design Archive
+          </h3>
+          <p className="mt-3 font-body text-base leading-relaxed text-slate-300">
+            Explore branding, event collateral, marketing campaigns, apparel designs, and custom digital illustrations.
+          </p>
+        </div>
+
+        {/* Filter tabs */}
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.5, delay: reduce ? 0 : 0.1 }}
+          className="mt-8 flex flex-wrap gap-2"
+          aria-label="Filter design gallery"
+        >
+          {FILTERS.map((option) => {
+            const active = option === filter;
+            return (
+              <button
+                key={option}
+                type="button"
+                aria-pressed={active}
+                onClick={() => setFilter(option)}
+                className={`rounded-full px-4 py-2 font-display text-xs font-semibold transition-all duration-200 sm:text-sm ${
+                  active
+                    ? "bg-zyk-accent text-slate-950 shadow-md shadow-zyk-accent/25"
+                    : "border border-white/10 bg-slate-900/60 text-slate-300 hover:border-white/20 hover:bg-slate-800/80 hover:text-white"
+                }`}
+              >
+                {option}
+              </button>
+            );
+          })}
+        </motion.div>
+      </div>
 
       {/* Masonry collage — balanced 1 to 4 columns, tight zero-gap flow */}
       <motion.div
@@ -487,6 +635,11 @@ export const GallerySection: React.FC = () => {
         mediaLayout="gallery"
         context={selectedItem?.context}
         onClose={() => setSelectedItem(null)}
+      />
+
+      <SchoolPaperFlipbook
+        open={flipbookOpen}
+        onClose={() => setFlipbookOpen(false)}
       />
     </section>
   );
