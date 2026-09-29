@@ -100,11 +100,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
   // • Negative number (e.g. -150): text exits upward faster
   // • 0: disabled (scrolls 1:1 with normal page scroll)
   const { scrollY } = useScroll();
-  const textParallaxY = useTransform(
-    scrollY,
-    [0, 500],
-    [0, reduce ? 0 : 120],
-  );
+  const textParallaxY = useTransform(scrollY, [0, 500], [0, reduce ? 0 : 220]);
 
   // Background Blobs Reverse Placement X sliding animation:
   // Starts at LoadingScreen placement: Top at 90% (right), Bottom at 10% (left).
@@ -183,11 +179,12 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
     >
       {/* Background Animated Gradient Blobs:
           Exact 1:1 match with LoadingScreen properties (colors, spread percentages, zero-blur).
-          Scaled to h-screen / min-h-screen for identical desktop and mobile behavior.
+          Spans the full Hero section (inset-0 w-full h-full) so the bottom blob seamlessly
+          covers the lower part and ZykCoding without any cut-off line when scrolling.
           Reverse placement X animation: starts at 90% (top) / 10% (bottom) and glides smoothly
           to 10% (top) / 90% (bottom) as Hero reveals. Steady opacity (no beating). */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-screen min-h-screen overflow-hidden"
+        className="pointer-events-none absolute inset-0 w-full h-full overflow-hidden"
         aria-hidden="true"
       >
         <motion.div
