@@ -153,14 +153,9 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
       }}
     >
       {/* Background Animated Gradient Blobs:
-          Reversed start on reveal (Top at Right, Bottom at Left matching loading screen),
-          animating smoothly into final corner placements (Top-Left & Bottom-Right)
-          as 'Hi, I'm Zyk' settles. */}
-      {/* Background Animated Gradient Blobs:
-          Replicates the exact size, radius, and color profile of the LoadingScreen.
-          Starts at reversed positions on reveal (Top at 90vw, Bottom at 10vw),
-          animating smoothly into final placements (Top at 10vw, Bottom at 90vw)
-          as 'Hi, I'm Zyk' settles. */}
+          Replicates the exact ambient spread and softness of the LoadingScreen.
+          Multi-stop organic decay and gentle atmospheric blur eliminate any visible
+          round perimeters or color banding while preserving full fluid motion. */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         {/* Top Blob (Indigo/Violet) */}
         <div className="absolute top-0 left-0 pointer-events-none">
@@ -170,10 +165,10 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
             animate={reduce ? "settled" : phase}
           >
             <div
-              className="-translate-x-1/2 -translate-y-1/2 h-[84vw] w-[84vw] rounded-full pointer-events-none"
+              className="-translate-x-1/2 -translate-y-1/2 h-[110vw] w-[110vw] max-h-[1400px] max-w-[1400px] blur-[40px] pointer-events-none"
               style={{
                 background:
-                  "radial-gradient(circle, rgba(99,102,241,0.20) 0%, transparent 100%)",
+                  "radial-gradient(circle at center, rgba(99,102,241,0.20) 0%, rgba(99,102,241,0.14) 20%, rgba(99,102,241,0.07) 38%, rgba(99,102,241,0.02) 52%, rgba(99,102,241,0.005) 62%, transparent 70%)",
               }}
             />
           </motion.div>
@@ -187,10 +182,10 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
             animate={reduce ? "settled" : phase}
           >
             <div
-              className="-translate-x-1/2 translate-y-1/2 h-[96vw] w-[96vw] rounded-full pointer-events-none"
+              className="-translate-x-1/2 translate-y-1/2 h-[120vw] w-[120vw] max-h-[1500px] max-w-[1500px] blur-[40px] pointer-events-none"
               style={{
                 background:
-                  "radial-gradient(circle, rgba(34,211,238,0.16) 0%, transparent 100%)",
+                  "radial-gradient(circle at center, rgba(34,211,238,0.16) 0%, rgba(34,211,238,0.11) 20%, rgba(34,211,238,0.05) 38%, rgba(34,211,238,0.015) 52%, rgba(34,211,238,0.004) 62%, transparent 70%)",
               }}
             />
           </motion.div>
