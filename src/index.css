@@ -10,8 +10,8 @@
   Each `--font-*` generates a font-* utility (font-display, font-body).
 */
 @theme {
-  --color-zyk-bg-start: #252E3D; /* background gradient top — blue-gray dark */
-  --color-zyk-bg-end: #111827; /* background gradient bottom — charcoal */
+  --color-zyk-bg-start: #020617; /* background canvas — deep slate */
+  --color-zyk-bg-end: #0b1120; /* background gradient bottom — deep navy slate */
   --color-zyk-heading: #e2e8f0; /* primary headline text — cool white */
   --color-zyk-accent: #38bdf8; /* subheading / tagline — electric sky blue */
   --color-zyk-primary: #6366f1; /* button 1 fill — indigo */
