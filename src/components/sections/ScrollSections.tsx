@@ -465,8 +465,8 @@ export const JourneySection: React.FC = () => {
   );
 };
 
-/** Contact / footer — the §2b brown footer band with a hire-me call to action,
- *  a faint patterned texture, and a closing footer bar. */
+/** Contact / footer — dark glass footer band with numbered eyebrow,
+ *  direct contact links, and closing signature. */
 export const ContactSection: React.FC = () => {
   const reveal = useReveal();
   const year = new Date().getFullYear();
@@ -474,39 +474,40 @@ export const ContactSection: React.FC = () => {
     <footer
       id="contact"
       style={{ scrollMarginTop: "5rem" }}
-      className="relative mt-12 overflow-hidden bg-zyk-brown px-6 py-20 text-center text-zyk-heading"
+      className="relative mt-24 overflow-hidden border-t border-slate-800/80 bg-slate-950/80 px-6 py-24 text-center text-slate-200 backdrop-blur-md"
     >
-      {/* bg-pattern.svg overlaid and recoloured to a soft cream via CSS mask
-          (the source SVG is solid black — masking lets us tint it without
-          editing the shared asset). Sits behind the content as faint texture. */}
+      {/* Subtle radial glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.12]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(56,189,248,0.06),transparent_100%)]"
       />
 
       <motion.div {...reveal} className="relative z-10 mx-auto max-w-2xl">
-        <h2 className="font-display text-4xl font-bold text-white md:text-5xl">
-          Let&apos;s work together.
+        <p className="font-display text-xs uppercase tracking-[0.24em] text-zyk-accent font-semibold">
+          // 05. GET IN TOUCH
+        </p>
+        <h2 className="mt-2 font-display text-4xl font-bold text-white md:text-5xl">
+          Let&apos;s build something great.
         </h2>
-        <p className="mx-auto mt-3 max-w-md font-body text-lg text-slate-300">
-          Open to roles and freelance. If the diorama made you smile, let&apos;s
-          talk.
+        <p className="mx-auto mt-3 max-w-lg font-body text-base text-slate-300 sm:text-lg">
+          Open to full-time engineering roles, creative collaborations, and
+          freelance opportunities. Let&apos;s connect.
         </p>
         <div className="mt-10">
           <ContactForm />
         </div>
 
-        {/* Or reach me directly */}
-        <div className="mt-10">
+        {/* Direct reach links */}
+        <div className="mt-12">
           <p className="mb-4 font-display text-xs uppercase tracking-[0.24em] text-zyk-accent font-semibold">
-            Or find me here
+            Or reach out directly
           </p>
           <ContactLinks />
         </div>
       </motion.div>
 
       {/* Closing footer bar */}
-      <div className="relative z-10 mx-auto mt-16 flex max-w-5xl flex-col items-center gap-2 border-t border-white/10 pt-6 font-body text-sm text-slate-400 sm:flex-row sm:justify-between">
+      <div className="relative z-10 mx-auto mt-20 flex max-w-5xl flex-col items-center gap-3 border-t border-white/10 pt-8 font-body text-sm text-slate-400 sm:flex-row sm:justify-between">
         <div className="flex items-center gap-2.5">
           <img
             src="/assets/logo.svg"
@@ -515,8 +516,7 @@ export const ContactSection: React.FC = () => {
           />
         </div>
         <p className="text-slate-400">
-          &copy; {year} Ezekiel Villadolid · Designed and built with care and a
-          little coffee ☕
+          &copy; {year} Ezekiel Villadolid · Built with TypeScript, React &amp; Tailwind
         </p>
         <a
           href="#home"
