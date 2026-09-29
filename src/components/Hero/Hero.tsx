@@ -42,24 +42,24 @@ const textVariants = {
 };
 
 const topBlobVariants = {
-  hidden: { x: "25vw", y: "-8vh", opacity: 0 },
-  pop: { x: "18vw", y: "-6vh", opacity: 0.15 },
+  hidden: { x: "72vw", y: "-20px", opacity: 0 },
+  pop: { x: "72vw", y: "-20px", opacity: 0.18 },
   settled: {
-    x: "-12vw",
-    y: "-2vh",
-    opacity: 0.28,
-    transition: { duration: 1.2, ease: "easeOut" },
+    x: "-4vw",
+    y: "-30px",
+    opacity: 0.22,
+    transition: { duration: 1.4, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
 const bottomBlobVariants = {
-  hidden: { x: "-25vw", y: "15vh", opacity: 0 },
-  pop: { x: "-18vw", y: "12vh", opacity: 0.12 },
+  hidden: { x: "-72vw", y: "20px", opacity: 0 },
+  pop: { x: "-72vw", y: "20px", opacity: 0.16 },
   settled: {
-    x: "15vw",
-    y: "8vh",
-    opacity: 0.24,
-    transition: { duration: 1.2, ease: "easeOut" },
+    x: "4vw",
+    y: "20px",
+    opacity: 0.18,
+    transition: { duration: 1.4, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
@@ -112,7 +112,7 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const textParallaxY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 70]);
+  const textParallaxY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 20]);
 
   React.useEffect(() => {
     if (!revealed) {
@@ -155,27 +155,28 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
       }}
     >
       {/* Background Animated Gradient Blobs:
-          Top blob translates Right → Left when 'Hi, I'm Zyk' animates to top.
-          Bottom blob translates Left → Right synchronously in reverse. */}
+          Reversed start on reveal (Top at Right, Bottom at Left matching loading screen),
+          animating smoothly into final corner placements (Top-Left & Bottom-Right)
+          as 'Hi, I'm Zyk' settles. */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <motion.div
           variants={topBlobVariants}
           initial="hidden"
           animate={reduce ? "settled" : phase}
-          className="absolute -top-24 right-1/4 h-[550px] w-[550px] rounded-full blur-[100px]"
+          className="absolute -top-16 left-0 h-[min(480px,50vw)] w-[min(480px,50vw)] rounded-full blur-[85px]"
           style={{
             background:
-              "radial-gradient(circle, rgba(99,102,241,0.32) 0%, rgba(139,92,246,0.18) 45%, transparent 70%)",
+              "radial-gradient(circle, rgba(99,102,241,0.24) 0%, rgba(139,92,246,0.12) 50%, transparent 72%)",
           }}
         />
         <motion.div
           variants={bottomBlobVariants}
           initial="hidden"
           animate={reduce ? "settled" : phase}
-          className="absolute bottom-12 left-1/4 h-[600px] w-[600px] rounded-full blur-[110px]"
+          className="absolute -bottom-16 right-0 h-[min(500px,52vw)] w-[min(500px,52vw)] rounded-full blur-[85px]"
           style={{
             background:
-              "radial-gradient(circle, rgba(34,211,238,0.26) 0%, rgba(56,189,248,0.14) 45%, transparent 70%)",
+              "radial-gradient(circle, rgba(34,211,238,0.20) 0%, rgba(56,189,248,0.10) 50%, transparent 72%)",
           }}
         />
       </div>
