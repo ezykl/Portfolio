@@ -86,22 +86,26 @@ export const NavBar: React.FC = () => {
 
   const handleClick =
     (href: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      // Unlock mobile body overflow immediately
+      document.body.style.overflow = "";
+      setMobileOpen(false);
+
       const target = document.querySelector(href);
       if (!target) return;
-      e.preventDefault();
-      // Use the same measured offset as desktop sticky sections. Calculating
-      // the destination directly avoids scrollIntoView's anchor positioning
-      // and the sticky constraint both applying an offset during the same
-      // smooth scroll, which makes the pinned project column visibly jump.
-      const navHeight = navRef.current?.getBoundingClientRect().height ?? 0;
-      const top = Math.max(
-        0,
-        target.getBoundingClientRect().top + window.scrollY - navHeight,
-      );
-      window.scrollTo({
-        top,
-        behavior: reduce ? "auto" : "smooth",
-      });
+
+      // Small delay on mobile ensures the drawer unmounts and viewport unfreezes before scrolling
+      setTimeout(() => {
+        const navHeight = navRef.current?.getBoundingClientRect().height ?? 64;
+        const top = Math.max(
+          0,
+          target.getBoundingClientRect().top + window.scrollY - navHeight,
+        );
+        window.scrollTo({
+          top,
+          behavior: reduce ? "auto" : "smooth",
+        });
+      }, 50);
     };
 
   return (
@@ -109,21 +113,21 @@ export const NavBar: React.FC = () => {
       ref={navRef}
       initial={reduce ? false : { y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 1, duration: 0.5, ease: "easeOut" }}
-      className="fixed inset-x-0 top-0 z-100 transition-all duration-300"
+      transition={{ delay: 0.8, duration: 0.4, ease: "easeOut" }}
+      className="fixed inset-x-0 top-0 z-100 transition-colors duration-300"
       style={{
-        backgroundColor: atTop ? "rgba(2, 6, 23, 0)" : "rgba(2, 6, 23, 0.82)",
-        backdropFilter: atTop ? "none" : "blur(16px)",
-        WebkitBackdropFilter: atTop ? "none" : "blur(16px)",
+        backgroundColor: atTop ? "rgba(2, 6, 23, 0)" : "rgba(2, 6, 23, 0.85)",
+        backdropFilter: atTop ? "none" : "blur(12px)",
+        WebkitBackdropFilter: atTop ? "none" : "blur(12px)",
         borderBottom: atTop
           ? "1px solid rgba(255, 255, 255, 0)"
           : "1px solid rgba(255, 255, 255, 0.08)",
         boxShadow: atTop
           ? "none"
-          : "0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.05)",
+          : "0 10px 30px -10px rgba(0, 0, 0, 0.5)",
       }}
     >
-      <div className="mx-auto flex max-w-350 items-center justify-between px-6 py-3.5 md:px-10">
+      <div className="mx-auto flex max-w-350 items-center justify-between px-6 py-4 md:px-10">
         <a
           href="#home"
           onClick={handleClick("#home")}
@@ -133,61 +137,43 @@ export const NavBar: React.FC = () => {
           <img src={logoSrc} alt="Zyk" className="h-9 w-auto object-contain" />
         </a>
 
-        {/* Desktop Navigation Dock & Status CTA */}
-        <div className="hidden items-center gap-5 md:flex">
-          {/* Glass pill navigation dock */}
-          <nav className="flex items-center rounded-full border border-white/10 bg-slate-900/60 p-1 shadow-inner shadow-white/5 backdrop-blur-md">
-            <ul className="flex items-center gap-1 font-display text-xs tracking-wider">
-              {LINKS.map((link) => {
-                const isActive = active === link.href.slice(1);
-                return (
-                  <li key={link.href} className="relative">
-                    <a
-                      href={link.href}
-                      onClick={handleClick(link.href)}
-                      aria-current={isActive ? "page" : undefined}
-                      className={`relative z-10 block rounded-full px-4 py-1.5 font-medium uppercase transition-colors duration-200 ${
-                        isActive
-                          ? "text-white"
-                          : "text-slate-400 hover:text-slate-100"
-                      }`}
-                    >
-                      {link.label}
-                    </a>
-                    {isActive && (
-                      <motion.span
-                        layoutId="nav-active-pill"
-                        className="absolute inset-0 rounded-full border border-zyk-accent/30 bg-slate-800/90 shadow-[0_0_15px_rgba(56,189,248,0.2)]"
-                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                      />
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
+        {/* Desktop Nav Links — clean, elegant typography */}
+        <ul className="hidden items-center gap-6 font-display text-sm tracking-wide md:flex md:gap-8 md:text-base">
+          {LINKS.map((link) => {
+            const isActive = active === link.href.slice(1);
+            return (
+              <li key={link.href} className="relative py-1">
+                <a
+                  href={link.href}
+                  onClick={handleClick(link.href)}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`uppercase transition-colors duration-200 ${
+                    isActive
+                      ? "text-zyk-accent font-semibold"
+                      : "text-slate-300 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                </a>
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-active-underline"
+                    className="absolute -bottom-0.5 left-0 right-0 h-0.5 rounded-full bg-zyk-accent shadow-[0_0_8px_rgba(56,189,248,0.6)]"
+                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                  />
+                )}
+              </li>
+            );
+          })}
+        </ul>
 
-          {/* Available for Work status indicator */}
-          <a
-            href="#contact"
-            onClick={handleClick("#contact")}
-            className="group flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3.5 py-1.5 font-display text-xs font-semibold text-emerald-400 transition-all duration-300 hover:border-emerald-400/40 hover:bg-emerald-500/20 hover:shadow-[0_0_15px_rgba(52,211,153,0.25)]"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-            </span>
-            <span className="tracking-wide">Available for Work</span>
-          </a>
-        </div>
-
-        {/* Hamburger toggle — visible only on mobile */}
+        {/* Hamburger toggle — visible only on mobile with generous touch target */}
         <button
           type="button"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((o) => !o)}
-          className="relative z-50 flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
+          className="relative z-50 flex h-11 w-11 flex-col items-center justify-center gap-1.5 md:hidden"
         >
           <motion.span
             animate={
@@ -229,13 +215,13 @@ export const NavBar: React.FC = () => {
                 ? { duration: 0.15 }
                 : { type: "spring", stiffness: 300, damping: 30 }
             }
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-slate-950/95 backdrop-blur-2xl md:hidden"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-slate-950/98 backdrop-blur-2xl md:hidden"
           >
             <motion.div
               initial={reduce ? false : { opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.25 }}
-              className="mb-2"
+              className="mb-4"
             >
               <img
                 src={logoSrc}
@@ -256,13 +242,10 @@ export const NavBar: React.FC = () => {
                     duration: 0.3,
                     ease: "easeOut",
                   }}
-                  onClick={(e) => {
-                    handleClick(link.href)(e);
-                    setMobileOpen(false);
-                  }}
+                  onClick={handleClick(link.href)}
                   className={`font-display text-2xl uppercase tracking-wider transition-colors ${
                     isActive
-                      ? "text-zyk-accent"
+                      ? "text-zyk-accent font-semibold"
                       : "text-slate-300 hover:text-white"
                   }`}
                 >
@@ -270,20 +253,6 @@ export const NavBar: React.FC = () => {
                 </motion.a>
               );
             })}
-
-            {/* Mobile Available for Work badge */}
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="mt-4 flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2 font-display text-xs font-semibold text-emerald-400"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-              </span>
-              <span>Available for Work</span>
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
