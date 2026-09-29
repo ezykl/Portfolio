@@ -46,25 +46,7 @@ const textVariants = {
   },
 };
 
-const topBlobVariants = {
-  hidden: { x: "90vw", opacity: 1 },
-  pop: { x: "90vw", opacity: 1 },
-  settled: {
-    x: "10vw",
-    opacity: 1,
-    transition: { duration: 1.4, ease: [0.16, 1, 0.3, 1] },
-  },
-};
 
-const bottomBlobVariants = {
-  hidden: { x: "10vw", opacity: 1 },
-  pop: { x: "10vw", opacity: 1 },
-  settled: {
-    x: "90vw",
-    opacity: 1,
-    transition: { duration: 1.4, ease: [0.16, 1, 0.3, 1] },
-  },
-};
 
 const detailItemVariants = {
   hidden: { opacity: 0, scale: 0.85, y: 8 },
@@ -164,46 +146,43 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
       }}
     >
       {/* Background Animated Gradient Blobs:
-          Replicates the exact ambient spread and softness of the LoadingScreen.
-          Multi-stop organic decay and gentle atmospheric blur eliminate any visible
-          round perimeters or color banding while preserving full fluid motion. */}
+          Exact 1:1 match with LoadingScreen properties (colors, spread percentages, zero-blur).
+          Scaled to h-screen / min-h-screen for identical desktop and mobile behavior.
+          Layer 1 mirrors the reversed initial state (Top at 90% 0%, Bottom at 10% 100%).
+          Layer 2 transitions into the final placement (Top at 10% 0%, Bottom at 90% 100%). */}
       <div
-        className="pointer-events-none absolute inset-0 overflow-hidden"
+        className="pointer-events-none absolute inset-x-0 top-0 h-screen min-h-screen overflow-hidden"
         aria-hidden="true"
       >
-        {/* Top Blob (Indigo/Violet) */}
-        <div className="absolute top-0 left-0 pointer-events-none">
-          <motion.div
-            variants={topBlobVariants}
-            initial="hidden"
-            animate={reduce ? "settled" : phase}
-          >
-            <div
-              className="-translate-x-1/2 -translate-y-1/2 h-[110vw] w-[110vw] max-h-[1400px] max-w-[1400px] blur-[40px] pointer-events-none"
-              style={{
-                background:
-                  "radial-gradient(circle at center, rgba(99,102,241,0.20) 0%, rgba(99,102,241,0.14) 20%, rgba(99,102,241,0.07) 38%, rgba(99,102,241,0.02) 52%, rgba(99,102,241,0.005) 62%, transparent 70%)",
-              }}
-            />
-          </motion.div>
-        </div>
+        {/* Layer 1: Initial Reveal Blobs (Exact copy of LoadingScreen) */}
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: phase === "settled" ? 0 : 1 }}
+          transition={{ duration: 1.4, ease: "easeInOut" }}
+          style={{
+            backgroundImage: [
+              "radial-gradient(circle at 90% 0%, rgba(99,102,241,0.20), transparent 42%)",
+              "radial-gradient(circle at 10% 100%, rgba(34,211,238,0.16), transparent 48%)",
+            ].join(", "),
+          }}
+        />
 
-        {/* Bottom Blob (Cyan/Teal) - anchored at screen bottom fold (100vh) matching LoadingScreen */}
-        <div className="absolute top-[100vh] left-0 pointer-events-none">
-          <motion.div
-            variants={bottomBlobVariants}
-            initial="hidden"
-            animate={reduce ? "settled" : phase}
-          >
-            <div
-              className="-translate-x-1/2 -translate-y-1/2 h-[120vw] w-[120vw] max-h-[1500px] max-w-[1500px] blur-[40px] pointer-events-none"
-              style={{
-                background:
-                  "radial-gradient(circle at center, rgba(34,211,238,0.16) 0%, rgba(34,211,238,0.11) 20%, rgba(34,211,238,0.05) 38%, rgba(34,211,238,0.015) 52%, rgba(34,211,238,0.004) 62%, transparent 70%)",
-              }}
-            />
-          </motion.div>
-        </div>
+        {/* Layer 2: Final Placement Blobs (Exact properties, final corners) */}
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: phase === "settled" ? 1 : 0 }}
+          transition={{ duration: 1.4, ease: "easeInOut" }}
+          style={{
+            backgroundImage: [
+              "radial-gradient(circle at 10% 0%, rgba(99,102,241,0.20), transparent 42%)",
+              "radial-gradient(circle at 90% 100%, rgba(34,211,238,0.16), transparent 48%)",
+            ].join(", "),
+          }}
+        />
       </div>
 
       <div className="relative z-10 flex flex-col w-full max-w-350 px-6 sm:px-10 md:px-20">
