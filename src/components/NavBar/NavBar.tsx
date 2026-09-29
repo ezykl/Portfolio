@@ -144,15 +144,18 @@ export const NavBar: React.FC = () => {
         transition={{ delay: 0.8, duration: 0.4, ease: "easeOut" }}
         className="fixed inset-x-0 top-0 z-100 transition-colors duration-300"
         style={{
-          backgroundColor: atTop ? "rgba(2, 6, 23, 0)" : "rgba(2, 6, 23, 0.85)",
-          backdropFilter: atTop ? "none" : "blur(12px)",
-          WebkitBackdropFilter: atTop ? "none" : "blur(12px)",
-          borderBottom: atTop
-            ? "1px solid rgba(255, 255, 255, 0)"
-            : "1px solid rgba(255, 255, 255, 0.08)",
-          boxShadow: atTop
-            ? "none"
-            : "0 10px 30px -10px rgba(0, 0, 0, 0.5)",
+          backgroundColor:
+            atTop && !mobileOpen ? "rgba(2, 6, 23, 0)" : "rgba(2, 6, 23, 0.95)",
+          backdropFilter: atTop && !mobileOpen ? "none" : "blur(12px)",
+          WebkitBackdropFilter: atTop && !mobileOpen ? "none" : "blur(12px)",
+          borderBottom:
+            atTop && !mobileOpen
+              ? "1px solid rgba(255, 255, 255, 0)"
+              : "1px solid rgba(255, 255, 255, 0.08)",
+          boxShadow:
+            atTop && !mobileOpen
+              ? "none"
+              : "0 10px 30px -10px rgba(0, 0, 0, 0.5)",
         }}
       >
         <div className="mx-auto flex max-w-350 items-center justify-between px-6 py-4 md:px-10">
@@ -195,7 +198,8 @@ export const NavBar: React.FC = () => {
             })}
           </ul>
 
-          {/* Hamburger toggle — visible only on mobile with generous touch target */}
+          {/* Hamburger toggle — visible only on mobile with generous touch target.
+              The button stays rock-solid in place while its lines cleanly morph into an 'X'. */}
           <button
             type="button"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -233,23 +237,21 @@ export const NavBar: React.FC = () => {
       </motion.nav>
 
       {/* Mobile fullscreen drawer rendered via React Portal directly into document.body.
-          This ensures the fixed overlay is NEVER trapped or clipped by header transforms
-          or backdropFilter when scrolled deep down the page. */}
+          Sits at z-90 directly behind the static navbar (z-100).
+          - No duplicate logo (so the real logo never animates or jumps).
+          - No duplicate close button (the burger button itself morphs into the close 'X').
+          - No padding or content shifting. */}
       {mounted &&
         typeof document !== "undefined" &&
         createPortal(
           <AnimatePresence>
             {mobileOpen && (
               <motion.div
-                initial={reduce ? { opacity: 0 } : { opacity: 0, y: -16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={reduce ? { opacity: 0 } : { opacity: 0, y: -16 }}
-                transition={
-                  reduce
-                    ? { duration: 0.15 }
-                    : { type: "spring", stiffness: 320, damping: 30 }
-                }
-                className="fixed inset-0 z-9999 flex flex-col bg-[#020617]/98 backdrop-blur-2xl md:hidden overflow-y-auto"
+                initial={reduce ? { opacity: 0 } : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={reduce ? { opacity: 0 } : { opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="fixed inset-0 z-90 flex flex-col justify-between bg-[#020617]/98 backdrop-blur-2xl md:hidden overflow-y-auto pt-20 pb-8 px-6"
                 style={{
                   backgroundImage: [
                     "repeating-linear-gradient(0deg, rgba(148,163,184,0.04) 0px, rgba(148,163,184,0.04) 1px, transparent 1px, transparent 24px)",
@@ -257,51 +259,18 @@ export const NavBar: React.FC = () => {
                   ].join(", "),
                 }}
               >
-                {/* Header row inside drawer with Logo and Close button */}
-                <div className="flex w-full items-center justify-between px-6 py-4 border-b border-white/5">
-                  <a
-                    href="#home"
-                    onClick={handleClick("#home")}
-                    aria-label="Back to top"
-                    className="flex items-center"
-                  >
-                    <img src={logoSrc} alt="Zyk" className="h-9 w-auto object-contain" />
-                  </a>
-
-                  <button
-                    type="button"
-                    aria-label="Close menu"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex h-11 w-11 items-center justify-center rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/50 transition-colors"
-                  >
-                    <svg
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
                 {/* Nav Links */}
-                <div className="flex flex-1 flex-col items-center justify-center gap-7 py-12 px-6">
+                <div className="flex flex-1 flex-col items-center justify-center gap-7 py-8">
                   {LINKS.map((link, i) => {
                     const isActive = active === link.href.slice(1);
                     return (
                       <motion.a
                         key={link.href}
                         href={link.href}
-                        initial={reduce ? false : { opacity: 0, y: 16 }}
+                        initial={reduce ? false : { opacity: 0, y: 14 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{
-                          delay: reduce ? 0 : 0.05 + i * 0.05,
+                          delay: reduce ? 0 : 0.04 + i * 0.04,
                           duration: 0.25,
                           ease: "easeOut",
                         }}
@@ -319,7 +288,7 @@ export const NavBar: React.FC = () => {
                 </div>
 
                 {/* Subtle minimalist bottom branding */}
-                <div className="flex w-full items-center justify-center pb-8 pt-4 text-xs font-mono tracking-widest text-slate-500">
+                <div className="flex w-full items-center justify-center pt-4 text-xs font-mono tracking-widest text-slate-500">
                   ZYK // PORTFOLIO
                 </div>
               </motion.div>

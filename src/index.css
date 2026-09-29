@@ -35,9 +35,11 @@ body,
 }
 
 /* Smooth-scroll for the NavBar anchor links (§3) — disabled when the user
-   prefers reduced motion (§4). */
+   prefers reduced motion (§4).
+   scrollbar-gutter: stable prevents horizontal layout shift when mobile drawer locks body scroll. */
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 @media (prefers-reduced-motion: reduce) {
   html {
