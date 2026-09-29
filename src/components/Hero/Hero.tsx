@@ -4,6 +4,9 @@ import {
   useReducedMotion,
   useScroll,
   useTransform,
+  useMotionValue,
+  useMotionTemplate,
+  animate,
 } from "framer-motion";
 import { ZykCoding } from "../ZykCoding/ZykCoding";
 import { PillButton } from "../ui/PillButton";
@@ -45,8 +48,6 @@ const textVariants = {
     transition: { duration: 1, ease: "easeOut" },
   },
 };
-
-
 
 const detailItemVariants = {
   hidden: { opacity: 0, scale: 0.85, y: 8 },
@@ -105,6 +106,41 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
     [0, reduce ? 0 : 120],
   );
 
+  // Background Blobs Reverse Placement X sliding animation:
+  // Starts at LoadingScreen placement: Top at 90% (right), Bottom at 10% (left).
+  // When Hero is revealed ("when Hi I'm Zyk shows"), smoothly glides across the X axis
+  // to the final settled placement: Top at 10% (left), Bottom at 90% (right).
+  // Zero heartbeat beating pulse in Hero section as requested.
+  const topBlobX = useMotionValue(90);
+  const bottomBlobX = useMotionValue(10);
+
+  React.useEffect(() => {
+    if (!revealed) {
+      topBlobX.set(90);
+      bottomBlobX.set(10);
+      return;
+    }
+    if (reduce) {
+      topBlobX.set(10);
+      bottomBlobX.set(90);
+      return;
+    }
+    const animTop = animate(topBlobX, 10, {
+      duration: 1.8,
+      ease: [0.16, 1, 0.3, 1],
+    });
+    const animBottom = animate(bottomBlobX, 90, {
+      duration: 1.8,
+      ease: [0.16, 1, 0.3, 1],
+    });
+    return () => {
+      animTop.stop();
+      animBottom.stop();
+    };
+  }, [revealed, reduce, topBlobX, bottomBlobX]);
+
+  const blobBackground = useMotionTemplate`radial-gradient(circle at ${topBlobX}% 0%, rgba(99,102,241,0.20), transparent 42%), radial-gradient(circle at ${bottomBlobX}% 100%, rgba(34,211,238,0.16), transparent 48%)`;
+
   React.useEffect(() => {
     if (!revealed) {
       setPhase("hidden");
@@ -148,39 +184,17 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
       {/* Background Animated Gradient Blobs:
           Exact 1:1 match with LoadingScreen properties (colors, spread percentages, zero-blur).
           Scaled to h-screen / min-h-screen for identical desktop and mobile behavior.
-          Layer 1 mirrors the reversed initial state (Top at 90% 0%, Bottom at 10% 100%).
-          Layer 2 transitions into the final placement (Top at 10% 0%, Bottom at 90% 100%). */}
+          Reverse placement X animation: starts at 90% (top) / 10% (bottom) and glides smoothly
+          to 10% (top) / 90% (bottom) as Hero reveals. Steady opacity (no beating). */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-screen min-h-screen overflow-hidden"
         aria-hidden="true"
       >
-        {/* Layer 1: Initial Reveal Blobs (Exact copy of LoadingScreen) */}
         <motion.div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: phase === "settled" ? 0 : 1 }}
-          transition={{ duration: 1.4, ease: "easeInOut" }}
           style={{
-            backgroundImage: [
-              "radial-gradient(circle at 90% 0%, rgba(99,102,241,0.20), transparent 42%)",
-              "radial-gradient(circle at 10% 100%, rgba(34,211,238,0.16), transparent 48%)",
-            ].join(", "),
-          }}
-        />
-
-        {/* Layer 2: Final Placement Blobs (Exact properties, final corners) */}
-        <motion.div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: phase === "settled" ? 1 : 0 }}
-          transition={{ duration: 1.4, ease: "easeInOut" }}
-          style={{
-            backgroundImage: [
-              "radial-gradient(circle at 10% 0%, rgba(99,102,241,0.20), transparent 42%)",
-              "radial-gradient(circle at 90% 100%, rgba(34,211,238,0.16), transparent 48%)",
-            ].join(", "),
+            backgroundImage: blobBackground,
           }}
         />
       </div>
