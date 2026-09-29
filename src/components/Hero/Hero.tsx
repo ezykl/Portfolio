@@ -1,5 +1,10 @@
 import React from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { ZykCoding } from "../ZykCoding/ZykCoding";
 import { PillButton } from "../ui/PillButton";
 import { PopupHost } from "../Popup/PopupHost";
@@ -106,11 +111,17 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
   const [detailsVisible, setDetailsVisible] = React.useState(false);
   const [typewriterActive, setTypewriterActive] = React.useState(false);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const textParallaxY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 20]);
+  // Scroll parallax: maps actual page scroll pixels (0 to 500px) directly
+  // to a noticeable vertical float for the intro text.
+  // • Positive number (e.g. 150): text floats downward / delays behind scroll
+  // • Negative number (e.g. -150): text exits upward faster
+  // • 0: disabled (scrolls 1:1 with normal page scroll)
+  const { scrollY } = useScroll();
+  const textParallaxY = useTransform(
+    scrollY,
+    [0, 500],
+    [0, reduce ? 0 : 120],
+  );
 
   React.useEffect(() => {
     if (!revealed) {
@@ -156,7 +167,10 @@ export const Hero: React.FC<HeroProps> = ({ revealed }) => {
           Replicates the exact ambient spread and softness of the LoadingScreen.
           Multi-stop organic decay and gentle atmospheric blur eliminate any visible
           round perimeters or color banding while preserving full fluid motion. */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        aria-hidden="true"
+      >
         {/* Top Blob (Indigo/Violet) */}
         <div className="absolute top-0 left-0 pointer-events-none">
           <motion.div
