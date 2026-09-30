@@ -98,9 +98,9 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
 
       {/* Terminal window card */}
       <div
-        className="w-[min(440px,90vw)] overflow-hidden rounded-xl"
+        className="relative w-[min(440px,90vw)] overflow-hidden rounded-xl"
         style={{
-          backgroundColor: "rgba(15, 23, 42, 0.85)",
+          backgroundColor: "#0f172a",
           border: "1px solid rgba(255,255,255,0.08)",
           boxShadow:
             "0 0 0 1px rgba(99,102,241,0.20), 0 0 40px rgba(99,102,241,0.10), 0 25px 60px rgba(0,0,0,0.6)",
@@ -116,9 +116,18 @@ export const LoadingScreen: React.FC<{ progress?: number }> = ({
         >
           {/* Traffic lights */}
           <div className="flex items-center gap-1.5">
-            <span className="inline-block h-[10px] w-[10px] rounded-full" style={{ backgroundColor: "#f87171" }} />
-            <span className="inline-block h-[10px] w-[10px] rounded-full" style={{ backgroundColor: "#fbbf24" }} />
-            <span className="inline-block h-[10px] w-[10px] rounded-full" style={{ backgroundColor: "#4ade80" }} />
+            <span
+              className="inline-block h-[10px] w-[10px] rounded-full"
+              style={{ backgroundColor: "#f87171" }}
+            />
+            <span
+              className="inline-block h-[10px] w-[10px] rounded-full"
+              style={{ backgroundColor: "#fbbf24" }}
+            />
+            <span
+              className="inline-block h-[10px] w-[10px] rounded-full"
+              style={{ backgroundColor: "#4ade80" }}
+            />
           </div>
 
           {/* Tab title */}
